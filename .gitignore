@@ -15,6 +15,7 @@
 firebase.json
 .firebaserc
 firebase-config.js
+storage.rules
 
 
 # misc
