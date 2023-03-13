@@ -1,68 +1,56 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using [clean-cra Template](https://github.com/JorgePasco1/cra-template-clean-cra).
+# TocToc
 
-## Available Scripts
+**The problem:** ESL teachers can easily take two weeks in testing and or grading their student's pronunciation, be it in the classroom or through sent audios that the teacher must later listen to and grade. 
 
-In the project directory, you can run:
+**The solution:** TocToc, A simple app that allows teachers to create courses with tests that include the words or phrases to grade and do it instantly.
 
-### `npm start`
+.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+.
 
-### `npm test`
+## Security
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Data structure and Security rules
+Security concerns will directly impact decisions made for our data structure.
 
-### `npm run build`
+In order to create user roles that decide what content is shown to what users, and so that a student cannot simply change a test's questions or their own grades, we need to choose a way to set these roles.
+We are presented with two choices that directly impact our data structure:
+1. Create `teachers` and `students` collections in order to create user roles.
+```
+/teachers (collection)
+    - teacherId (document)
+/students (collection)
+    - studentId (document)
+ ```
+2. Create a `users` collection where users can have custom claims with the `teacher` or `student` role.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+/users (collection)
+    - userId (document)
+        - name: <string>
+        - email: <string>
+        - customClaims: ["teacher"]
+    - userId (document)
+        - name: <string>
+        - email: <string>
+        - customClaims: ["student"]
+```
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+If we choose to make a teachers and a students collection, these will need their own firestore security rules adding more complexity. 
+While if we choose to only create a users collection that uses custom claims, we need not make extra security rules for these collections.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+.
 
-### `npm run eject`
+.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Protected routes
+In the frontend we need to check a user's status and based on this show different UI. If the user is athenticated as a teacher, they should be directed to the teacher dashboard, while if they're a student, they should be directed to the student dashboard. 
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+We accomplish this through a combination of:
+1. [Firebase custom claims](https://firebase.google.com/docs/auth/admin/custom-claims). Through which we set the userId document with the role for each user, student or teacher.
+2. [React router](https://reactrouter.com/en/main/start/overview), through a [higher order component](https://www.makeuseof.com/create-protected-route-in-react/) that checks a user's authentication before rendering one of the above mentioned components.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
