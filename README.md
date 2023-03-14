@@ -54,3 +54,19 @@ We accomplish this through a combination of:
 1. [Firebase custom claims](https://firebase.google.com/docs/auth/admin/custom-claims). Through which we set the userId document with the role for each user, student or teacher.
 2. [React router](https://reactrouter.com/en/main/start/overview), through a [higher order component](https://www.makeuseof.com/create-protected-route-in-react/) that checks a user's authentication before rendering one of the above mentioned components.
 
+## Firebase Authentication
+
+I'm using Firebase for all things database and authentication. Here are a few important mentions.
+
+### `getAuth()` method
+ `auth` is a reference to the Firebase Authentication service that you can use to create and manage user accounts, authenticate users, and more.
+
+Once you have initialized the Authentication service using `getAuth()`, you can use the methods provided by the Auth class to perform various tasks related to authentication, such as:
+
+1. Creating a new user account using `createUserWithEmailAndPassword()`
+2. Signing in an existing user using `signInWithEmailAndPassword()` or `signInWithPopup()`
+3. Signing out the current user using `signOut()`
+4. Checking if a user is signed in using `onAuthStateChanged()`
+
+
+And many more.
