@@ -1,8 +1,12 @@
+import { Route, Routes } from "react-router-dom";
+
+import Authentication from "./routes/authentication/authentication.component";
+
 function App() {
   return (
-    <div className="App">
-      Hello World
-    </div>
+    <Routes>
+      <Route path="/" element={<Authentication />} />
+    </Routes>
   );
 }
 

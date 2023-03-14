@@ -5,10 +5,10 @@ import {
 import {
     getAuth,
     GoogleAuthProvider,
-    signInWithPopoup,
+    signInWithPopup,
     signInWithEmailAndPassword,
   } from 'firebase/auth'; //Authentication
-import { firebaseConfig } from './firebase-config'; //Our firebase api config
+import firebaseConfig from "./firebase-config"; //Our firebase api config
 
 //initialize app
 const app = initializeApp(firebaseConfig);
@@ -30,7 +30,7 @@ export const db = getFirestore();
 
 //popup sign in
 export const signInWithGooglePopup = () => {
-  signInWithPopoup(auth, googleProvider);
+  signInWithPopup(auth, googleProvider);
 }
 
 //email and password sign in

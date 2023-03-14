@@ -2,7 +2,7 @@ import "./sign-in-form.styles.scss";
 import TextInput from "../text-input/text-input.component";
 import Button from "../button/button.component";
 import { useState } from "react";
-import { signInAuthEmailPassword, signInWithGooglePopup } from "../../../firebase-utils";
+import { signInWithGooglePopup, signInAuthEmailPassword } from "../../utils/firebase/firebase-utils";
 
 const SignInForm = () => {
   const defaultForm = {
@@ -39,7 +39,7 @@ const SignInForm = () => {
   }
 
   return (
-    <div>
+    <div className="sign-in-container">
       <h2>Already have an account?</h2>
       <span>Sign in with your email and password</span>
       <form onSubmit={handleSubmit}>
