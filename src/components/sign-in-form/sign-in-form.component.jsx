@@ -2,7 +2,7 @@ import "./sign-in-form.styles.scss";
 import TextInput from "../text-input/text-input.component";
 import Button from "../button/button.component";
 import { useState } from "react";
-import { signInWithGooglePopup, signInAuthEmailPassword } from "../../utils/firebase/firebase-utils";
+import { signInWithGooglePopup, signInAuthEmailPassword, checkUserExists } from "../../utils/firebase/firebase-utils";
 
 const SignInForm = () => {
   const defaultForm = {
@@ -33,9 +33,14 @@ const SignInForm = () => {
     }
   };
 
-  //we don't know when the server will respond => async function
   const signInWithGoogle = async () => {
-    await signInWithGooglePopup();
+    const result = await signInWithGooglePopup();
+    const user = result.user;
+    //Check if the user exists in the database
+    const exists = await checkUserExists(user);
+    if (!exists) {
+      alert("You have not signed up yet, sign up!")
+    } return;
   }
 
   return (
