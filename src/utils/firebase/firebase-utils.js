@@ -110,3 +110,10 @@ export const checkUserExists = async (userAuth) => {
   //the user may or may not exist. If it doesn't exist, create it
   return userSnapshot.exists() //exists: true or false
 }
+
+//----------------- Custom Claims ------------------//
+//create teacher
+export const createTeacher = async (userAuth) => {
+  const userDocRef = doc(db, "users", userAuth.uid)
+  return userAuth.setCustomUserClaims(userDocRef, { admin: true })
+}
