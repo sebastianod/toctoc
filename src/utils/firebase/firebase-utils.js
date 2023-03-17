@@ -1,7 +1,10 @@
 import { initializeApp } from "firebase/app";
-import { doc, getDoc, //gets doc reference
-   getFirestore, 
-   setDoc} from "firebase/firestore"; //Firestore CRUD and such
+import {
+  doc,
+  getDoc, //gets doc reference
+  getFirestore,
+  setDoc,
+} from "firebase/firestore"; //Firestore CRUD and such
 import {
   getAuth,
   GoogleAuthProvider,
@@ -9,6 +12,7 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
+  onAuthStateChanged,
 } from "firebase/auth"; //Authentication
 import firebaseConfig from "./firebase-config"; //Our firebase api config
 
@@ -55,10 +59,10 @@ export const signInAuthEmailPassword = async (email, password) => {
 export const createAuthUserEmailPassword = async (email, password) => {
   if (!email || !password) return;
 
-  //Creates a new user account associated with the specified email 
+  //Creates a new user account associated with the specified email
   //address and password.
   return await createUserWithEmailAndPassword(auth, email, password);
-  //the method returns a UserCredential object that contains the new user's 
+  //the method returns a UserCredential object that contains the new user's
   //account information, such as their uid, email, and emailVerified status.
 };
 
@@ -76,13 +80,14 @@ export const createUserDocumentFromAuth = async (
   //doc() gets or creates the user document reference.
   //userAuth.uid gets the authenticated user unique id and
   //sets this uid as the document id of said user doc
-  const userDocRef = doc(db, "users", userAuth.uid); 
+  const userDocRef = doc(db, "users", userAuth.uid);
 
   //get a "picture" of the user at this moment
   const userSnapshot = await getDoc(userDocRef);
 
-  //the user may or may not exist. If it doesn't exist, create it
-  if (!userSnapshot.exists()) { //if user doesn't exist
+  //the user may or may not exist.
+  if (!userSnapshot.exists()) {
+    //if user doesn't exist create it
     const { displayName, email } = userAuth;
     const createdAt = new Date();
 
@@ -91,8 +96,8 @@ export const createUserDocumentFromAuth = async (
         displayName,
         email,
         createdAt,
-        ...additionalUserInfo
-      })
+        ...additionalUserInfo,
+      });
     } catch (error) {
       console.log("Error creating the user", error.message);
     }
@@ -102,18 +107,28 @@ export const createUserDocumentFromAuth = async (
 };
 
 export const checkUserExists = async (userAuth) => {
-  const userDocRef = doc(db, "users", userAuth.uid); 
+  const userDocRef = doc(db, "users", userAuth.uid);
 
   //get a "picture" of the user at this moment
   const userSnapshot = await getDoc(userDocRef);
 
   //the user may or may not exist. If it doesn't exist, create it
-  return userSnapshot.exists() //exists: true or false
-}
+  return userSnapshot.exists(); //exists: true or false
+};
+
+//----------------User Observer---------------------//
+//Allows us to fire a callback function anytime we see the user object changes
+//Sign ins and sign outs are observed and kept track of in a single place.
+//Instead of having to use useContext everywhere in our app, set the observer
+//in userContext itself, and it will be kept track of only there.
+
+export const onAuthStateChangedListener = (callback) => {
+  return onAuthStateChanged(auth, callback); //to be used in UserContexts
+};
 
 //----------------- Custom Claims ------------------//
 //create teacher
 export const createTeacher = async (userAuth) => {
-  const userDocRef = doc(db, "users", userAuth.uid)
-  return userAuth.setCustomUserClaims(userDocRef, { admin: true })
-}
+  const userDocRef = doc(db, "users", userAuth.uid);
+  return userAuth.setCustomUserClaims(userDocRef, { admin: true });
+};

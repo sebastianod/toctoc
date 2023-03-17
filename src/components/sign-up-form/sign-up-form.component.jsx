@@ -7,8 +7,6 @@ import {
   createUserDocumentFromAuth,
   signInWithGooglePopup,
 } from "../../utils/firebase/firebase-utils";
-import { useContext } from "react";
-import { UserContext } from "../../contexts/user/user.context";
 
 const SignUpForm = () => {
   const defaultForm = {
@@ -20,7 +18,6 @@ const SignUpForm = () => {
 
   const [form, setForm] = useState(defaultForm);
   const { displayName, email, password, confirmPassword } = form; //destructuring form
-  const { setCurrentUser } = useContext(UserContext);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -45,7 +42,6 @@ const SignUpForm = () => {
     try {
       //Try to create the Auth user. Returns the user object.
       const { user } = await createAuthUserEmailPassword(email, password);
-      setCurrentUser(user);
       //Create the user in Firestore DB, we can make the user doc
       //be as we want, so we give it a displayName, or any additional
       //info
@@ -69,7 +65,6 @@ const SignUpForm = () => {
 
     const result = await signInWithGooglePopup();
     const user = result.user;
-    setCurrentUser(user);
     console.log("user id: ", user.uid, " user email: ", user.email);
 
     try {

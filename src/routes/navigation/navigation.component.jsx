@@ -7,19 +7,13 @@ import AudioWavesLogo from "../../assets/audio-waves.png";
 import "./navigation.styles.scss";
 
 const Navigation = () => {
-  const { currentUser, setCurrentUser } = useContext(UserContext); //to sign in or out
-  
-  const signOutHandler = async () => {
-    await signOutUser(); //signs out user, returns undefined
-    setCurrentUser(null);
-  }
-
+  const { currentUser } = useContext(UserContext); //to sign in or out
 
   return (
     <Fragment>
       <div className="navigation">
         <Link className="logo-container" to="/">
-            <img className="logo" src={AudioWavesLogo} alt="TocToc"/>
+          <img className="logo" src={AudioWavesLogo} alt="TocToc" />
         </Link>
         <div className="nav-links-container">
           <Link className="nav-link" to="/">
@@ -27,7 +21,7 @@ const Navigation = () => {
           </Link>
           {/* Show sign out if user is signed in, sign out if signed in */}
           {currentUser ? (
-            <span className="nav-link" onClick={signOutHandler}>
+            <span className="nav-link" onClick={signOutUser}>
               SIGN OUT
             </span>
           ) : (
