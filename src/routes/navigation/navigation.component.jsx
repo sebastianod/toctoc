@@ -21,9 +21,17 @@ const Navigation = () => {
           </Link>
           {/* Show sign out if user is signed in, sign out if signed in */}
           {currentUser ? (
-            <span className="nav-link" onClick={signOutUser}>
-              SIGN OUT
-            </span>
+            <Fragment>
+              <Link className="nav-link" to="/dasht">
+                TEACHER DASHBOARD
+              </Link>
+              <Link className="nav-link" to="/dashs">
+                STUDENT DASHBOARD
+              </Link>
+              <span className="nav-link" onClick={signOutUser}>
+                SIGN OUT
+              </span>
+            </Fragment>
           ) : (
             <Link className="nav-link" to="/auth">
               SIGN IN

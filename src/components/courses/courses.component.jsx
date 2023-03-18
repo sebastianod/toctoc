@@ -9,9 +9,9 @@ const Courses = () => {
   useEffect(() => {
     async function fetchCourses() {
       const coursesData = await getCourses();
-      setCourses(coursesData);
+      setCourses(coursesData); //Set it only once the promise is resolved
     }
-    fetchCourses();
+    fetchCourses(); 
   }, []);
 
   return (
