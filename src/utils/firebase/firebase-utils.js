@@ -128,13 +128,6 @@ export const onAuthStateChangedListener = (callback) => {
   return onAuthStateChanged(auth, callback); //to be used in UserContexts
 };
 
-//----------------- Custom Claims ------------------//
-//create teacher
-export const createTeacher = async (userAuth) => {
-  const userDocRef = doc(db, "users", userAuth.uid);
-  return userAuth.setCustomUserClaims(userDocRef, { admin: true });
-};
-
 //---------------- Get and Create data -------------//
 
 //  Helper: Reads an array of IDs from a collection concurrently
