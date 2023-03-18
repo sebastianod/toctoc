@@ -2,6 +2,8 @@ import { initializeApp } from "firebase/app";
 import {
   doc,
   getDoc, //gets doc reference
+  getDocs,
+  collection,
   getFirestore,
   setDoc,
 } from "firebase/firestore"; //Firestore CRUD and such
@@ -131,4 +133,20 @@ export const onAuthStateChangedListener = (callback) => {
 export const createTeacher = async (userAuth) => {
   const userDocRef = doc(db, "users", userAuth.uid);
   return userAuth.setCustomUserClaims(userDocRef, { admin: true });
+};
+
+//---------------- Get and Create data -------------//
+
+//  Helper: Reads an array of IDs from a collection concurrently
+const readIds = async (collection, ids) => {
+  //say from the tags collection, read their ids.
+  const reads = ids.map((id) => collection.doc(id).get());
+  const result = await Promise.all(reads);
+  return result.map((v) => v.data()); //gets the actual data from each doc
+};
+
+export const getCourses = async () => {
+  const coursesRef = collection(db, "courses"); //reference for courses collection
+  const querySnapshot = await getDocs(coursesRef); //Returns a promise that resolves to querysnapshot object
+  return querySnapshot.docs.map((course) => course.data()); //returns a courses array
 };
