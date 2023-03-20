@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import Course from "./components/courses/course/course.component";
+import CourseDetails from "./components/courses/course-details/course-details.component";
 import Courses from "./components/courses/courses.component";
 import Students from "./components/students/students.component";
 import Tests from "./components/tests-component/tests-component.component";
@@ -19,10 +19,10 @@ function App() {
         <Route index element={<Home />} />
         <Route path="auth" element={<Authentication />} />
         <Route path="dasht" element={<TeacherDashboard />}>
-          <Route path="courses" element={<Courses />}>
-            <Route path=":courseId" element={<Course />} />
-            <Route path=":courseId/tests" element={<Tests />} />
-            <Route path=":courseId/students" element={<Students />} />
+          <Route path="courses" element={<Courses />} />
+          <Route path="courses/:courseId" element={<CourseDetails />}>
+            <Route path="tests" element={<Tests />} />
+            <Route path="students" element={<Students />} />
           </Route>
         </Route>
         <Route path="dashs" element={<StudentDashboard />}>

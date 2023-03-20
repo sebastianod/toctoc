@@ -16,9 +16,9 @@ const Tests = () => {
   return (
     <div className="list-container">
       <div className="content-container">
-        <h2> Test 1 </h2>
-        <h2> Test 2 </h2>
-        <h2> Test 3 </h2>
+        <h3> Test 1 </h3>
+        <h3> Test 2 </h3>
+        <h3> Test 3 </h3>
         {/* {courses.map((course, index) => {
           const { name, teacher } = course;
           return <Course key={index} name={name} teacher={teacher} />;

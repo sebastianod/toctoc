@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import "./teacher-dashboard.styles.scss";
 
 const TeacherDashboard = () => {
@@ -9,11 +9,9 @@ const TeacherDashboard = () => {
         <h1>Teacher Dashboard</h1>
       </div>
       <div className="nav-links-container">
-        <nav className="nav-link">
-          <NavLink to="courses">
-            <h2>Courses</h2>
-          </NavLink>
-        </nav>
+        <Link to="/dasht/courses">
+          <h2>Courses</h2>
+        </Link>
       </div>
       <Outlet />
     </Fragment>
