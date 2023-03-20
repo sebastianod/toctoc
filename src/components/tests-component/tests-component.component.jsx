@@ -1,5 +1,6 @@
 // import { getCourses } from "../../utils/firebase/firebase-utils"; //replace with get tests
 // import { useState, useEffect } from "react";
+import PlusButton from "../plus-button/plus-button.component";
 import "./tests-component.styles.scss";
 
 const Tests = () => {
@@ -23,12 +24,7 @@ const Tests = () => {
           const { name, teacher } = course;
           return <Course key={index} name={name} teacher={teacher} />;
         })} */}
-        <div className="add-test-container">
-          <button className="create-button">
-            <span className="plus">+</span>
-          </button>
-          <h3 className="create-test-label">Create Test</h3>
-        </div>
+        <PlusButton add="test"/>
       </div>
     </div>
   );

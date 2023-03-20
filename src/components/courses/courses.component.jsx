@@ -22,7 +22,7 @@ const Courses = () => {
           const { name, courseId } = course;
           return <Course key={index} name={name} courseId={courseId} />;
         })}
-        <PlusButton name="Course" />
+        <PlusButton add="course" />
       </div>
     </div>
   );
