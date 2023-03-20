@@ -1,0 +1,88 @@
+.list-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  
+  .routes-container {
+    width: 200px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    padding: 20px;
+  }
+  
+  .routes-container .route-title {
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  .content-container {
+    flex: 1;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0px 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+  
+  .course {
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+  }
+  
+  .course h3 {
+    margin-top: 0;
+  }
+  
+  .course p {
+    margin-bottom: 0;
+  }
+  
+  .add-course-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+  
+    .create-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 10px;
+      padding: 10px;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+  
+      .plus {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        border: 2px solid #0066cc;
+        border-radius: 50%;
+        font-size: 24px;
+        font-weight: bold;
+        color: #0066cc;
+        line-height: 1.2; /* adjust line-height as necessary */
+      }
+    }
+
+    .create-button:hover .plus {
+        background-color: #0066cc;
+        color: #fff;
+      }
+  
+    .create-course-label {
+      margin: 0;
+      color: #0066cc;
+      font-size: 18px;
+      font-family: 'Ubuntu', sans-serif;
+    }
+  }

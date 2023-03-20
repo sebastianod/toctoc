@@ -141,5 +141,8 @@ const readIds = async (collection, ids) => {
 export const getCourses = async () => {
   const coursesRef = collection(db, "courses"); //reference for courses collection
   const querySnapshot = await getDocs(coursesRef); //Returns a promise that resolves to querysnapshot object
-  return querySnapshot.docs.map((course) => course.data()); //returns a courses array
+  return querySnapshot.docs.map((course) => ({
+    courseId: course.id, //return the courseId to set the url later
+    ...course.data() //name etc...
+  }));
 };
