@@ -1,0 +1,43 @@
+.add-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+  
+    .create-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 10px;
+      padding: 10px;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+  
+      .plus {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        border: 2px solid #0066cc;
+        border-radius: 50%;
+        font-size: 24px;
+        font-weight: bold;
+        color: #0066cc;
+        line-height: 1.2; /* adjust line-height as necessary */
+      }
+    }
+
+    .create-button:hover .plus {
+        background-color: #0066cc;
+        color: #fff;
+      }
+  
+    .create-label {
+      margin: 0;
+      color: #0066cc;
+      font-size: 18px;
+      font-family: 'Ubuntu', sans-serif;
+    }
+}

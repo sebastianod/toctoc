@@ -2,6 +2,7 @@ import Course from "./course/course.component";
 import "./courses.styles.scss";
 import { getCourses } from "../../utils/firebase/firebase-utils";
 import { useState, useEffect } from "react";
+import PlusButton from "../plus-button/plus-button.component";
 
 const Courses = () => {
   const [courses, setCourses] = useState([]);
@@ -21,12 +22,7 @@ const Courses = () => {
           const { name, courseId } = course;
           return <Course key={index} name={name} courseId={courseId} />;
         })}
-        <div className="add-course-container">
-          <button className="create-button">
-            <span className="plus">+</span>
-          </button>
-          <h3 className="create-course-label">Create Course</h3>
-        </div>
+        <PlusButton name="Course" />
       </div>
     </div>
   );
