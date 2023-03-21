@@ -1,5 +1,5 @@
 import { Fragment, useContext } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 import { CourseContext } from "../../../contexts/course/course.context";
 import "./course.styles.scss";
 
@@ -15,9 +15,9 @@ const Course = ({ name, courseId }) => {
   return (
     <Fragment>
       <div className="course-container">
-        <Link to={`/dasht/courses/${courseId}`} onClick={handleCourseClick}>
+        <NavLink to={`/dasht/courses/${courseId}`} onClick={handleCourseClick}>
           <div className="course">{name}</div>
-        </Link>
+        </NavLink>
       </div>
       <Outlet />
     </Fragment>

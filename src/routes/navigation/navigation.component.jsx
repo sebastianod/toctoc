@@ -1,5 +1,5 @@
 import { Fragment, useContext } from "react"; //for user context
-import { Outlet, Link } from "react-router-dom"; //routing
+import { Outlet, NavLink, Link } from "react-router-dom"; //routing
 import { UserContext } from "../../contexts/user/user.context";
 import { signOutUser } from "../../utils/firebase/firebase-utils";
 import AudioWavesLogo from "../../assets/audio-waves.png";
@@ -16,26 +16,26 @@ const Navigation = () => {
           <img className="logo" src={AudioWavesLogo} alt="TocToc" />
         </Link>
         <div className="nav-links-container">
-          <Link className="nav-link" to="/">
+          <NavLink className="nav-link" to="/">
             HOME
-          </Link>
+          </NavLink>
           {/* Show sign out if user is signed in, sign out if signed in */}
           {currentUser ? (
             <Fragment>
-              <Link className="nav-link" to="/dasht">
+              <NavLink className="nav-link" to="/dasht">
                 TEACHER DASHBOARD
-              </Link>
-              <Link className="nav-link" to="/dashs">
+              </NavLink>
+              <NavLink className="nav-link" to="/dashs">
                 STUDENT DASHBOARD
-              </Link>
+              </NavLink>
               <span className="nav-link" onClick={signOutUser}>
                 SIGN OUT
               </span>
             </Fragment>
           ) : (
-            <Link className="nav-link" to="/auth">
+            <NavLink className="nav-link" to="/auth">
               SIGN IN
-            </Link>
+            </NavLink>
           )}
         </div>
       </div>

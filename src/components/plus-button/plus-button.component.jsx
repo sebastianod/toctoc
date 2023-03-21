@@ -1,7 +1,7 @@
 import "./plus-button.styles.scss";
 
 const PlusButton = (props) => {
-    const { add } = props; //create (thing)
+    const { add } = props; //create (word)
 
   return (
     <div className="add-container">
