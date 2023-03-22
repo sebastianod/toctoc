@@ -19,7 +19,7 @@ import {
 import firebaseConfig from "./firebase-config"; //Our firebase api config
 
 //initialize app
-const app = initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 
 //-------------Authentication-------------//
 
@@ -131,12 +131,12 @@ export const onAuthStateChangedListener = (callback) => {
 //---------------- Get and Create data -------------//
 
 //  Helper: Reads an array of IDs from a collection concurrently
-const readIds = async (collection, ids) => {
-  //say from the tags collection, read their ids.
-  const reads = ids.map((id) => collection.doc(id).get());
-  const result = await Promise.all(reads);
-  return result.map((v) => v.data()); //gets the actual data from each doc
-};
+// const readIds = async (collection, ids) => {
+//   //say from the tags collection, read their ids.
+//   const reads = ids.map((id) => collection.doc(id).get());
+//   const result = await Promise.all(reads);
+//   return result.map((v) => v.data()); //gets the actual data from each doc
+// };
 
 export const getCourses = async () => {
   const coursesRef = collection(db, "courses"); //reference for courses collection
