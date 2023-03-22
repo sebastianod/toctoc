@@ -146,3 +146,14 @@ export const getCourses = async () => {
     ...course.data() //name etc...
   }));
 };
+
+export const getTests = async (courseId) => {
+    //get the reference for the tests subcollection
+    const testsRef = collection(db, `courses/${courseId}/tests`) 
+    //get a snapshot of all docs in the tests collection
+    const testsSnapshot = await getDocs(testsRef); // QuerySnapshot contains zero or more DocumentSnapshot objects representing the results of a query. A DocumentSnapshot contains data read from a document in your Firestore database. 
+    return testsSnapshot.docs.map((test)=>({
+      testId: test.id, //return the testId to set url for <testDetails />
+      ...test.data() //the data inside the test, name etc.
+    })) // The documents can be accessed as an array via the docs property or enumerated using the forEach method.
+}
