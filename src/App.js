@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import CourseDetails from "./components/courses/course-details/course-details.component";
 import Courses from "./components/courses/courses.component";
 import Students from "./components/students/students.component";
+import Test from "./components/tests-component/test-component/test-component.component";
 import Tests from "./components/tests-component/tests-component.component";
 
 import Authentication from "./routes/authentication/authentication.component";
@@ -22,7 +23,9 @@ function App() {
           <Route path="courses" element={<Courses />} />
           <Route path="courses/:courseId" element={<CourseDetails />}>
             <Route path="tests" element={<Tests />} />
+            <Route path="tests/:testId" element={<Test />}/>
             <Route path="students" element={<Students />} />
+            {/* <Route path="students/:studentId" element={<Student />}/> */}
           </Route>
         </Route>
         <Route path="dashs" element={<StudentDashboard />}>

@@ -7,26 +7,26 @@ import "./tests-component.styles.scss";
 
 const Tests = () => {
   const [tests, setTests] = useState([]);
-  const { currentCourse } = useContext(CourseContext) //to get the current courseId, for the path to the tests to this course
+  const { currentCourse } = useContext(CourseContext); //to get the current courseId, for the path to the tests to this course
   const courseId = currentCourse.courseId;
 
   useEffect(() => {
     async function fetchTests() {
       const testsData = await getTests(courseId);
-      setTests(testsData) //sets tests once getTests's promise is resolved
+      setTests(testsData); //sets tests once getTests's promise is resolved
     }
     fetchTests();
   }, [courseId]); //useEffect re-runs upon courseId changing
 
-  const showTests = tests.map((test, index)=>{
-    const {name} = test;
-    return <Test testName={name} />
-  })
+  const showTests = tests.map((test, index) => {
+    const { name, testId } = test;
+    return <Test key={index} testName={name} testId={testId} />;
+  });
 
   return (
     <div className="list-container">
       <div className="content-container">
-        { showTests }
+        {showTests}
         <PlusButton add="test" />
       </div>
     </div>
