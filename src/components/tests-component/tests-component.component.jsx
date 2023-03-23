@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { CourseContext } from "../../contexts/course/course.context";
 import { getTests } from "../../utils/firebase/firebase-utils";
+import { processListOfSentences } from "../../utils/utilities";
 import PlusButton from "../plus-button/plus-button.component";
 import Test from "./test-component/test-component.component";
 import "./tests-component.styles.scss";
@@ -20,7 +21,8 @@ const Tests = () => {
 
   const showTests = tests.map((test, index) => {
     const { name, testId } = test;
-    return <Test key={index} testName={name} testId={testId} />;
+    const processedName = processListOfSentences(name).toString();
+    return <Test key={index} testName={processedName} testId={testId} />;
   });
 
   return (

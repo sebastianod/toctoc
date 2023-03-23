@@ -10,7 +10,6 @@ const Test = ({ testName, testId }) => {
 
   const handleTestClick = () => {
     setCurrentTest({ name: testName, testId: testId });
-    console.log('currentTest set to: ', { name: testName, testId: testId });
   };
 
   return (
