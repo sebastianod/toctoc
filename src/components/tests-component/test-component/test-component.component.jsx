@@ -1,17 +1,17 @@
 import { Fragment, useContext } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { TestContext } from "../../../contexts/test-context/test.context";
+import "./test-component.styles.scss";
 
-export default function Test(props) {
-  const { testName, testId } = props;
+
+
+const Test = ({ testName, testId }) => {
   const { setCurrentTest } = useContext(TestContext);
 
   const handleTestClick = () => {
-  // setCurrentTest({ //set the currently chosen test in TestContext
-  //   name: testName, //to be passed down to TestDetails
-  //   testId: testId,
-  // })
-  }
+    setCurrentTest({ name: testName, testId: testId });
+    console.log('currentTest set to: ', { name: testName, testId: testId });
+  };
 
   return (
     <Fragment>
@@ -25,4 +25,6 @@ export default function Test(props) {
       </div>
     </Fragment>
   );
-}
+};
+
+export default Test;

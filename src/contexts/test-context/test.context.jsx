@@ -6,9 +6,9 @@ export const TestContext = createContext({
   setCurrentTest: () => null,
 });
 
-export function TestProvider({ children }) {
+export const TestProvider = ({ children }) => {
   const [currentTest, setCurrentTest] = useState(null); //no test by default
   const value = { currentTest, setCurrentTest }; //to be provided
 
   return <TestContext.Provider value={value}>{children}</TestContext.Provider>;
-}
+};

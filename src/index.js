@@ -6,6 +6,7 @@ import { UserProvider } from "./contexts/user/user.context";
 import App from "./App";
 import "./index.scss";
 import { CourseProvider } from "./contexts/course/course.context";
+import { TestProvider } from "./contexts/test-context/test.context";
 
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement); // createRoot(container!)
@@ -15,7 +16,9 @@ root.render(
     <BrowserRouter>
       <UserProvider>
         <CourseProvider>
-          <App />
+          <TestProvider>
+            <App />
+          </TestProvider>
         </CourseProvider>
       </UserProvider>
     </BrowserRouter>

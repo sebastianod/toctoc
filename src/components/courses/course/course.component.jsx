@@ -6,11 +6,11 @@ import "./course.styles.scss";
 //We use the courseId to set that as the link to each course
 
 const Course = ({ name, courseId }) => {
-  const {setCurrentCourse} = useContext(CourseContext)
+  const {setCurrentCourse} = useContext(CourseContext);
 
   const handleCourseClick = () => {
     setCurrentCourse({name: name, courseId: courseId})
-  }
+  };
 
   return (
     <Fragment>
