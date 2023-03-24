@@ -1,13 +1,14 @@
 .button-container {
-    min-width: 165px;
+    min-width: 100px;
     width: auto;
-    height: 50px;
+    height: 40px;
     letter-spacing: 0.5px;
     line-height: 50px;
     padding: 0 35px 0 35px;
     font-size: 15px;
-    background-color: black;
+    background-color: #010030;
     color: white;
+    border-radius: 5px;
     text-transform: uppercase;
     font-family: 'Open Sans Condensed';
     font-weight: bolder;
@@ -15,6 +16,7 @@
     cursor: pointer;
     display: flex;
     justify-content: center;
+    align-items: center;
   
     &:hover {
       background-color: white;
@@ -41,6 +43,17 @@
         background-color: black;
         color: white;
         border: none;
+      }
+    }
+
+    &.submit {
+      background-color: #3d0000;
+      color: white;
+  
+      &:hover {
+        background-color: rgb(222, 0, 0);
+        color: rgb(255, 255, 255);
+        border: 1px solid black;
       }
     }
   }

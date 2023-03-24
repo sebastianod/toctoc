@@ -7,6 +7,7 @@ const CourseDetails = () => {
   // const [name, courseId] = useOutletContext() //when nested inside courses
   const { currentCourse } = useContext(CourseContext);
   const { name } = currentCourse; //get the name of the clicked course
+  console.log("course name: ", name);
 
   return (
     <div className="course-details-container">

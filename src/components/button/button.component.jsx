@@ -6,6 +6,7 @@ import "./button.styles.scss";
 const buttonTypeClasses = {
   google: "google-sign-in",
   inverted: "inverted",
+  submit: "submit",
 };
 
 //entering {...otherProps} means we must use the jsx button tags when
