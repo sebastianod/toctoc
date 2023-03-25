@@ -1,11 +1,11 @@
 import { useContext, useState } from "react";
 import { TestContext } from "../../../contexts/test-context/test.context";
-import Button from "../../button/button.component";
 import {
   processListOfSentences,
   hasEmptynessBetweenStars,
 } from "../../../utils/utilities";
 import "./test-details.styles.scss";
+import Answers from "../../answers-form/answers.component";
 
 export default function TestDetails() {
   const { currentTest } = useContext(TestContext);
@@ -26,7 +26,8 @@ export default function TestDetails() {
   function handleSubmit(e) {
     e.preventDefault(); //prevent page refresh, without this, the url changes to the action url and the page breaks
 
-    if (hasEmptynessBetweenStars(answersList)) { //prevents submission of empty spaces between stars
+    if (hasEmptynessBetweenStars(answersList)) {
+      //prevents submission of empty spaces between stars
       return alert("Please remove empty spaces between stars");
     }
 
@@ -39,21 +40,11 @@ export default function TestDetails() {
     <div className="test-details-container">
       <h3 className="test-name">{name} </h3>
 
-      <form className="answers-form" onSubmit={handleSubmit}>
-        <h4>Answers: </h4>
-        <textarea
-          type="textarea"
-          name="textValue"
-          value={answersList}
-          onChange={handleAnswerInput}
-          className="answers-text-area"
-          rows="4"
-          cols="50"
-        />
-        <div className="submit-button-area">
-          <Button buttonType="submit">Submit answers</Button>
-        </div>
-      </form>
+      <Answers
+        value={answersList}
+        onChange={handleAnswerInput}
+        onSubmit={handleSubmit}
+      />
     </div>
   );
 }
