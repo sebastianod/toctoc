@@ -1,29 +1,29 @@
-.create-button {
+.delete-button {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 10px;
+    margin: 0;
     padding: 10px;
     background-color: transparent;
     border: none;
     cursor: pointer;
 
-    .plus {
+    .delete {
       display: flex;
       align-items: center;
       justify-content: center;
       width: 30px;
       height: 30px;
-      border: 2px solid #003fa5;
+      border: 2px solid #960000;
       border-radius: 50%;
-      font-size: 24px;
+      font-size: 18px;
       font-weight: bold;
-      color: #003fa5;
-      line-height: 1.2; /* adjust line-height as necessary */
+      color: #960000;
+      padding: 0;
     }
   }
 
-  .create-button:hover .plus {
-      background-color: #003fa5;
+  .delete-button:hover .delete {
+      background-color: #960000;
       color: #fff;
     }

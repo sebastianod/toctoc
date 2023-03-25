@@ -4,6 +4,7 @@ import { getCourses } from "../../utils/firebase/firebase-utils";
 import { useState, useEffect } from "react";
 import PlusButton from "../plus-button/plus-button.component";
 import { processListOfSentences } from "../../utils/utilities";
+import CreateArea from "../create-area/create-area.component";
 
 const Courses = () => {
   const [courses, setCourses] = useState([]);
@@ -27,7 +28,7 @@ const Courses = () => {
   return (
     <div className="list-container">
       <div className="content-container">
-        <PlusButton add="course" />
+        <CreateArea type="Course"/>
         {showCourses(courses)}
       </div>
     </div>
