@@ -27,8 +27,8 @@ const Courses = () => {
   return (
     <div className="list-container">
       <div className="content-container">
-        {showCourses(courses)}
         <PlusButton add="course" />
+        {showCourses(courses)}
       </div>
     </div>
   );

@@ -1,3 +1,4 @@
+import Plus from "./plus-alone.component";
 import "./plus-button.styles.scss";
 
 const PlusButton = (props) => {
@@ -5,9 +6,7 @@ const PlusButton = (props) => {
 
   return (
     <div className="add-container">
-      <button className="create-button">
-        <span className="plus">+</span>
-      </button>
+      <Plus />
       <h3 className="create-label">Create {add}</h3>
     </div>
   );
