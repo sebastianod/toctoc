@@ -4,10 +4,11 @@ import Plus from "../plus-button/plus-alone.component";
 import PlusButton from "../plus-button/plus-button.component";
 import TextInput from "../text-input/text-input.component";
 import XButton from "../x-button/x-button.component";
-import { createCourse } from "../../utils/firebase/firebase-utils";
+import { createCourse, createTest } from "../../utils/firebase/firebase-utils";
 import "./create-area.styles.scss";
 
-export default function CreateArea({ type }) {
+export default function CreateArea({ type, courseId }) {
+  //courseId is only passed if type is test
   const [thingName, setThingName] = useState(""); //course or test name
   const [isClicked, setIsClicked] = useState(false); //is the create button clicked?
   const [isOut, setIsOut] = useState(false); //is the X button clicked? Return to create course or test
@@ -29,6 +30,7 @@ export default function CreateArea({ type }) {
     event.preventDefault();
     //create course
     if (type === "Course") createCourse(thingName);
+    if (type === "Test") createTest(courseId, thingName); //If called from <Tests />, courseId is passed in order to create the test in the correct course
     setThingName(""); //reset the thing name field
   };
 

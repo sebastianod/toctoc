@@ -176,6 +176,18 @@ export const subscribeToCourses = (onUpdate) => {//onUpdate is setCourses in <Co
   return unsubscribe;
 };
 
+export const subscribeToTests = (courseId, onUpdate) => { //requieres the courseId to get the tests from the right course
+  const testsRef = collection(db, `courses/${courseId}/tests`);
+  const unsubscribe = onSnapshot(testsRef, (querySnapshot) => {
+    const testsData = querySnapshot.docs.map((test) => ({
+      testId: test.id,
+      ...test.data(),
+    }));
+    onUpdate(testsData);
+  });
+  return unsubscribe;
+}
+
 //================================================//
 
 //=================Creating data=================//
@@ -189,3 +201,13 @@ export const createCourse = async (courseName) => {
     console.log("Error creating course", error.message);
   }
 };
+
+export const createTest = async (courseId, testName) => {//needs courseId to create the test in the right course
+  const testsRef = collection(db, `courses/${courseId}/tests`);
+
+  try {
+    await addDoc(testsRef, { name: testName });
+  } catch (error) {
+    console.log("Error creating test", error.message);
+  }
+}
