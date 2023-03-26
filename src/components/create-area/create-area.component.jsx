@@ -55,12 +55,10 @@ export default function CreateArea({ type }) {
     if (isOut) {
         setIsClicked(false);
         setIsOut(false);
+        setThingName("");
         return <PlusButton add={type} onClick={handleClick} />
     };
   };
-
-  console.log("isClicked: ", isClicked);
-  console.log("isOut: ", isOut);
 
   return <div className="create-area-container">{uiLogic()}</div>;
 }

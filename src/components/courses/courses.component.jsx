@@ -2,7 +2,6 @@ import Course from "./course/course.component";
 import "./courses.styles.scss";
 import { getCourses } from "../../utils/firebase/firebase-utils";
 import { useState, useEffect } from "react";
-import PlusButton from "../plus-button/plus-button.component";
 import { processListOfSentences } from "../../utils/utilities";
 import CreateArea from "../create-area/create-area.component";
 
