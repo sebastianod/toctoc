@@ -1,0 +1,26 @@
+.course-container {
+    display: flex;
+    flex-direction: row;
+    .course{    
+        flex: 2;
+        margin: 6px;
+        padding: 0;
+        width: 200px;
+        padding: 10px;
+        border-radius: 5px;
+        justify-content: center;
+        align-items: center;
+    }
+    .edit-container{
+        flex: 1;
+        margin: 0;
+        justify-content: center;
+        align-items: center;
+    }
+    .delete-container{
+        flex: 0;
+        margin: 0;
+        justify-content: center;
+        align-items: center;
+    }
+}

@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from "react";
 import { CourseContext } from "../../contexts/course/course.context";
-import { getTests } from "../../utils/firebase/firebase-utils";
 import { processListOfSentences } from "../../utils/utilities";
 import { subscribeToTests } from "../../utils/firebase/firebase-utils";
 import CreateArea from "../create-area/create-area.component";

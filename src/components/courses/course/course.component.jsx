@@ -1,6 +1,8 @@
 import { Fragment, useContext } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { CourseContext } from "../../../contexts/course/course.context";
+import Delete from "../../delete-button/delete-button.component";
+import Edit from "../../edit-button/edit-button.component";
 import "./course.styles.scss";
 
 //We use the courseId to set that as the link to each course
@@ -18,6 +20,8 @@ const Course = ({ name, courseId }) => {
         <NavLink to={`/dasht/courses/${courseId}`} onClick={handleCourseClick}>
           <div className="course">{name}</div>
         </NavLink>
+        <Edit className="edit-container"/>
+        <Delete className="delete-container" />
       </div>
       <Outlet />
     </Fragment>
