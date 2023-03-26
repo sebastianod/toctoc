@@ -4,6 +4,7 @@ import Plus from "../plus-button/plus-alone.component";
 import PlusButton from "../plus-button/plus-button.component";
 import TextInput from "../text-input/text-input.component";
 import XButton from "../x-button/x-button.component";
+import { createCourse } from "../../utils/firebase/firebase-utils";
 import "./create-area.styles.scss";
 
 export default function CreateArea({ type }) {
@@ -26,12 +27,14 @@ export default function CreateArea({ type }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    //create course or test here
-    console.log(`${type} submitted`);
+    //create course
+    if (type === "Course") createCourse(thingName);
+    setThingName(""); //reset the thing name field
   };
 
   const uiLogic = () => {
-    if (isClicked === false) return <PlusButton add={type} onClick={handleClick} />;
+    if (isClicked === false)
+      return <PlusButton add={type} onClick={handleClick} />;
     if (isClicked === true && isOut === false)
       return (
         <form className="form-container" onSubmit={handleSubmit}>
@@ -54,11 +57,11 @@ export default function CreateArea({ type }) {
         </form>
       );
     if (isOut) {
-        setIsClicked(false);
-        setIsOut(false);
-        setThingName("");
-        return <PlusButton add={type} onClick={handleClick} />
-    };
+      setIsClicked(false);
+      setIsOut(false);
+      setThingName("");
+      return <PlusButton add={type} onClick={handleClick} />;
+    }
   };
 
   return <div className="create-area-container">{uiLogic()}</div>;

@@ -1,6 +1,8 @@
 import Course from "./course/course.component";
 import "./courses.styles.scss";
-import { getCourses } from "../../utils/firebase/firebase-utils";
+import {
+  subscribeToCourses,
+} from "../../utils/firebase/firebase-utils";
 import { useState, useEffect } from "react";
 import { processListOfSentences } from "../../utils/utilities";
 import CreateArea from "../create-area/create-area.component";
@@ -8,12 +10,10 @@ import CreateArea from "../create-area/create-area.component";
 const Courses = () => {
   const [courses, setCourses] = useState([]);
 
-  useEffect(() => {
-    async function fetchCourses() {
-      const coursesData = await getCourses();
-      setCourses(coursesData); //Set it only once the promise is resolved
-    }
-    fetchCourses();
+  useEffect(() => { 
+    console.log("just fetched courses");
+    const unsubscribe = subscribeToCourses(setCourses); //whenever a document is added, removed, or changed, this will be called
+    return () => unsubscribe();
   }, []);
 
   function showCourses(coursesArray) {
@@ -27,7 +27,7 @@ const Courses = () => {
   return (
     <div className="list-container">
       <div className="content-container">
-        <CreateArea type="Course"/>
+        <CreateArea type="Course" />
         {showCourses(courses)}
       </div>
     </div>
