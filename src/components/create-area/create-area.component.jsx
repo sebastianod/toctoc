@@ -27,13 +27,14 @@ export default function CreateArea({ type }) {
   const handleSubmit = (event) => {
     event.preventDefault();
     //create course or test here
+    console.log(`${type} submitted`);
   };
 
   const uiLogic = () => {
     if (isClicked === false) return <PlusButton add={type} onClick={handleClick} />;
     if (isClicked === true && isOut === false)
       return (
-        <form className="form-container" onClick={handleSubmit}>
+        <form className="form-container" onSubmit={handleSubmit}>
           <div className="input-container">
             <TextInput
               label={`${type} name`}
