@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { updateCourse } from "../../utils/firebase/firebase-utils";
+import { updateCourse, updateTest } from "../../utils/firebase/firebase-utils";
 import Plus from "../plus-button/plus-alone.component";
 import TextInput from "../text-input/text-input.component";
 import XButton from "../x-button/x-button.component";
@@ -25,9 +25,11 @@ export default function EditArea({ type, courseId, setEditClick, ...otherProps }
     event.preventDefault();
     setIsSubmitted(true);
 
+    const { testId } = otherProps; //testId is only passed if type is test
+
     //edit course
     if (type === "Course") updateCourse(courseId, thingName);
-    //if (type === "Test") updateTest(courseId, testId, thingName); //If called from <Tests />, courseId is passed in order to update the test in the correct course
+    if (type === "Test") updateTest(courseId, testId, thingName); //If called from <Tests />, courseId is passed in order to update the test in the correct course
     setThingName(""); //reset the thing name field
   };
 

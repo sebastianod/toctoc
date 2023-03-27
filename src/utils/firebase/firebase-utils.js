@@ -198,7 +198,7 @@ export const createCourse = async (courseName) => {
   const coursesRef = collection(db, "courses"); //reference for courses collection
 
   try {
-    await addDoc(coursesRef, { name: courseName }); //addDoc method sets doc id automatically
+    await addDoc(coursesRef, { name: courseName.toLowerCase() }); //addDoc method sets doc id automatically
   } catch (error) {
     console.log("Error creating course", error.message);
   }
@@ -208,7 +208,7 @@ export const createTest = async (courseId, testName) => {//needs courseId to cre
   const testsRef = collection(db, `courses/${courseId}/tests`);
 
   try {
-    await addDoc(testsRef, { name: testName });
+    await addDoc(testsRef, { name: testName.toLowerCase() });
   } catch (error) {
     console.log("Error creating test", error.message);
   }
@@ -220,9 +220,19 @@ export const updateCourse = async (courseId, courseName) => {
   const courseRef = doc(db, "courses", courseId); //reference for the course to be updated
 
   try {
-    await updateDoc(courseRef, { name: courseName });
+    await updateDoc(courseRef, { name: courseName.toLowerCase() });
   } catch (error) {
     console.log("Error updating course", error.message);
+  }
+}
+
+export const updateTest = async (courseId, testId, testName) => { 
+  const testRef = doc(db, `courses/${courseId}/tests`, testId); //reference for the test to be updated
+
+  try {
+    await updateDoc(testRef, { name: testName.toLowerCase() });
+  } catch (error) {
+    console.log("Error updating test", error.message);
   }
 }
 
@@ -235,5 +245,15 @@ export const deleteCourse = async (courseId) => {
     await deleteDoc(courseRef);
   } catch (error) {
     console.log("Error deleting course", error.message);
+  }
+}
+
+export const deleteTest = async (courseId, testId) => { 
+  const testRef = doc(db, `courses/${courseId}/tests`, testId); //reference for the test to be deleted
+
+  try {
+    await deleteDoc(testRef);
+  } catch (error) {
+    console.log("Error deleting test", error.message);
   }
 }

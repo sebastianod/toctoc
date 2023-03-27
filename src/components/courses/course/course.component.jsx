@@ -11,7 +11,7 @@ import "./course.styles.scss";
 
 const Course = ({ name, courseId, ...otherProps }) => {
   const { setCurrentCourse } = useContext(CourseContext);
-  const [ editClick, setEditClick ] = useState(false); //is the edit button clicked?
+  const [ editClick, setEditClick ] = useState(false); //is the edit button clicked? Based on this, we rende <EditArea /> or the basic <Course /> component
 
   const handleCourseClick = () => {
     setCurrentCourse({ name: name, courseId: courseId });

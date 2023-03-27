@@ -1,6 +1,7 @@
 .form-container {
     display: flex;
     flex-direction: row;
+    margin-left: 9px;
 
     .input-container {
         flex: 2;
@@ -29,7 +30,7 @@
 
     .delete-container {
         flex: 0;
-        margin: 0;
+        margin: 0px;
         justify-content: center;
         align-items: center;
     }
