@@ -18,7 +18,7 @@ const Course = ({ name, courseId }) => {
     <Fragment>
       <div className="course-container">
         <NavLink to={`/dasht/courses/${courseId}`} onClick={handleCourseClick}>
-          <div className="course">{name}</div>
+          <h3 className="course">{name}</h3>
         </NavLink>
         <Edit className="edit-container"/>
         <Delete className="delete-container" />
