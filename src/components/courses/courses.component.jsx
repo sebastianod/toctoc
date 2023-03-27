@@ -11,7 +11,6 @@ const Courses = () => {
   const [courses, setCourses] = useState([]);
 
   useEffect(() => { 
-    console.log("just fetched courses");
     const unsubscribe = subscribeToCourses(setCourses); //whenever a document is added, removed, or changed, this will be called
     return () => unsubscribe();
   }, []);

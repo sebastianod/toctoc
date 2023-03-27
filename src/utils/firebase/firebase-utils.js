@@ -8,6 +8,8 @@ import {
   setDoc,
   addDoc,
   onSnapshot,
+  updateDoc,
+  deleteDoc,
 } from "firebase/firestore"; //Firestore CRUD and such
 import {
   getAuth,
@@ -209,5 +211,29 @@ export const createTest = async (courseId, testName) => {//needs courseId to cre
     await addDoc(testsRef, { name: testName });
   } catch (error) {
     console.log("Error creating test", error.message);
+  }
+}
+
+//=================Updating data=================//
+
+export const updateCourse = async (courseId, courseName) => {
+  const courseRef = doc(db, "courses", courseId); //reference for the course to be updated
+
+  try {
+    await updateDoc(courseRef, { name: courseName });
+  } catch (error) {
+    console.log("Error updating course", error.message);
+  }
+}
+
+//=================Deleting data=================//
+
+export const deleteCourse = async (courseId) => { 
+  const courseRef = doc(db, "courses", courseId); //reference for the course to be deleted
+
+  try {
+    await deleteDoc(courseRef);
+  } catch (error) {
+    console.log("Error deleting course", error.message);
   }
 }

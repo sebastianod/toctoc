@@ -1,43 +1,38 @@
-//Handles creation of  courses and tests
 import { useState } from "react";
+import { updateCourse } from "../../utils/firebase/firebase-utils";
 import Plus from "../plus-button/plus-alone.component";
-import PlusButton from "../plus-button/plus-button.component";
 import TextInput from "../text-input/text-input.component";
 import XButton from "../x-button/x-button.component";
-import { createCourse, createTest } from "../../utils/firebase/firebase-utils";
-import "./create-area.styles.scss";
+import "./edit-area.styles.scss";
 
-export default function CreateArea({ type, courseId }) {
+export default function EditArea({ type, courseId, setEditClick, ...otherProps }) {
   //courseId is only passed if type is course
   const [thingName, setThingName] = useState(""); //course or test name
-  const [isClicked, setIsClicked] = useState(false); //is the create button clicked?
   const [isOut, setIsOut] = useState(false); //is the X button clicked? Return to create course or test
+  const [isSubmitted, setIsSubmitted] = useState(false); //is the form submitted?
 
   const handleChange = (event) => {
     const { value } = event.target;
     setThingName(value); //set course name for ui
   };
 
-  const handleClick = () => {
-    setIsClicked(!isClicked); //toggles the create area
-  };
-
   const handleOut = () => {
     setIsOut(true);
+    console.log("isOut: " + isOut);
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    //create course
-    if (type === "Course") createCourse(thingName);
-    if (type === "Test") createTest(courseId, thingName); //If called from <Tests />, courseId is passed in order to create the test in the correct course
+    setIsSubmitted(true);
+
+    //edit course
+    if (type === "Course") updateCourse(courseId, thingName);
+    //if (type === "Test") updateTest(courseId, testId, thingName); //If called from <Tests />, courseId is passed in order to update the test in the correct course
     setThingName(""); //reset the thing name field
   };
 
   const uiLogic = () => {
-    if (isClicked === false)
-      return <PlusButton add={type} onClick={handleClick} />;
-    if (isClicked === true && isOut === false)
+    if (isOut === false && isSubmitted === false)
       return (
         <form className="form-container" onSubmit={handleSubmit}>
           <div className="input-container">
@@ -58,13 +53,10 @@ export default function CreateArea({ type, courseId }) {
           </div>
         </form>
       );
-    if (isOut) {
-      setIsClicked(false);
-      setIsOut(false);
-      setThingName("");
-      return <PlusButton add={type} onClick={handleClick} />;
+    if (isOut === true || isSubmitted === true) {
+      setEditClick(false); //reset the edit click that comes from the <Course /> component
     }
   };
 
-  return <div className="create-area-container">{uiLogic()}</div>;
+  return uiLogic();
 }
