@@ -26,7 +26,7 @@ export default function EditArea({ type, courseId, setEditClick, ...otherProps }
 
     const { testId } = otherProps; //testId is only passed if type is test
 
-    //edit course
+    //edit course, test
     if (type === "Course") updateCourse(courseId, thingName);
     if (type === "Test") updateTest(courseId, testId, thingName); //If called from <Tests />, courseId is passed in order to update the test in the correct course
     setThingName(""); //reset the thing name field

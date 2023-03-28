@@ -134,13 +134,6 @@ export const onAuthStateChangedListener = (callback) => {
 
 //=============== Get and Create data ==============//
 
-//  Helper: Reads an array of IDs from a collection concurrently
-// const readIds = async (collection, ids) => {
-//   //say from the tags collection, read their ids.
-//   const reads = ids.map((id) => collection.doc(id).get());
-//   const result = await Promise.all(reads);
-//   return result.map((v) => v.data()); //gets the actual data from each doc
-// };
 
 //---------------Getting data Once-----------------//
 
@@ -163,6 +156,17 @@ export const getTests = async (courseId) => {
     ...test.data(), //the data inside the test, name etc.
   })); // The documents can be accessed as an array via the docs property or enumerated using the forEach method.
 };
+
+export const checkUserExistsByEmail = async (email) => {
+  const usersRef = collection(db, "users");
+  usersRef.where("email", "==", email).get().then((querySnapshot) => {
+    if (querySnapshot.empty) {
+      return false;
+    } else {
+      return true;
+    }
+  });
+}
 
 //-------Data listeners (realtime updates)-------//
 
@@ -255,5 +259,14 @@ export const deleteTest = async (courseId, testId) => {
     await deleteDoc(testRef);
   } catch (error) {
     console.log("Error deleting test", error.message);
+  }
+}
+
+export const deleteStudent  = async (courseId, studentId) => {
+  const studentRef = doc(db, `courses/${courseId}/students`, studentId);
+  try {
+    await deleteDoc(studentRef);
+  } catch (error) {
+    console.log("Error deleting student", error.message);
   }
 }
