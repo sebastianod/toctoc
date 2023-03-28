@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CourseContext } from "../../contexts/course/course.context";
 import CreateArea from "../create-area/create-area.component";
 import "./students.styles.sass";
@@ -7,6 +7,11 @@ const Students = () => {
   const [students, setStudents] = useState([]);
   const { currentCourse } = useContext(CourseContext); //to get the current courseId, for the path to the students of this course
   const courseId = currentCourse.courseId;
+
+  // useEffect(()=>{
+  //   const unsubscribe = subscribeToStudents(setStudents, courseId);
+  //   return () => unsubscribe();
+  // },[]);
     
       return (
         <div className="list-container">

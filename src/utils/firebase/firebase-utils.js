@@ -198,6 +198,19 @@ export const subscribeToTests = (courseId, onUpdate) => {
   return unsubscribe;
 };
 
+export const subscribeToStudents = (courseId, onUpdate) => { 
+  //requieres the courseId to get the students from the right course
+  const studentsRef = collection(db, `courses/${courseId}/students`);
+  const unsubscribe = onSnapshot(studentsRef, (querySnapshot) => {
+    const studentsData = querySnapshot.docs.map((student) => ({
+      studentId: student.id,
+      ...student.data(),
+    }));
+    onUpdate(studentsData);
+  });
+  return unsubscribe;
+}
+
 //================================================//
 
 //=================Creating data=================//
