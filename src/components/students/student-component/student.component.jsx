@@ -7,7 +7,6 @@ import "./student.styles.scss";
 
 export default function Student(props) {
   const { studentName, courseId, studentId } = props;
-  const [editClick, setEditClick] = useState(false);
 
   const handleDeleteClick = () => {
     const deleteConfirmation = prompt(
@@ -18,29 +17,12 @@ export default function Student(props) {
     }
   };
 
-  function uiLogic() {
-    if (editClick === true) {
-      return (
-        <EditArea
-          type="Student"
-          courseId={courseId}
-          studentId={studentId}
-          name={studentName}
-          setEditClick={setEditClick}
-        />
-      );
-    }
-    if (editClick === false) {
-      return (
-        <Fragment>
-          <div className="student-container">
-            <h3 className="student-name">{studentName}</h3>
-            <Delete className="delete-container" onClick={handleDeleteClick} />
-          </div>
-        </Fragment>
-      );
-    }
-  }
-
-  return uiLogic();
+  return (
+    <Fragment>
+      <div className="student-container">
+        <h3 className="student-name">{studentName}</h3>
+        <Delete className="delete-container" onClick={handleDeleteClick} />
+      </div>
+    </Fragment>
+  );
 }

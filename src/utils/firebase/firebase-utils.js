@@ -134,7 +134,6 @@ export const onAuthStateChangedListener = (callback) => {
 
 //=============== Get and Create data ==============//
 
-
 //---------------Getting data Once-----------------//
 
 export const getCourses = async () => {
@@ -159,30 +158,35 @@ export const getTests = async (courseId) => {
 
 export const checkUserExistsByEmail = async (email) => {
   const usersRef = collection(db, "users");
-  usersRef.where("email", "==", email).get().then((querySnapshot) => {
-    if (querySnapshot.empty) {
-      return false;
-    } else {
-      return true;
-    }
-  });
-}
+  usersRef
+    .where("email", "==", email)
+    .get()
+    .then((querySnapshot) => {
+      if (querySnapshot.empty) {
+        return false;
+      } else {
+        return true;
+      }
+    });
+};
 
 //-------Data listeners (realtime updates)-------//
 
-export const subscribeToCourses = (setterFunction) => {//setterFunction is setCourses in <Courses />, for example
+export const subscribeToCourses = (setterFunction) => {
+  //setterFunction is setCourses in <Courses />, for example
   const coursesRef = collection(db, "courses"); //collection to be listened to
   const unsubscribe = onSnapshot(coursesRef, (querySnapshot) => {
     const coursesData = querySnapshot.docs.map((course) => ({
       courseId: course.id,
       ...course.data(),
     }));
-    setterFunction(coursesData);//sets the courses state in <Courses />
+    setterFunction(coursesData); //sets the courses state in <Courses />
   });
   return unsubscribe;
 };
 
-export const subscribeToTests = (courseId, onUpdate) => { //requieres the courseId to get the tests from the right course
+export const subscribeToTests = (courseId, onUpdate) => {
+  //requieres the courseId to get the tests from the right course
   const testsRef = collection(db, `courses/${courseId}/tests`);
   const unsubscribe = onSnapshot(testsRef, (querySnapshot) => {
     const testsData = querySnapshot.docs.map((test) => ({
@@ -192,7 +196,7 @@ export const subscribeToTests = (courseId, onUpdate) => { //requieres the course
     onUpdate(testsData);
   });
   return unsubscribe;
-}
+};
 
 //================================================//
 
@@ -208,7 +212,8 @@ export const createCourse = async (courseName) => {
   }
 };
 
-export const createTest = async (courseId, testName) => {//needs courseId to create the test in the right course
+export const createTest = async (courseId, testName) => {
+  //needs courseId to create the test in the right course
   const testsRef = collection(db, `courses/${courseId}/tests`);
 
   try {
@@ -216,7 +221,29 @@ export const createTest = async (courseId, testName) => {//needs courseId to cre
   } catch (error) {
     console.log("Error creating test", error.message);
   }
-}
+};
+
+//Teacher assigns a student to a course with this function. The student must already exist in Users collection
+export const createStudent = async (courseId, studentEmail) => {
+  //student is created by email in a course
+
+  //check if student exists in Users collection by email
+  if (checkUserExistsByEmail(studentEmail) === false) {
+    console.log(
+      "Student doesn't exist. Student must exist as a user before enrolling him to a course"
+    );
+    return;
+  } 
+  if (checkUserExistsByEmail(studentEmail) === true ) {
+    const studentsRef = collection(db, `courses/${courseId}/students`);
+
+    try {
+      await addDoc(studentsRef, { email: studentEmail });
+    } catch (error) {
+      console.log("Error creating student", error.message);
+    }
+  }
+};
 
 //=================Updating data=================//
 
@@ -228,9 +255,9 @@ export const updateCourse = async (courseId, courseName) => {
   } catch (error) {
     console.log("Error updating course", error.message);
   }
-}
+};
 
-export const updateTest = async (courseId, testId, testName) => { 
+export const updateTest = async (courseId, testId, testName) => {
   const testRef = doc(db, `courses/${courseId}/tests`, testId); //reference for the test to be updated
 
   try {
@@ -238,11 +265,11 @@ export const updateTest = async (courseId, testId, testName) => {
   } catch (error) {
     console.log("Error updating test", error.message);
   }
-}
+};
 
 //=================Deleting data=================//
 
-export const deleteCourse = async (courseId) => { 
+export const deleteCourse = async (courseId) => {
   const courseRef = doc(db, "courses", courseId); //reference for the course to be deleted
 
   try {
@@ -250,9 +277,9 @@ export const deleteCourse = async (courseId) => {
   } catch (error) {
     console.log("Error deleting course", error.message);
   }
-}
+};
 
-export const deleteTest = async (courseId, testId) => { 
+export const deleteTest = async (courseId, testId) => {
   const testRef = doc(db, `courses/${courseId}/tests`, testId); //reference for the test to be deleted
 
   try {
@@ -260,13 +287,13 @@ export const deleteTest = async (courseId, testId) => {
   } catch (error) {
     console.log("Error deleting test", error.message);
   }
-}
+};
 
-export const deleteStudent  = async (courseId, studentId) => {
+export const deleteStudent = async (courseId, studentId) => {
   const studentRef = doc(db, `courses/${courseId}/students`, studentId);
   try {
     await deleteDoc(studentRef);
   } catch (error) {
     console.log("Error deleting student", error.message);
   }
-}
+};

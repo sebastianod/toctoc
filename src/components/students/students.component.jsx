@@ -1,22 +1,17 @@
-// import { getCourses } from "../../utils/firebase/firebase-utils"; //replace with get Student
-// import { useState, useEffect } from "react";
-import PlusButton from "../plus-button/plus-button.component";
+import { useContext, useState } from "react";
+import { CourseContext } from "../../contexts/course/course.context";
+import CreateArea from "../create-area/create-area.component";
 import "./students.styles.sass";
 
 const Students = () => {
-    //   const [students, setStudents] = useState([]);
-    
-    //   useEffect(() => {
-    //     async function fetchStudents() {
-    //       const studentsData = await getStudents();
-    //       setStudents(testsData); //Set it only once the promise is resolved
-    //     }
-    //     fetchStudents();
-    //   }, []);
+  const [students, setStudents] = useState([]);
+  const { currentCourse } = useContext(CourseContext); //to get the current courseId, for the path to the students of this course
+  const courseId = currentCourse.courseId;
     
       return (
         <div className="list-container">
           <div className="content-container">
+            <CreateArea type="Student" courseId={courseId}/>
             <h3> Student 1 </h3>
             <h3> Student 2 </h3>
             <h3> Student 3 </h3>
@@ -24,7 +19,6 @@ const Students = () => {
               const { name, teacher } = course;
               return <Course key={index} name={name} teacher={teacher} />;
             })} */}
-            <PlusButton add="student"/>
           </div>
         </div>
       );
