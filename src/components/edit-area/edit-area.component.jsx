@@ -18,7 +18,6 @@ export default function EditArea({ type, courseId, setEditClick, ...otherProps }
 
   const handleOut = () => {
     setIsOut(true);
-    console.log("isOut: " + isOut);
   };
 
   const handleSubmit = (event) => {
@@ -56,7 +55,7 @@ export default function EditArea({ type, courseId, setEditClick, ...otherProps }
         </form>
       );
     if (isOut === true || isSubmitted === true) {
-      setEditClick(false); //reset the edit click that comes from the <Course /> component
+      setEditClick(false); //reset the edit click that comes from the <Course /> or <Test /> parent component
     }
   };
 

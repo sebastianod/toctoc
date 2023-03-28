@@ -166,14 +166,14 @@ export const getTests = async (courseId) => {
 
 //-------Data listeners (realtime updates)-------//
 
-export const subscribeToCourses = (onUpdate) => {//onUpdate is setCourses in <Courses />, for example
+export const subscribeToCourses = (setterFunction) => {//setterFunction is setCourses in <Courses />, for example
   const coursesRef = collection(db, "courses"); //collection to be listened to
   const unsubscribe = onSnapshot(coursesRef, (querySnapshot) => {
     const coursesData = querySnapshot.docs.map((course) => ({
       courseId: course.id,
       ...course.data(),
     }));
-    onUpdate(coursesData);//sets the courses state in <Courses />
+    setterFunction(coursesData);//sets the courses state in <Courses />
   });
   return unsubscribe;
 };
