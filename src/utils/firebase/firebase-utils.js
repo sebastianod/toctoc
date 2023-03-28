@@ -10,6 +10,8 @@ import {
   onSnapshot,
   updateDoc,
   deleteDoc,
+  query,
+  where,
 } from "firebase/firestore"; //Firestore CRUD and such
 import {
   getAuth,
@@ -157,17 +159,12 @@ export const getTests = async (courseId) => {
 };
 
 export const checkUserExistsByEmail = async (email) => {
-  const usersRef = collection(db, "users");
-  usersRef
-    .where("email", "==", email)
-    .get()
-    .then((querySnapshot) => {
-      if (querySnapshot.empty) {
-        return false;
-      } else {
-        return true;
-      }
-    });
+  const usersRef = collection(db, "users"); //get collection reference
+  const q = query(usersRef, where("email", "==", email)); //query for the user with the email
+  const querySnapshot = await getDocs(q); //get the snapshot of the query
+  // return true or false depending on if the user exists
+  if (querySnapshot.docs.length === 0) return false;
+  if (querySnapshot.docs.length > 0) return true;
 };
 
 //-------Data listeners (realtime updates)-------//
@@ -185,7 +182,7 @@ export const subscribeToCourses = (setterFunction) => {
   return unsubscribe;
 };
 
-export const subscribeToTests = (courseId, onUpdate) => {
+export const subscribeToTests = (courseId, setterFunction) => {
   //requieres the courseId to get the tests from the right course
   const testsRef = collection(db, `courses/${courseId}/tests`);
   const unsubscribe = onSnapshot(testsRef, (querySnapshot) => {
@@ -193,12 +190,12 @@ export const subscribeToTests = (courseId, onUpdate) => {
       testId: test.id,
       ...test.data(),
     }));
-    onUpdate(testsData);
+    setterFunction(testsData);
   });
   return unsubscribe;
 };
 
-export const subscribeToStudents = (courseId, onUpdate) => { 
+export const subscribeToStudents = (courseId, setterFunction) => {
   //requieres the courseId to get the students from the right course
   const studentsRef = collection(db, `courses/${courseId}/students`);
   const unsubscribe = onSnapshot(studentsRef, (querySnapshot) => {
@@ -206,10 +203,10 @@ export const subscribeToStudents = (courseId, onUpdate) => {
       studentId: student.id,
       ...student.data(),
     }));
-    onUpdate(studentsData);
+    setterFunction(studentsData);
   });
   return unsubscribe;
-}
+};
 
 //================================================//
 
@@ -239,22 +236,14 @@ export const createTest = async (courseId, testName) => {
 //Teacher assigns a student to a course with this function. The student must already exist in Users collection
 export const createStudent = async (courseId, studentEmail) => {
   //student is created by email in a course
+  console.log("createStudent function called");
 
-  //check if student exists in Users collection by email
-  if (checkUserExistsByEmail(studentEmail) === false) {
-    console.log(
-      "Student doesn't exist. Student must exist as a user before enrolling him to a course"
-    );
-    return;
-  } 
-  if (checkUserExistsByEmail(studentEmail) === true ) {
-    const studentsRef = collection(db, `courses/${courseId}/students`);
+  const studentsRef = collection(db, `courses/${courseId}/students`);
 
-    try {
-      await addDoc(studentsRef, { email: studentEmail });
-    } catch (error) {
-      console.log("Error creating student", error.message);
-    }
+  try {
+    await addDoc(studentsRef, { email: studentEmail });
+  } catch (error) {
+    console.log("Error creating student", error.message);
   }
 };
 

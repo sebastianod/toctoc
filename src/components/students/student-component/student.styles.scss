@@ -1,0 +1,17 @@
+.student-container {
+    display: flex;
+    flex-direction: row;
+    margin-left: 9px;
+
+    .student-name {
+        flex: 1;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .delete-container {
+        flex: 0;
+        justify-content: center;
+        align-items: center;
+    }
+}
