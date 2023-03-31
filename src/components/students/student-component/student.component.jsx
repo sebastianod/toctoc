@@ -20,7 +20,7 @@ export default function Student(props) {
   return (
     <Fragment>
       <div className="student-container">
-        <h3 className="student-name">{capitalizeFirstLetterOfEachWord(studentName)}: </h3>
+        <h3 className="student-name">{capitalizeFirstLetterOfEachWord(studentName)}, </h3>
         <h3 className="student-email">{studentEmail}</h3>
         <Delete className="delete-container" onClick={handleDeleteClick} />
       </div>
