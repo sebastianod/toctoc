@@ -18,8 +18,8 @@ const Students = () => {
 
   //showing the students
   const showStudents = students.map((student, index) => {
-    const { email, studentId } = student;
-    return <Student key={index} studentEmail={email} studentId={studentId} courseId={courseId}/>;
+    const { email, studentId, displayName } = student;
+    return <Student key={index} studentName={displayName} studentEmail={email} studentId={studentId} courseId={courseId}/>;
   });
 
   return (
