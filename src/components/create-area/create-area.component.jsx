@@ -4,7 +4,7 @@ import Plus from "../plus-button/plus-alone.component";
 import PlusButton from "../plus-button/plus-button.component";
 import TextInput from "../text-input/text-input.component";
 import XButton from "../x-button/x-button.component";
-import { createCourse, createStudent, createTest } from "../../utils/firebase/firebase-utils";
+import { createCourse, createStudentUnderCourse, createTest } from "../../utils/firebase/firebase-utils";
 import "./create-area.styles.scss";
 
 export default function CreateArea({ type, courseId }) {
@@ -31,7 +31,7 @@ export default function CreateArea({ type, courseId }) {
     //create course
     if (type === "Course") createCourse(thingName);
     if (type === "Test") createTest(courseId, thingName); //If called from <Tests />, courseId is passed in order to create the test in the correct course
-    if (type === "Student") createStudent(courseId, thingName); //If called from <Students />, courseId is passed and thingName is the student's email this time
+    if (type === "Student") createStudentUnderCourse(courseId, thingName); //If called from <Students />, courseId is passed and thingName is the student's email this time
     setThingName(""); //reset the thing name field
   };
 
