@@ -13,6 +13,9 @@ const TeacherDashboard = () => {
           <NavLink to="/dasht/courses">
             <h2>Courses</h2>
           </NavLink>
+          <NavLink to="/dasht/create">
+            <h2>Create Students</h2>
+          </NavLink>
         </div>
         <div className="outlet-container">
           <Outlet />
