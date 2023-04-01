@@ -1,4 +1,3 @@
-import Courses from "../../components/courses/courses.component";
 import "./home.styles.scss";
 
 const Home = () => {
