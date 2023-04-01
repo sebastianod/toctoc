@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { read, utils } from "xlsx";
-import "./csv-input.styles.scss";
+import "./excel-input.styles.scss";
 
-export default function CsvInput() {
+export default function ExcelInput() {
   const [jsonData, setJsonData] = useState(null);
 
   const handleFileUpload = (e) => {

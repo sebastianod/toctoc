@@ -10,7 +10,7 @@ import Home from "./routes/home/home.component";
 import Navigation from "./routes/navigation/navigation.component";
 import StudentDashboard from "./routes/student-dashboard/student-dashboard.component";
 import TeacherDashboard from "./routes/teacher-dashboard/teacher-dashboard.component";
-import CsvInput from "./components/csv-input/csv-input.component";
+import ExcelInput from "./components/csv-input/excel-input.component";
 
 function App() {
   return (
@@ -21,7 +21,7 @@ function App() {
         <Route index element={<Home />} />
         <Route path="auth" element={<Authentication />} />
         <Route path="dasht" element={<TeacherDashboard />}>
-          <Route path="create" element={<CsvInput />} />
+          <Route path="create" element={<ExcelInput />} />
           <Route path="courses" element={<Courses />} />
           <Route path="courses/:courseId" element={<CourseDetails />}>
             <Route path="tests" element={<Tests />} />
