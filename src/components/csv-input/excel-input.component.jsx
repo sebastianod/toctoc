@@ -1,9 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { read, utils } from "xlsx";
+import Button from "../button/button.component";
+import ExcelLogo from "../../assets/excel.png"
 import "./excel-input.styles.scss";
 
+
 export default function ExcelInput() {
-  const [jsonData, setJsonData] = useState(null);
+  const [jsonForm, setJsonForm] = useState(null);
 
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
@@ -16,19 +19,34 @@ export default function ExcelInput() {
         header: ["name", "course", "email", "password"],
         range: 1, //start from the second row
       });
-      setJsonData(data);
+      setJsonForm(data);
     };
     reader.readAsBinaryString(file);
   };
 
-  useEffect(() => {
-    console.log(jsonData);
-  }, [jsonData]);
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log(jsonForm);
+  }
 
   return (
     <div className="excel-input-container">
-      <h3 className="excel-input-label">Upload your excel file</h3>
-      <input className="excel-input" type="file" onChange={handleFileUpload} />
-    </div>
+    <h3 className="excel-input-label">Upload your excel file</h3>
+    <label htmlFor="file-input">
+      <img className="logo" src={ExcelLogo} alt="excel icon" />
+    </label>
+    <form className="form-container" onSubmit={handleSubmit}>
+      <input
+        id="file-input"
+        className="input"
+        type="file"
+        onChange={handleFileUpload}
+        style={{ display: "none" }} // hide the input element
+      />
+      <Button className="submit-button" buttonType="submit" type="submit">
+        Submit
+      </Button>
+    </form>
+  </div>
   );
 }
