@@ -24,11 +24,9 @@ const Tests = () => {
   });
 
   return (
-    <div className="list-container">
-      <div className="content-container">
-        <CreateArea type="Test" courseId={courseId}/>
-        {showTests}
-      </div>
+    <div className="tests-container">
+        <CreateArea type="Test" courseId={courseId} />
+      {showTests}
     </div>
   );
 };

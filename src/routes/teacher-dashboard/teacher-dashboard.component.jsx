@@ -10,12 +10,16 @@ const TeacherDashboard = () => {
       </div>
       <div className="dashboard-container">
         <div className="sidebar-container">
-          <NavLink to="/dasht/courses">
-            <h2>Courses</h2>
-          </NavLink>
-          <NavLink to="/dasht/create">
-            <h2>Create Students</h2>
-          </NavLink>
+          <div className="navlink-container">
+            <NavLink to="/dasht/courses">
+              <h2>Courses</h2>
+            </NavLink>
+          </div>
+          <div className="navlink-container">
+            <NavLink to="/dasht/create">
+              <h2>Create Students</h2>
+            </NavLink>
+          </div>
         </div>
         <div className="outlet-container">
           <Outlet />

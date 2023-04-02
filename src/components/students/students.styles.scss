@@ -1,0 +1,28 @@
+.students-container {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+
+    .student-list-container{
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 10px 30px;
+        justify-content: center;
+        justify-items: stretch;
+    }
+}
+
+@media screen and (max-width: 1095px) {
+    .students-container {
+        .student-list-container{
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+}
+@media screen and (max-width: 855px) {
+    .students-container {
+        .student-list-container{
+            grid-template-columns: repeat(1, 1fr);
+        }
+    }
+}

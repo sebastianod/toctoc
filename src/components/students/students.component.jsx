@@ -3,7 +3,7 @@ import { CourseContext } from "../../contexts/course/course.context";
 import { subscribeToStudents } from "../../utils/firebase/firebase-utils";
 import CreateArea from "../create-area/create-area.component";
 import Student from "./student-component/student.component";
-import "./students.styles.sass";
+import "./students.styles.scss";
 
 const Students = () => {
   const [students, setStudents] = useState([]);
@@ -23,12 +23,10 @@ const Students = () => {
   });
 
   return (
-    <div className="list-container">
-      <div className="content-container">
+      <div className="students-container">
         <CreateArea type="Student" courseId={courseId} />
-        {showStudents}
+        <div className="student-list-container">{showStudents}</div>
       </div>
-    </div>
   );
 };
 

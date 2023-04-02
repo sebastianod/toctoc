@@ -1,4 +1,3 @@
-import { Fragment } from "react";
 import { deleteStudent } from "../../../utils/firebase/firebase-utils";
 import Delete from "../../delete-button/delete-button.component";
 import { capitalizeFirstLetterOfEachWord } from "../../../utils/utilities";
@@ -18,12 +17,10 @@ export default function Student(props) {
   };
 
   return (
-    <Fragment>
       <div className="student-container">
-        <h3 className="student-name">{capitalizeFirstLetterOfEachWord(studentName)}, </h3>
-        <h3 className="student-email">{studentEmail}</h3>
+        <span className="student-name">{capitalizeFirstLetterOfEachWord(studentName)}, </span>
+        <span className="student-email">{studentEmail}</span>
         <Delete className="delete-container" onClick={handleDeleteClick} />
       </div>
-    </Fragment>
   );
 }

@@ -1,35 +1,70 @@
 .course-details-container {
   display: flex;
   flex-direction: row;
+  height: 25rem;
 }
 
-.sidebar-container {
-  width: 250px;
-  padding: 20px;
+.course-details-sidebar-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 12rem;
+  padding: 5px;
   background-color: rgb(237, 237, 237);
   background-color: #fff;
   border-radius: 5px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
 
-  .course-title {
-    display: flex;
-    padding: 2.5rem;
-    color: #333;
-    text-decoration: none;
-    transition: background-color 0.3s ease-in-out;
-    border-radius: 5px;
-    width: 140px;
-    height: 60px;
+  .course-details-link {
     justify-content: center;
     align-items: center;
-    text-align: center;
+    background-color: #cdcdcd50;
+    margin-bottom: 10px;
+    border-radius: 5px;
   }
 }
 
-.outlet-container {
-  flex: 1;
+//NavLink styling
+.course-details-sidebar-container a {
+  display: flex;
+  padding: 0.5rem;
+  color: #333;
+  text-decoration: none;
+  transition: background-color 0.3s ease-in-out;
+  border-radius: 5px;
+  width: 140px;
+  height: 60px;
+  justify-content: center;
+  align-items: center;
+}
+
+.course-details-sidebar-container a:hover {
+  background-color: #ddd;
+}
+
+.course-details-sidebar-container a.active {
+  background-color: #010030;
+  color: #ffffff;
+  width: 140px;
+  height: 60px;
+}
+
+.course-title {
+  display: flex;
+  padding: 2.5rem;
+  color: #333;
+  text-decoration: none;
+  transition: background-color 0.3s ease-in-out;
+  border-radius: 5px;
+  width: 180px;
+  height: 60px;
+  margin-bottom: 10px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.course-details-outlet-container {
+  flex-grow: 1; // fix typo
 }

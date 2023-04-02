@@ -10,18 +10,22 @@ const CourseDetails = () => {
 
   return (
     <div className="course-details-container">
-      <div className="sidebar-container">
+      <div className="course-details-sidebar-container">
         <div className="course-title">
           <h2>{name}</h2>
         </div>
-        <NavLink to={`tests`}>
-          <h3>Tests</h3>
-        </NavLink>
-        <NavLink to={`students`}>
-          <h3>Students</h3>
-        </NavLink>
+        <div className="course-details-link">
+          <NavLink to={`tests`}>
+            <h3>Tests</h3>
+          </NavLink>
+        </div>
+        <div className="course-details-link">
+          <NavLink to={`students`}>
+            <h3>Students</h3>
+          </NavLink>
+        </div>
       </div>
-      <div className="outlet-container">
+      <div className="course-details-outlet-container">
         <Outlet />
       </div>
     </div>

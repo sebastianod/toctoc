@@ -1,19 +1,30 @@
 .dashboard-container {
     display: flex;
     flex-direction: column;
+    justify-content: center;
   }
   
   .sidebar-container {
-    width: 190px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 23rem;
     padding: 20px;
     background-color: rgb(237, 237, 237);
     background-color: #fff;
     border-radius: 5px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
+    align-items: center;
+    margin-bottom: 20px;
+
+    .navlink-container {
+      justify-content: center;
+      align-items: center;
+      background-color: #cdcdcd50;
+      margin-right: 5px;
+      margin-left: 5px;
+      border-radius: 5px;
+    }
   }
 
    //NavLink styling
