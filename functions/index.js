@@ -66,16 +66,27 @@ exports.addUsers = functions.https.onCall(async (data, context) => {
     try {
       const users = data; // The array of user objects
 
-      // Authenticate each user and get their UID
+      // Authenticate each user and get their UID, or get UID if user already exists
       const authPromises = users.map(async (user) => {
         const { email, password, name } = user;
-        const { uid } = await admin.auth().createUser({
-          // new Firebase Authentication user
-          email,
-          password,
-          displayName: name,
-        });
-        return { uid, email, name };
+        let uid = null;
+        try {
+          const userRecord = await admin.auth().getUserByEmail(email); // check if user already exists
+          uid = userRecord.uid;
+        } catch (error) {
+          if (error.code === "auth/user-not-found") {
+            // if user doesn't exist, create user authentication
+            const newUserRecord = await admin.auth().createUser({
+              email,
+              password,
+              displayName: name,
+            });
+            uid = newUserRecord.uid;
+          } else {
+            throw error;
+          }
+        }
+        return { uid, email, name }; // return user info whether user existed or was created
       });
 
       // Wait for all the authentication promises to resolve
@@ -85,8 +96,16 @@ exports.addUsers = functions.https.onCall(async (data, context) => {
       const firestorePromises = authResults.map(async (authResult) => {
         const { uid, email, name } = authResult;
         const userDocRef = admin.firestore().collection("users").doc(uid);
-        const createdAt = new Date();
-        await userDocRef.set({ email, name, createdAt });
+
+        const userDoc = await userDocRef.get();
+        if (userDoc.exists) {
+          // User already exists, update their details
+          await userDocRef.update({ email, name });
+        } else {
+          // User doesn't exist, create a new document
+          const createdAt = new Date();
+          await userDocRef.set({ email, name, createdAt });
+        }
       });
 
       // Wait for all the Firestore promises to resolve

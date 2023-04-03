@@ -17,7 +17,7 @@ export default function ExcelInput() {
       const sheet = workbook.Sheets[sheetName];
       const data = utils.sheet_to_json(sheet, {
         header: ["name", "course", "email", "password"],
-        range: 1, //start from the second row
+        range: 1, //ignore first row
       });
       setJsonForm(data);
     };
@@ -27,10 +27,9 @@ export default function ExcelInput() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    console.log(jsonForm);
     addUsersFunction(jsonForm)
       .then((result) => {
-        console.log("Users created:", result);
+        console.log("Sercer Message: ", result);
       })
       .catch((error) => {
         console.error(error);
