@@ -54,9 +54,9 @@ const Navigation = () => {
             {uiLogic()}
           </div>
         </div>
-        {/* <Outlet> component is used to render child routes within a parent route.
-         It acts as a placeholder where the child routes will be rendered. */}
       </div>
+       {/* <Outlet> component is used to render child routes within a parent route.
+         It acts as a placeholder where the child routes will be rendered. */}
       <Outlet />
     </>
   );

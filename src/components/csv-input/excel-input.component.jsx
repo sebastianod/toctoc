@@ -3,6 +3,7 @@ import { read, utils } from "xlsx";
 import Button from "../button/button.component";
 import ExcelLogo from "../../assets/excel.png";
 import "./excel-input.styles.scss";
+import { addUsersFunction } from "../../utils/firebase/firebase-utils";
 
 export default function ExcelInput() {
   const [jsonForm, setJsonForm] = useState(null);
@@ -25,8 +26,15 @@ export default function ExcelInput() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
     console.log(jsonForm);
-    console.log("Type of jsonForm: " , typeof(jsonForm));
+    addUsersFunction(jsonForm)
+      .then((result) => {
+        console.log("Users created:", result);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (

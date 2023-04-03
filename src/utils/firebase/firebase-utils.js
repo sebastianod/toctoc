@@ -22,6 +22,7 @@ import {
   signOut,
   onAuthStateChanged,
 } from "firebase/auth"; //Authentication
+import { getFunctions, httpsCallable } from "firebase/functions"; // Import getFunctions and httpsCallable from the Firebase Functions SDK
 import firebaseConfig from "./firebase-config"; //Our firebase api config
 
 //initialize app
@@ -259,6 +260,12 @@ export const createStudentUnderCourse = async (courseId, studentEmail) => {
     return alert("Student must be signed up before enrollment");
   }
 };
+
+// calling a cloud function that creates many users at once
+// Get the Functions instance
+export const functions = getFunctions();
+
+export const addUsersFunction = httpsCallable(functions, "addUsers");
 
 //=================Updating data=================//
 
