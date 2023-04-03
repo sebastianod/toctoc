@@ -18,7 +18,7 @@ export default function Student(props) {
 
   return (
       <div className="student-container">
-        <span className="student-name">{capitalizeFirstLetterOfEachWord(studentName)}, </span>
+        <span className="student-name">{capitalizeFirstLetterOfEachWord(studentName)}. </span>
         <span className="student-email">{studentEmail}</span>
         <Delete className="delete-container" onClick={handleDeleteClick} />
       </div>
