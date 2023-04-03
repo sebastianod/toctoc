@@ -5,10 +5,10 @@ import ExcelLogo from "../../assets/excel.png";
 import "./excel-input.styles.scss";
 import { addUsersFunction } from "../../utils/firebase/firebase-utils";
 
-export default function ExcelInput() {
+export default function ExcelInput(props) {
   const [jsonForm, setJsonForm] = useState(null);
 
-  const handleFileUpload = (e) => {
+  const handleFileUpload = (e) => { //convert excel file to json
     const file = e.target.files[0];
     const reader = new FileReader();
     reader.onload = (event) => {
@@ -27,13 +27,19 @@ export default function ExcelInput() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    const { courseId, type } = props;
+    if (type === "enrollment") {
+      //enroll students under the course with courseId
+    } else if ( type === undefined ) { //no type specified
+      //create student user accounts
     addUsersFunction(jsonForm)
-      .then((result) => {
-        console.log("Sercer Message: ", result);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    .then((result) => {
+      console.log("Sercer Message: ", result);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+    }
   };
 
   return (

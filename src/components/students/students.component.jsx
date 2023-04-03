@@ -4,6 +4,7 @@ import { subscribeToStudents } from "../../utils/firebase/firebase-utils";
 import CreateArea from "../create-area/create-area.component";
 import Student from "./student-component/student.component";
 import "./students.styles.scss";
+import ExcelInput from "../csv-input/excel-input.component";
 
 const Students = () => {
   const [students, setStudents] = useState([]);
@@ -19,14 +20,26 @@ const Students = () => {
   //showing the students
   const showStudents = students.map((student, index) => {
     const { email, studentId, displayName } = student;
-    return <Student key={index} studentName={displayName} studentEmail={email} studentId={studentId} courseId={courseId}/>;
+    return (
+      <Student
+        key={index}
+        studentName={displayName}
+        studentEmail={email}
+        studentId={studentId}
+        courseId={courseId}
+      />
+    );
   });
 
   return (
-      <div className="students-container">
+    <div className="students-container">
+      <div className="student-creation-area">
         <CreateArea type="Student" courseId={courseId} />
-        <div className="student-list-container">{showStudents}</div>
+        <span className="or"> Or </span>
+        <ExcelInput courseId={courseId} type="enrollment"/>
       </div>
+      <div className="student-list-container">{showStudents}</div>
+    </div>
   );
 };
 
