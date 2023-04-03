@@ -61,6 +61,8 @@ admin
 
 // write users to firestore if user is a teacher.
 // First authenticate to get uid, then create a user document in users collection in firestore
+// Check if user is already authenticated before authenticating.
+// Check if user is already created in users collection before creating. If already created, update.
 exports.addUsers = functions.https.onCall(async (data, context) => {
   if (context.auth.token.teacher === true) {
     try {
@@ -104,7 +106,7 @@ exports.addUsers = functions.https.onCall(async (data, context) => {
         } else {
           // User doesn't exist, create a new document
           const createdAt = new Date();
-          await userDocRef.set({ email, name, createdAt });
+          await userDocRef.set({ email, displayName: name, createdAt });
         }
       });
 
