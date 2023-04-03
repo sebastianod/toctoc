@@ -5,11 +5,11 @@
   justify-content: center;
   width: 23rem;
 
-  .logo{
+  .excel-logo{
     margin-bottom: 0;
   }
 
-  .form-container {
+  .excel-form-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -24,6 +24,53 @@
       border-radius: 5px;
       padding: 5px;
       margin-top: 10px;
+      width: 150px;
+
+      &:hover {
+        background-color: rgb(140, 0, 0);
+        color: rgb(255, 255, 255);
+        border: 1px solid black;
+        border-radius: 5px;
+        font-size: medium;
+      }
+    }
+  }
+}
+
+.enrollment-excel-input-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  width: 30rem;
+
+  .excel-img-label{
+    margin: 0;
+    .excel-logo{
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+  }
+  
+
+  .excel-input-label {
+    width: 200px;
+  }
+
+  .excel-form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+
+    .submit-button {
+      background-color: #3d0000;
+      border: 1px solid black;
+      color: white;
+      font-family: "Ubuntu", sans-serif;
+      font-size: medium;
+      border-radius: 5px;
+      padding: 5px;
       width: 150px;
 
       &:hover {
