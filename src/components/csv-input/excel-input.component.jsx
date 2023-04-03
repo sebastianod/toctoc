@@ -26,6 +26,7 @@ export default function ExcelInput() {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(jsonForm);
+    console.log("Type of jsonForm: " , typeof(jsonForm));
   };
 
   return (

@@ -26,3 +26,24 @@ exports.addTeacherRole = functions.https.onCall((data, context) => {
     return err;
   });
 });
+
+// give custom claim of teacher to sebastianochoad@gmail.com
+const userEmail = 'sebastianochoad@gmail.com';
+admin.auth().getUserByEmail(userEmail) 
+  .then((user) => { //when promise is resolved you get the user
+
+    const teacherClaim = {
+      teacher: true
+    };
+    
+    admin.auth().setCustomUserClaims(user.uid, teacherClaim)
+      .then(() => { //response to user in front end
+        console.log('Custom claim added to user');
+      })
+      .catch((error) => {
+        console.log('Error adding custom claim:', error);
+      });
+  })
+  .catch((error) => {
+    console.log('Error fetching user data:', error);
+  });

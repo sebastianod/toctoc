@@ -1,7 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 //user is set by sign in or sign up. Used dashboards.
 import {
-  createUserDocumentFromAuth,
   onAuthStateChangedListener,
 } from "../../utils/firebase/firebase-utils"; //All user object changes can be kept track of here
 
@@ -20,9 +19,17 @@ export const UserProvider = ({ children }) => {
   //firebase still persists a user based in sign in or out. Despite refreshes.
   useEffect(() => {
     const unsubscribe = onAuthStateChangedListener((user) => {
-      if (user) {
-        //a user may be created from google sign in, without asking for a display name, this way.
-        createUserDocumentFromAuth(user); //already checks if it already exists or not before creation
+      if (user) { //get user's custom claims
+
+        user.getIdTokenResult().then((idTokenResult) => {
+         if ( idTokenResult.claims.teacher ) {
+           console.log('User is a teacher');
+           user.teacher = true; //add teacher property to user object
+
+         } else {
+            console.log('User is not a teacher');
+         }
+        });
       }
       setCurrentUser(user); //This is the callback function. It receives a user or null. So this handles sign in and out.
     });
