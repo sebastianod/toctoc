@@ -122,3 +122,31 @@ exports.addUsers = functions.https.onCall(async (data, context) => {
     return "Error: Only teachers can add users!";
   }
 });
+
+// trigger function when a student is created under a course
+// create a new document in a middle man collection called enrollments
+// enrollments will have a document for each student that has been enrolled in a course
+// each document's id is the student's uid. The document will have a field called courses. It's an array of course ids.
+// when a student is enrolled in a course, add the course id to the courses array
+
+exports.logEnrollment = functions.firestore
+  .document("/courses/{courseId}/students/{studentId}")
+  .onCreate(async (snapshot, context) => {
+    const courseId = context.params.courseId;
+    const studentId = context.params.studentId;
+
+    //enrollment document reference
+    const enrollmentsRef = admin
+      .firestore()
+      .collection("enrollments")
+      .doc(studentId);
+    //create enrollment document
+    try {
+      await enrollmentsRef.set(
+      { courses: admin.firestore.FieldValue.arrayUnion(courseId) }, // add each course id to courses array
+      { merge: true });
+    } catch (error) {
+      console.log("Error creating enrollment document:", error);
+    }
+    return null;
+  });

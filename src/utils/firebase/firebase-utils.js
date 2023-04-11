@@ -247,7 +247,7 @@ export const createStudentUnderCourse = async (courseId, studentEmail) => {
       
       const enrolledAt = new Date();
 
-      await setDoc(studentRef, {
+      await setDoc(studentRef, {//setDoc only creates the doc if it doesn't exist, otherwise it updates it
         displayName,
         email,
         enrolledAt,
