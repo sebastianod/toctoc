@@ -20,7 +20,7 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChangedListener((user) => {
       if (user) { //get user's custom claims
-
+        
         user.getIdTokenResult().then((idTokenResult) => {
          if ( idTokenResult.claims.teacher ) {
            console.log('User is a teacher');

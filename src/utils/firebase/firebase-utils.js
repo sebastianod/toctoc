@@ -200,6 +200,23 @@ export const subscribeToStudents = (courseId, setterFunction) => {
   return unsubscribe;
 };
 
+export const subscribeStudentToEnrollments = (studentId, setterFunction) => {
+  // studentId is the enrollment docs's id
+  const enrollmentsRef = collection(db, `enrollments/${studentId}`);
+  const unsubscribe = onSnapshot(enrollmentsRef, (querySnapshot) => {
+    const enrollmentsData = querySnapshot
+      .docs() //expect only one doc
+      // the structure of the enrollment doc is courses(array) which is an array of maps with strings, courseId and name.
+      // destructure the courses array and map over it to get the courseId and name
+      .map((enrollment) => enrollment.data().courses);
+    const courses = enrollmentsData.map((course) => {
+      return { courseId: course.courseId, courseName: course.name };
+    });
+    setterFunction(courses);
+  });
+  return unsubscribe;
+};
+
 //================================================//
 
 //=================Creating data=================//
@@ -229,34 +246,36 @@ export const createTest = async (courseId, testName) => {
 //The studentId is the same as the one in the users collection.
 //therefore we use setDoc instead of addDoc, because it allows us to set the docId, while addDoc sets it automatically.
 export const createStudentUnderCourse = async (courseId, studentEmail) => {
-
   const usersRef = collection(db, "users");
   const q = query(usersRef, where("email", "==", studentEmail));
   const studentSnapshot = await getDocs(q);
 
-  if (!studentSnapshot.empty) { //If the student exists in users collection, create the student under the course
-    
+  if (!studentSnapshot.empty) {
+    //If the student exists in users collection, create the student under the course
+
     try {
-      const studentData = studentSnapshot.docs.map((student) => ({//get the student data from the users collection
+      const studentData = studentSnapshot.docs.map((student) => ({
+        //get the student data from the users collection
         studentId: student.id,
         ...student.data(),
       }));
 
       const { studentId, displayName, email } = studentData[0];
       const studentRef = doc(db, `courses/${courseId}/students`, studentId); //duplicated studentId, it's the same as in the users collection
-      
+
       const enrolledAt = new Date();
 
-      await setDoc(studentRef, {//setDoc only creates the doc if it doesn't exist, otherwise it updates it
+      await setDoc(studentRef, {
+        //setDoc only creates the doc if it doesn't exist, otherwise it updates it
         displayName,
         email,
         enrolledAt,
       });
-
     } catch (error) {
       console.log("Error creating student", error.message);
     }
-  } else { //if student is not signed up already
+  } else {
+    //if student is not signed up already
     return alert("Student must be signed up before enrollment");
   }
 };
