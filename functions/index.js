@@ -142,13 +142,55 @@ exports.logEnrollment = functions.firestore
       .firestore()
       .collection("enrollments")
       .doc(studentId);
-    //create enrollment document
-    try {
-      await enrollmentsRef.set(
-      { courses: admin.firestore.FieldValue.arrayUnion(courseId) }, // add each course id to courses array
-      { merge: true });
-    } catch (error) {
-      console.log("Error creating enrollment document:", error);
+    
+    // check if the enrollment document already exists
+    const enrollmentsDoc = await enrollmentsRef.get();
+    if (enrollmentsDoc.exists) {
+      // the enrollment document already exists, update the courses array
+      try {
+        //query a course document to get the course name
+        const courseDoc = await admin
+          .firestore()
+          .collection("courses")
+          .doc(courseId)
+          .get();
+        const courseName = courseDoc.data().name;
+
+        const enrollmentData = {
+          courseId: courseId,
+          name: courseName
+        }
+
+        await enrollmentsRef.update(
+          { courses: admin.firestore.FieldValue.arrayUnion(enrollmentData) }
+        );
+
+      } catch (error) {
+        console.log("Error updating enrollment document:", error);
+      }
+    } else {
+      // the enrollment document doesn't exist, create a new one
+      try {
+        //query a course document to get the course name
+        const courseDoc = await admin
+          .firestore()
+          .collection("courses")
+          .doc(courseId)
+          .get();
+        const courseName = courseDoc.data().name;
+
+        const enrollmentData = {
+          courseId: courseId,
+          name: courseName
+        }
+
+        await enrollmentsRef.set(
+          { courses: [enrollmentData] } // add first course id to courses array
+        );
+
+      } catch (error) {
+        console.log("Error creating enrollment document:", error);
+      }
     }
     return null;
   });
@@ -167,13 +209,23 @@ exports.logUnenrollment = functions.firestore
       .firestore()
       .collection("enrollments")
       .doc(studentId);
-    //delete course id from courses array
+
+    //delete course from courses array. The data structure is an array of maps. Each map has a courseId and a name.
     try {
-      await enrollmentsRef.update({
-        courses: admin.firestore.FieldValue.arrayRemove(courseId),
-      });
+      //get the enrollment document data
+      const enrollmentData = (await enrollmentsRef.get()).data();
+
+      //find the index of the course with the given courseId
+      const courseIndex = enrollmentData.courses.findIndex(course => course.courseId === courseId);
+
+      //remove the course at the specified index
+      enrollmentData.courses.splice(courseIndex, 1);
+
+      //update the enrollment document with the modified courses array
+      await enrollmentsRef.set({ courses: enrollmentData.courses }, { merge: true });
     } catch (error) {
       console.log("Error deleting enrollment document:", error);
     }
+
     return null;
   });
