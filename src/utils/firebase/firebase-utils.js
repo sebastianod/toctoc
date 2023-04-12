@@ -202,17 +202,18 @@ export const subscribeToStudents = (courseId, setterFunction) => {
 
 export const subscribeStudentToEnrollments = (studentId, setterFunction) => {
   // studentId is the enrollment docs's id
-  const enrollmentsRef = collection(db, `enrollments/${studentId}`);
-  const unsubscribe = onSnapshot(enrollmentsRef, (querySnapshot) => {
-    const enrollmentsData = querySnapshot
-      .docs() //expect only one doc
-      // the structure of the enrollment doc is courses(array) which is an array of maps with strings, courseId and name.
-      // destructure the courses array and map over it to get the courseId and name
-      .map((enrollment) => enrollment.data().courses);
-    const courses = enrollmentsData.map((course) => {
-      return { courseId: course.courseId, courseName: course.name };
-    });
-    setterFunction(courses);
+  const enrollmentsRef = doc(db, `enrollments/${studentId}`);
+
+  const unsubscribe = onSnapshot(enrollmentsRef, (docSnapshot) => { // the structure of the enrollment doc is courses(array) which is an array of maps with strings, courseId and name.
+    const enrollmentsData = docSnapshot.data();
+    //destructuring the courses array from the enrollment doc
+    const { courses } = enrollmentsData;
+    //mapping the courses array to get the courseId and name
+    const coursesList = courses.map((course) => ({
+      courseId: course.courseId,
+      name: course.name,
+      }));
+    setterFunction(coursesList);
   });
   return unsubscribe;
 };
