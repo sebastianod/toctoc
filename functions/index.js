@@ -123,6 +123,8 @@ exports.addUsers = functions.https.onCall(async (data, context) => {
   }
 });
 
+//===============Trigger functions==================//
+
 // trigger function when a student is created under a course
 // create a new document in a middle man collection called enrollments
 // enrollments will have a document for each student that has been enrolled in a course
@@ -142,11 +144,42 @@ exports.logEnrollment = functions.firestore
       .doc(studentId);
     //create enrollment document
     try {
+      // enrollment timestamp
+      const enrollmentTimeStamp = new Date();
+
       await enrollmentsRef.set(
-      { courses: admin.firestore.FieldValue.arrayUnion(courseId) }, // add each course id to courses array
-      { merge: true });
+        {
+          courses: admin.firestore.FieldValue.arrayUnion(courseId),
+          enrollmentDate: enrollmentTimeStamp,
+        }, // add each course id to courses array
+        { merge: true }
+      );
     } catch (error) {
       console.log("Error creating enrollment document:", error);
+    }
+    return null;
+  });
+
+// trigger function when a student is deleted from a course
+// delete the course id from the courses array in the enrollment document
+exports.logUnenrollment = functions.firestore
+  .document("/courses/{courseId}/students/{studentId}")
+  .onDelete(async (snapshot, context) => {
+    const courseId = context.params.courseId;
+    const studentId = context.params.studentId;
+
+    //enrollment document reference
+    const enrollmentsRef = admin
+      .firestore()
+      .collection("enrollments")
+      .doc(studentId);
+    //delete course id from courses array
+    try {
+      await enrollmentsRef.update({
+        courses: admin.firestore.FieldValue.arrayRemove(courseId),
+      });
+    } catch (error) {
+      console.log("Error deleting enrollment document:", error);
     }
     return null;
   });
