@@ -144,21 +144,15 @@ exports.logEnrollment = functions.firestore
       .doc(studentId);
     //create enrollment document
     try {
-      // enrollment timestamp
-      const enrollmentTimeStamp = new Date();
-
       await enrollmentsRef.set(
-        {
-          courses: admin.firestore.FieldValue.arrayUnion(courseId),
-          enrollmentDate: enrollmentTimeStamp,
-        }, // add each course id to courses array
-        { merge: true }
-      );
+      { courses: admin.firestore.FieldValue.arrayUnion(courseId) }, // add each course id to courses array
+      { merge: true });
     } catch (error) {
       console.log("Error creating enrollment document:", error);
     }
     return null;
   });
+
 
 // trigger function when a student is deleted from a course
 // delete the course id from the courses array in the enrollment document
