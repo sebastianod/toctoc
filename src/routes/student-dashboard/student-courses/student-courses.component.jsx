@@ -29,9 +29,11 @@ export default function StudentCourses() {
   }
 
   return (
-    <div>
-      <h2>List of student courses</h2>
+    <div className="student-courses-container">
+      <div className="sidebar-student-dashboard">
+        <h2 className="student-courses-header">My Courses</h2>
         {showCourses()}
+      </div>
     </div>
   );
 }

@@ -11,6 +11,7 @@ import Navigation from "./routes/navigation/navigation.component";
 import StudentDashboard from "./routes/student-dashboard/student-dashboard.component";
 import TeacherDashboard from "./routes/teacher-dashboard/teacher-dashboard.component";
 import ExcelInput from "./components/csv-input/excel-input.component";
+import StudentCourseDetails from "./routes/student-dashboard/student-courses/st-course-details/st-course-details.component";
 
 function App() {
   return (
@@ -31,7 +32,7 @@ function App() {
           </Route>
         </Route>
         <Route path="dashs" element={<StudentDashboard />}>
-          <Route path="courses" element={<Courses />} />
+          <Route path="dashs/:courseId" element={<StudentCourseDetails />} />
         </Route>
       </Route>
     </Routes>
