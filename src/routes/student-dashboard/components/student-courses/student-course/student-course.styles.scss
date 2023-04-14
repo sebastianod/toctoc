@@ -1,0 +1,39 @@
+.student-course-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  .student-course {
+    display: flex;
+    width: 230px;
+    border-radius: 5px;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+//NavLink styling
+.student-course-container a {
+  display: flex;
+  padding: 0.5rem;
+  color: #333;
+  text-decoration: none;
+  transition: background-color 0.3s ease-in-out;
+  border-radius: 5px;
+  width: 230px;
+  height: 60px;
+  justify-content: center;
+  align-items: center;
+}
+
+.student-course-container a:hover {
+  background-color: #ddd;
+}
+
+.student-course-container a.active {
+  background-color: #010030;
+  color: #ffffff;
+  width: 230px;
+  height: 60px;
+}

@@ -11,7 +11,7 @@ import Navigation from "./routes/navigation/navigation.component";
 import StudentDashboard from "./routes/student-dashboard/student-dashboard.component";
 import TeacherDashboard from "./routes/teacher-dashboard/teacher-dashboard.component";
 import ExcelInput from "./components/csv-input/excel-input.component";
-import StudentCourseDetails from "./routes/student-dashboard/student-courses/st-course-details/st-course-details.component";
+import StudentCourseDetails from "./routes/student-dashboard/components/student-courses/st-course-details/st-course-details.component";
 
 function App() {
   return (
@@ -26,13 +26,13 @@ function App() {
           <Route path="courses" element={<Courses />} />
           <Route path="courses/:courseId" element={<CourseDetails />}>
             <Route path="tests" element={<Tests />} />
-            <Route path="tests/:testId" element={<TestDetails />}/>
+            <Route path="tests/:testId" element={<TestDetails />} />
             <Route path="students" element={<Students />} />
             {/* <Route path="students/:studentId" element={<Student />}/> */}
           </Route>
         </Route>
         <Route path="dashs" element={<StudentDashboard />}>
-          <Route path="dashs/:courseId" element={<StudentCourseDetails />} />
+          <Route path=":courseId" element={<StudentCourseDetails />} />
         </Route>
       </Route>
     </Routes>

@@ -1,4 +1,4 @@
-import StudentCourses from "./student-courses/student-courses.component";
+import StudentCourses from "./components/student-courses/student-courses.component";
 import "./student-dashboard.styles.scss";
 
 const StudentDashboard = () => {

@@ -1,0 +1,31 @@
+.courses-and-details-container {
+  display: flex;
+  flex-direction: row;
+
+  .student-courses-container {
+    display: flex;
+    flex-direction: column;
+    width: 270px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    justify-content: center;
+    align-items: center;
+
+    .student-courses-header {
+      margin: 10px;
+    }
+  }
+
+  .st-course-details-container {
+    display: flex;
+    width: 80%;
+    padding: 20px;
+    margin-left: 10px;
+    background-color: rgb(237, 237, 237);
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+}
