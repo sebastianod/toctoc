@@ -12,7 +12,6 @@ const Tests = () => {
   const courseId = currentCourse.courseId;
 
   useEffect(() => {
-    console.log("just fetched tests");
     const unsubscribe = subscribeToTests(courseId, setTests); //whenever a document is added, removed, or changed, this will be called
     return () => unsubscribe(); //cleans up after the component is unmounted
   }, [courseId]); //useEffect re-runs upon courseId changing
