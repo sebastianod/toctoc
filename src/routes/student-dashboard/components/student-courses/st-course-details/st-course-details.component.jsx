@@ -17,12 +17,12 @@ export default function StudentCourseDetails() {
   const showTests = tests.map((test, index) => {
     const { name, testId } = test;
     const processedName = processListOfSentences(name).toString();
-    return <p key={index}>Test name: {processedName}, and testId: {testId}</p>;
+    return (
+      <h4 key={index}>
+        Test name: {processedName}, testId: {testId}
+      </h4>
+    );
   });
 
-  return (
-    <div className="student-tests-container">
-      {showTests}
-    </div>
-  );
+  return <div className="student-tests-container">{showTests}</div>;
 }
