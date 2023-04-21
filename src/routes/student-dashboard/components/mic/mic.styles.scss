@@ -1,0 +1,27 @@
+.mic-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .mic {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #00ffff00;
+        border-radius: 50%;
+        border-width: 3px;
+        border-style: solid;
+        border-color: #2064FF;
+        width: 60px;
+        height: 60px;
+
+        .mic-svg {
+            width: 30px;
+            height: 30px;
+        }
+        
+        &:hover {
+            background-color: #e6f2ff; /* Very light blue */
+        }
+    }
+}

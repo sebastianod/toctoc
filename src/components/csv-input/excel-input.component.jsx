@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { read, utils } from "xlsx";
 import Button from "../button/button.component";
 import ExcelLogo from "../../assets/excel.png";
