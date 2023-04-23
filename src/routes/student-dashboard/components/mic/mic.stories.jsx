@@ -2,7 +2,7 @@ import React from "react";
 import Mic from "./mic.component";
 
 export default {
-    title: "Mic", //must be a unique name
+    title: "test/Mic", //must be a unique name
     component: Mic, //the actual component
 };
 

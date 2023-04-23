@@ -1,0 +1,32 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    margin-bottom: 2.5rem;
+}
+
+.question-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 20px;
+    margin-bottom: 2.5rem;
+}
+
+.footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    margin-top: 2.5rem;
+
+    .next-skip {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 7px;
+        border-width: 2px;
+    }
+}
