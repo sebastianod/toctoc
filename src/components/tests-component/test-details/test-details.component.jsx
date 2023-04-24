@@ -7,7 +7,7 @@ import {
 } from "../../../utils/utilities";
 import "./test-details.styles.scss";
 import Answers from "../../answers-form/answers.component";
-import { createTestQuestions } from "../../../utils/firebase/firebase-utils";
+import { createOrUpdateTestQuestions } from "../../../utils/firebase/firebase-utils";
 
 export default function TestDetails() {
   const { currentTest } = useContext(TestContext); //getting the current test
@@ -40,7 +40,7 @@ export default function TestDetails() {
     const processedAnswers = processListOfSentences(answersList); //process the raw answersList to an array of sentences delimitted by a star
 
     //create test questions
-    await createTestQuestions(courseId, testId, processedAnswers);
+    await createOrUpdateTestQuestions(courseId, testId, processedAnswers);
 
     return setSubmittedAnswers(processedAnswers);
   }

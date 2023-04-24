@@ -286,14 +286,37 @@ export const createStudentUnderCourse = async (courseId, studentEmail) => {
 export const functions = getFunctions();
 export const addUsersFunction = httpsCallable(functions, "addUsers");
 
-export const createTestQuestions = async (courseId, testId, questionsList) => {
+export const createOrUpdateTestQuestions = async (courseId, testId, questionsList) => {
   const questionsRef = collection(db, `courses/${courseId}/tests/${testId}/questions`); //reference for the questions collection
 
-  try {
-    await addDoc(questionsRef, { questionsList }); //addDoc method sets doc id automatically
-  } catch (error) {
-    console.log("Error creating questions", error.message);
+  //check if a document already exists within the questions collection. The idea is to only have one document inside the questions collection, which is an array of questions.
+  const q = query(questionsRef);
+  const questionsSnapshot = await getDocs(q);
+
+  if (!questionsSnapshot.empty) { // if the questions collection has a document already, update it instead of creating a new one
+    const questionsDoc = questionsSnapshot.docs.map((doc) => ({
+      id: doc.id,
+    }));
+
+    const questionsDocId = questionsDoc[0].id;
+    const questionsDocRef = doc(db, `courses/${courseId}/tests/${testId}/questions`, questionsDocId); //reference for the questions document
+
+    try { //update the questions document with the current array of questions
+      await updateDoc(questionsDocRef, { questionsList });
+    } catch (error) {
+      console.log("Error updating questions", error.message);
+    }
   }
+  else {
+    //if the questions collection doesn't have a document, create one
+    try {
+      await addDoc(questionsRef, { questionsList }); //addDoc method sets doc id automatically
+    } catch (error) {
+      console.log("Error creating questions", error.message);
+    }
+  }
+
+  
 } 
 //=================Updating data=================//
 
