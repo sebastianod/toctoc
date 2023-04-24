@@ -159,6 +159,20 @@ export const getTests = async (courseId) => {
   })); // The documents can be accessed as an array via the docs property or enumerated using the forEach method.
 };
 
+export const getQuestions = async (courseId, testId) => {
+  //get the reference for the questions subcollection
+  const questionsRef = collection(
+    db,
+    `courses/${courseId}/tests/${testId}/questions`
+  );
+  //get a snapshot of all docs in the questions collection
+  const questionsSnapshot = await getDocs(questionsRef);
+  return questionsSnapshot.docs.map((questionsList) => ({
+    questionsId: questionsList.id, //return the questionId
+    ...questionsList.data(), //the data inside the question, should be an array of questions
+  }));
+};
+
 //-------Data listeners (realtime updates)-------//
 
 export const subscribeToCourses = (setterFunction) => {
@@ -204,7 +218,8 @@ export const subscribeStudentToEnrollments = (studentId, setterFunction) => {
   // studentId is the enrollment docs's id
   const enrollmentsRef = doc(db, `enrollments/${studentId}`);
 
-  const unsubscribe = onSnapshot(enrollmentsRef, (docSnapshot) => { // the structure of the enrollment doc is courses(array) which is an array of maps with strings, courseId and name.
+  const unsubscribe = onSnapshot(enrollmentsRef, (docSnapshot) => {
+    // the structure of the enrollment doc is courses(array) which is an array of maps with strings, courseId and name.
     const enrollmentsData = docSnapshot.data();
     //destructuring the courses array from the enrollment doc
     const { courses } = enrollmentsData;
@@ -212,7 +227,7 @@ export const subscribeStudentToEnrollments = (studentId, setterFunction) => {
     const coursesList = courses.map((course) => ({
       courseId: course.courseId,
       name: course.name,
-      }));
+    }));
     setterFunction(coursesList);
   });
   return unsubscribe;
@@ -286,28 +301,41 @@ export const createStudentUnderCourse = async (courseId, studentEmail) => {
 export const functions = getFunctions();
 export const addUsersFunction = httpsCallable(functions, "addUsers");
 
-export const createOrUpdateTestQuestions = async (courseId, testId, questionsList) => {
-  const questionsRef = collection(db, `courses/${courseId}/tests/${testId}/questions`); //reference for the questions collection
+//Test questions
+export const createOrUpdateTestQuestions = async (
+  courseId,
+  testId,
+  questionsList
+) => {
+  const questionsRef = collection(
+    db,
+    `courses/${courseId}/tests/${testId}/questions`
+  ); //reference for the questions collection
 
   //check if a document already exists within the questions collection. The idea is to only have one document inside the questions collection, which is an array of questions.
   const q = query(questionsRef);
   const questionsSnapshot = await getDocs(q);
 
-  if (!questionsSnapshot.empty) { // if the questions collection has a document already, update it instead of creating a new one
+  if (!questionsSnapshot.empty) {
+    // if the questions collection has a document already, update it instead of creating a new one
     const questionsDoc = questionsSnapshot.docs.map((doc) => ({
       id: doc.id,
     }));
 
     const questionsDocId = questionsDoc[0].id;
-    const questionsDocRef = doc(db, `courses/${courseId}/tests/${testId}/questions`, questionsDocId); //reference for the questions document
+    const questionsDocRef = doc(
+      db,
+      `courses/${courseId}/tests/${testId}/questions`,
+      questionsDocId
+    ); //reference for the questions document
 
-    try { //update the questions document with the current array of questions
+    try {
+      //update the questions document with the current array of questions
       await updateDoc(questionsDocRef, { questionsList });
     } catch (error) {
       console.log("Error updating questions", error.message);
     }
-  }
-  else {
+  } else {
     //if the questions collection doesn't have a document, create one
     try {
       await addDoc(questionsRef, { questionsList }); //addDoc method sets doc id automatically
@@ -315,9 +343,7 @@ export const createOrUpdateTestQuestions = async (courseId, testId, questionsLis
       console.log("Error creating questions", error.message);
     }
   }
-
-  
-} 
+};
 //=================Updating data=================//
 
 export const updateCourse = async (courseId, courseName) => {
@@ -370,4 +396,3 @@ export const deleteStudent = async (courseId, studentId) => {
     console.log("Error deleting student", error.message);
   }
 };
-

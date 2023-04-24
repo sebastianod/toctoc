@@ -3,7 +3,7 @@ import "./answers.styles.scss";
 
 export default function Answers({value: answersList, onChange: handleAnswerInput, onSubmit: handleSubmit}) {
     return <form className="answers-form" onSubmit={handleSubmit}>
-    <h4>Answers: </h4>
+    <h4>Create or update answers: </h4>
     <textarea
       type="textarea"
       name="textValue"

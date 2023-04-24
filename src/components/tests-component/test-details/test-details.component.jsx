@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { TestContext } from "../../../contexts/test-context/test.context";
 import { CourseContext } from "../../../contexts/course/course.context";
 import {
@@ -7,7 +7,7 @@ import {
 } from "../../../utils/utilities";
 import "./test-details.styles.scss";
 import Answers from "../../answers-form/answers.component";
-import { createOrUpdateTestQuestions } from "../../../utils/firebase/firebase-utils";
+import { createOrUpdateTestQuestions, getQuestions } from "../../../utils/firebase/firebase-utils";
 
 export default function TestDetails() {
   const { currentTest } = useContext(TestContext); //getting the current test
@@ -21,13 +21,13 @@ export default function TestDetails() {
     "Write* answers* here* separated* by* a* star*"
   );
   const [submittedAnswers, setSubmittedAnswers] = useState([]); //submmitting answers
+  const [ currentAnswers, setCurrentAnswers ] = useState([]); //current answers in the db
 
   const handleAnswerInput = (e) => {
     e.preventDefault();
     const value = e.target.value;
     setAnswersList(value);
   };
-  console.log(answersList);
 
   async function handleSubmit(e) {
     e.preventDefault(); //prevent page refresh, without this, the url changes to the action url and the page breaks
@@ -42,9 +42,28 @@ export default function TestDetails() {
     //create test questions
     await createOrUpdateTestQuestions(courseId, testId, processedAnswers);
 
+
     return setSubmittedAnswers(processedAnswers);
   }
-  console.log(`Submitted ${name} test answers: `, submittedAnswers);
+
+  useEffect(()=>{
+    const fetchQuestions = async () => {
+      const questions = await getQuestions(courseId, testId);
+      const questionsList = questions[0].questionsList;
+      setCurrentAnswers(questionsList);
+    }
+    fetchQuestions()
+    .catch(err => console.log(err));
+  }, [courseId, testId, submittedAnswers]);
+
+
+  const showCurrentAnswers = (currentAnswers) => {
+    return currentAnswers.map((answer, index) => {
+      return <span key={index}>{answer}* </span>;
+    });
+  };
+
+  console.log("current answers in db: ", currentAnswers);
 
   return (
     <div className="test-details-container">
@@ -55,6 +74,10 @@ export default function TestDetails() {
         onChange={handleAnswerInput}
         onSubmit={handleSubmit}
       />
+      <div className="current-answers-area">
+        <h4>Current answers: </h4>
+        {showCurrentAnswers(currentAnswers)}
+      </div>
     </div>
   );
 }
