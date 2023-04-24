@@ -284,9 +284,17 @@ export const createStudentUnderCourse = async (courseId, studentEmail) => {
 // calling a cloud function that creates many users at once
 // Get the Functions instance
 export const functions = getFunctions();
-
 export const addUsersFunction = httpsCallable(functions, "addUsers");
 
+export const createTestQuestions = async (courseId, testId, questionsList) => {
+  const questionsRef = collection(db, `courses/${courseId}/tests/${testId}/questions`); //reference for the questions collection
+
+  try {
+    await addDoc(questionsRef, { questionsList }); //addDoc method sets doc id automatically
+  } catch (error) {
+    console.log("Error creating questions", error.message);
+  }
+} 
 //=================Updating data=================//
 
 export const updateCourse = async (courseId, courseName) => {
@@ -339,3 +347,4 @@ export const deleteStudent = async (courseId, studentId) => {
     console.log("Error deleting student", error.message);
   }
 };
+

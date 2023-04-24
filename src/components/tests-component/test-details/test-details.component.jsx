@@ -1,15 +1,21 @@
 import { useContext, useState } from "react";
 import { TestContext } from "../../../contexts/test-context/test.context";
+import { CourseContext } from "../../../contexts/course/course.context";
 import {
   processListOfSentences,
   hasEmptynessBetweenStars,
 } from "../../../utils/utilities";
 import "./test-details.styles.scss";
 import Answers from "../../answers-form/answers.component";
+import { createTestQuestions } from "../../../utils/firebase/firebase-utils";
 
 export default function TestDetails() {
-  const { currentTest } = useContext(TestContext);
-  const { name } = currentTest;
+  const { currentTest } = useContext(TestContext); //getting the current test
+  const { currentCourse } = useContext(CourseContext); //getting the current course
+
+  const courseId = currentCourse.courseId; //needed to create the test questions, to give the db path
+
+  const { name, testId } = currentTest;
   const [answersList, setAnswersList] = useState(
     //setting the answers text area
     "Write* answers* here* separated* by* a* star*"
@@ -23,7 +29,7 @@ export default function TestDetails() {
   };
   console.log(answersList);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault(); //prevent page refresh, without this, the url changes to the action url and the page breaks
 
     if (hasEmptynessBetweenStars(answersList)) {
@@ -32,6 +38,10 @@ export default function TestDetails() {
     }
 
     const processedAnswers = processListOfSentences(answersList); //process the raw answersList to an array of sentences delimitted by a star
+
+    //create test questions
+    await createTestQuestions(courseId, testId, processedAnswers);
+
     return setSubmittedAnswers(processedAnswers);
   }
   console.log(`Submitted ${name} test answers: `, submittedAnswers);
