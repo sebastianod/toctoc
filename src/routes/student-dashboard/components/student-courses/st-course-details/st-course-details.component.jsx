@@ -15,14 +15,17 @@ export default function StudentCourseDetails() {
   }, [courseId]); //useEffect re-runs upon courseId changing
 
   const showTests = tests.map((test, index) => {
-    const { name, testId } = test;
+    const { name } = test;
     const processedName = processListOfSentences(name).toString();
     return (
-      <h4 key={index}>
-        Test name: {processedName}, testId: {testId}
-      </h4>
+      <span key={index} className="test-name">
+        {processedName}
+      </span>
     );
   });
 
-  return <div className="student-tests-container">{showTests}</div>;
+  return <div className="student-tests-container">
+  <h4>Tests</h4>
+  {showTests}
+  </div>;
 }
