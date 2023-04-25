@@ -10,21 +10,17 @@ export default function TestUi() {
   const courseId = currentCourse.courseId;
   const { currentTest } = useContext(TestContext);
   const { testId } = currentTest;
-
   const [currentQuestions, setCurrentQuestions] = useState([]);
 
   // fetch Questions set by teacher
   useEffect(() => {
     const fetchQuestions = async () => {
-      const questionsDoc = getQuestions(courseId, testId);
-      const questionsList = questionsDoc[0].questionsList;
+      const questions = await getQuestions(courseId, testId);
+      const questionsList = questions[0].questionsList;
       setCurrentQuestions(questionsList);
     };
-    fetchQuestions()
-    .catch(err => console.log(err));
+    fetchQuestions().catch((err) => console.log(err));
   }, [courseId, testId]);
-
-  console.log(currentQuestions);
 
   return (
     <div className="test-ui-container">
@@ -33,7 +29,7 @@ export default function TestUi() {
         <span>Quit</span>
       </header>
       <div className="question-area">
-        <span>Question word</span>
+        <span>{currentQuestions[0]}</span>
       </div>
       <div className="response-area">
         <Mic />

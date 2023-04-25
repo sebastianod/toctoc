@@ -5,14 +5,13 @@ import { useContext } from "react";
 import "./student-course.styles.scss";
 
 export default function StudentCourse(props) {
-  const { courseId, name, studentId } = props;
+  const { courseId, name } = props;
   const { setCurrentCourse } = useContext(CourseContext);
 
   const handleCourseClick = () => {
     setCurrentCourse({ name: name, courseId: courseId });
   };
   
-  console.log(courseId, name, studentId);
   return (
     <div className="student-course-container">
       <div className="student-course">

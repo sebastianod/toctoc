@@ -1,0 +1,29 @@
+.test-name-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+
+  .test-name-link {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+}
+
+.test-name-container a {
+    display: flex;
+    padding: 0.5rem;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s ease-in-out;
+    border-radius: 5px;
+    width: 230px;
+    height: 60px;
+    justify-content: center;
+    align-items: center;
+  }
+
+.test-name-container a:hover {
+  background-color: #ddd;
+}

@@ -161,16 +161,21 @@ export const getTests = async (courseId) => {
 
 export const getQuestions = async (courseId, testId) => {
   //get the reference for the questions subcollection
+  console.log("courseId: ", courseId, "testId: ", testId);
   const questionsRef = collection(
     db,
     `courses/${courseId}/tests/${testId}/questions`
   );
   //get a snapshot of all docs in the questions collection
   const questionsSnapshot = await getDocs(questionsRef);
-  return questionsSnapshot.docs.map((questionsList) => ({
-    questionsId: questionsList.id, //return the questionId
-    ...questionsList.data(), //the data inside the question, should be an array of questions
-  }));
+  console.log("Docs inside questionsSnapshot", questionsSnapshot.docs);
+  return questionsSnapshot.docs.map((questionsDoc) => {
+    console.log("questions doc from firebase: ", questionsDoc.data());
+    return {
+      questionsId: questionsDoc.id, //return the questionId
+      ...questionsDoc.data(), //the data inside the question, should be an array of questions
+    };
+  });
 };
 
 //-------Data listeners (realtime updates)-------//
