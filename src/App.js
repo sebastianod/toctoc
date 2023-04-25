@@ -12,6 +12,7 @@ import StudentDashboard from "./routes/student-dashboard/student-dashboard.compo
 import TeacherDashboard from "./routes/teacher-dashboard/teacher-dashboard.component";
 import ExcelInput from "./components/csv-input/excel-input.component";
 import StudentCourseDetails from "./routes/student-dashboard/components/student-courses/st-course-details/st-course-details.component";
+import TestUi from "./routes/student-dashboard/components/test-ui/test-ui.component";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
         </Route>
         <Route path="dashs" element={<StudentDashboard />}>
           <Route path=":courseId" element={<StudentCourseDetails />} />
+          <Route path=":courseId/:testId" element={<TestUi />}/>
         </Route>
       </Route>
     </Routes>
