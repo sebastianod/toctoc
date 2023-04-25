@@ -4,12 +4,13 @@ import { getQuestions } from "../../../../utils/firebase/firebase-utils";
 import { CourseContext } from "../../../../contexts/course/course.context";
 import { TestContext } from "../../../../contexts/test-context/test.context";
 import { useContext, useEffect, useState } from "react";
+import { capitalizeFirstLetterOfEachWord } from "../../../../utils/utilities";
 
 export default function TestUi() {
   const { currentCourse } = useContext(CourseContext);
   const courseId = currentCourse.courseId;
   const { currentTest } = useContext(TestContext);
-  const { testId } = currentTest;
+  const { testId, name } = currentTest;
   const [currentQuestions, setCurrentQuestions] = useState([]);
 
   // fetch Questions set by teacher
@@ -26,10 +27,11 @@ export default function TestUi() {
     <div className="test-ui-container">
       <header className="header">
         <span>1 of x</span>
+        <h3 className="test-title">{capitalizeFirstLetterOfEachWord(name)} Test</h3>
         <span>Quit</span>
       </header>
       <div className="question-area">
-        <span>{currentQuestions[0]}</span>
+        <strong>{currentQuestions[0]}</strong>
       </div>
       <div className="response-area">
         <Mic />
