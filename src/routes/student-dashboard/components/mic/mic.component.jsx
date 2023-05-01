@@ -4,14 +4,14 @@ import MicUnavailableSvg from "../../../../assets/mic-unavailable.svg";
 import { useState, useRef } from "react";
 import { AudioBlobContext } from "../../../../contexts/audioBlob/audioBlob.context";
 import { useContext } from "react";
+import { TriesContext } from "../../../../contexts/tries/tries.context";
 
 export default function Mic() {
   const [isRecording, setIsRecording] = useState(false); //true when recording
-  const [hasRecorded, setHasRecorded] = useState(false); //true when recording has been done
   //const [isNewQuestion, setIsNewQuestion] = useState(false); //To go in <TestUi />. Resets tries to 0 when next is pressed.
 
   const maxTries = 2;
-  const [tries, setTries] = useState(0); //2 max tries
+  const { tries, setTries, hasRecorded, setHasRecorded } = useContext(TriesContext); //calling the setTries function from the triesContext
 
   //useRef is a React Hook that lets you reference a value that’s not needed for rendering.
   //The recorded audio data is stored in an array of audio chunks. We'll only have one.
@@ -78,7 +78,7 @@ export default function Mic() {
     }
   };
 
-console.log(audioBlob);
+  console.log("hasRecorded: ", hasRecorded);
 
   const uiLogic = () => {
     if (tries < maxTries && isRecording === false && hasRecorded === false) {

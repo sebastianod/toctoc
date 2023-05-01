@@ -6,6 +6,7 @@ import { TestContext } from "../../../../contexts/test-context/test.context";
 import { useContext, useEffect, useState } from "react";
 import { capitalizeFirstLetterOfEachWord } from "../../../../utils/utilities";
 import { AudioBlobContext } from "../../../../contexts/audioBlob/audioBlob.context";
+import { TriesContext } from "../../../../contexts/tries/tries.context";
 
 export default function TestUi() {
   //fetch courseId and testId from context
@@ -19,7 +20,9 @@ export default function TestUi() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
 
   // Get audio recording from mic component
+  // audioBlob is the audio recording obtained in <Mic />
   const { audioBlob, setAudioBlob } = useContext(AudioBlobContext);
+  const { tries, setTries, setHasRecorded } = useContext(TriesContext);
 
   // fetch Questions set by teacher
   useEffect(() => {
@@ -34,15 +37,19 @@ export default function TestUi() {
   // handle next question
   const handleNextButton = () => {
 
-    if (currentQuestion < questions.length - 1) {
-      if (audioBlob) {
+    if (currentQuestion < questions.length - 1) { //if not the last question, allow next
+      if (audioBlob) { // if the question is answered
         setCurrentQuestion(currentQuestion + 1);
         setAudioBlob(null); // reset audio blob
+        setTries(0); // reset tries
+        setHasRecorded(false); // reset hasRecorded
       } else if (audioBlob === null ) { // if the question is skipped
-        const skip = prompt("Are you sure you want to skip this question?");
+        const skip = window.confirm("Are you sure you want to skip this question?");
         if (skip) {
           setCurrentQuestion(currentQuestion + 1);
           setAudioBlob(null); // reset audio blob
+          setTries(0); // reset tries
+          setHasRecorded(false); // reset hasRecorded
         }
       }
       
@@ -51,6 +58,8 @@ export default function TestUi() {
       // do nothing when last question is reached
     }
   }
+
+  console.log("tries: ", tries, "audioBlob: ", audioBlob, "hasRecorded: ");
 
   return (
     <div className="test-ui-container">
