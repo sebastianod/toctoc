@@ -7,6 +7,7 @@ import App from "./App";
 import "./index.scss";
 import { CourseProvider } from "./contexts/course/course.context";
 import { TestProvider } from "./contexts/test-context/test.context";
+import { AudioBlobProvider } from "./contexts/audioBlob/audioBlob.context";
 
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement); // createRoot(container!)
@@ -17,7 +18,9 @@ root.render(
       <UserProvider>
         <CourseProvider>
           <TestProvider>
-            <App />
+            <AudioBlobProvider>
+              <App />
+            </AudioBlobProvider>
           </TestProvider>
         </CourseProvider>
       </UserProvider>

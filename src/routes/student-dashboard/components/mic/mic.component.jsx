@@ -2,6 +2,8 @@ import "./mic.styles.scss";
 import MicSvg from "../../../../assets/mic.svg";
 import MicUnavailableSvg from "../../../../assets/mic-unavailable.svg";
 import { useState, useRef } from "react";
+import { AudioBlobContext } from "../../../../contexts/audioBlob/audioBlob.context";
+import { useContext } from "react";
 
 export default function Mic() {
   const [isRecording, setIsRecording] = useState(false); //true when recording
@@ -11,9 +13,13 @@ export default function Mic() {
   const maxTries = 2;
   const [tries, setTries] = useState(0); //2 max tries
 
+  //useRef is a React Hook that lets you reference a value that’s not needed for rendering.
+  //The recorded audio data is stored in an array of audio chunks. We'll only have one.
+
   const mediaRecorder = useRef(null); //reference to the MediaRecorder object
   const audioChunks = useRef([]); //array to store the audio data chunks
-  const audioBlob = useRef(null); //blob to store the final audio data
+  const audioBlobRecording = useRef(null); //blob to store the final audio data
+  const { audioBlob, setAudioBlob } = useContext(AudioBlobContext); //calling the setAudioBlob function from the AudioBlobContext
 
   const handleMicClick = () => {
     if (tries < maxTries) {
@@ -44,10 +50,11 @@ export default function Mic() {
           audioChunks.current.push(e.data);
           if (mediaRecorder.current.state === "inactive") {
             //when recording is stopped, create a blob from the audioChunks array
-            audioBlob.current = new Blob(audioChunks.current, {
-              type: "audio/mpeg-3",
+            audioBlobRecording.current = new Blob(audioChunks.current, {
+              type: "audio/mpeg",
             });
             audioChunks.current = []; //reset the audioChunks array
+            setAudioBlob(audioBlobRecording.current); //set the audioBlob value in the AudioBlobContext
           }
         };
       })
@@ -57,13 +64,21 @@ export default function Mic() {
   };
 
   const playAudio = () => {
-    if (audioBlob.current) {
-      //if there is an audioBlob available, create a URL from it and play it using an audio element
-      const audioUrl = URL.createObjectURL(audioBlob.current);
-      const audio = new Audio(audioUrl);
-      audio.play();
+    if (audioBlob) {
+      //if there is an audioBlob available, check if it is a Blob object
+      if (audioBlob instanceof Blob) {
+        //if it is a Blob object, create a URL from it and play it using an audio element
+        const audioUrl = URL.createObjectURL(audioBlob);
+        const audio = new Audio(audioUrl);
+        audio.play();
+      } else {
+        //if it is not a Blob object, log an error message
+        console.error("Invalid argument for URL.createObjectURL()");
+      }
     }
   };
+
+console.log(audioBlob);
 
   const uiLogic = () => {
     if (tries < maxTries && isRecording === false && hasRecorded === false) {
@@ -99,7 +114,7 @@ export default function Mic() {
             <img className="mic-svg" src={MicSvg} alt="mic" />
           </button>
         </div>
-             );
+      );
     }
 
     if (tries === maxTries && isRecording === false) {
