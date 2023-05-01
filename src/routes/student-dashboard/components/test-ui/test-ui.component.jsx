@@ -5,6 +5,7 @@ import { CourseContext } from "../../../../contexts/course/course.context";
 import { TestContext } from "../../../../contexts/test-context/test.context";
 import { useContext, useEffect, useState } from "react";
 import { capitalizeFirstLetterOfEachWord } from "../../../../utils/utilities";
+import { AudioBlobContext } from "../../../../contexts/audioBlob/audioBlob.context";
 
 export default function TestUi() {
   //fetch courseId and testId from context
@@ -16,6 +17,9 @@ export default function TestUi() {
   // Question list and state for cycling through questions
   const [questions, setQuestions] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
+
+  // Get audio recording from mic component
+  const { audioBlob, setAudioBlob } = useContext(AudioBlobContext);
 
   // fetch Questions set by teacher
   useEffect(() => {
@@ -31,10 +35,20 @@ export default function TestUi() {
   const handleNextButton = () => {
 
     if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
+      if (audioBlob) {
+        setCurrentQuestion(currentQuestion + 1);
+        setAudioBlob(null); // reset audio blob
+      } else if (audioBlob === null ) { // if the question is skipped
+        const skip = prompt("Are you sure you want to skip this question?");
+        if (skip) {
+          setCurrentQuestion(currentQuestion + 1);
+          setAudioBlob(null); // reset audio blob
+        }
+      }
+      
     }
     else if (currentQuestion === questions.length - 1) {
-      
+      // do nothing when last question is reached
     }
   }
 
