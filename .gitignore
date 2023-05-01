@@ -16,6 +16,9 @@ firebase.json
 .firebaserc
 firebase-config.js
 
+# dotenv environment variables file
+.env
+.env.test
 
 # misc
 .DS_Store
