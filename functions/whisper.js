@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 require('dotenv').config(); // to use .env file
 const { Configuration, OpenAIApi } = require("openai");
 

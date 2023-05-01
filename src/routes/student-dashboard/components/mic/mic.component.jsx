@@ -1,7 +1,7 @@
 import "./mic.styles.scss";
 import MicSvg from "../../../../assets/mic.svg";
 import MicUnavailableSvg from "../../../../assets/mic-unavailable.svg";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 export default function Mic() {
   const [isRecording, setIsRecording] = useState(false); //true when recording
@@ -11,15 +11,21 @@ export default function Mic() {
   const maxTries = 2;
   const [tries, setTries] = useState(0); //2 max tries
 
+  const mediaRecorder = useRef(null); //reference to the MediaRecorder object
+  const audioChunks = useRef([]); //array to store the audio data chunks
+  const audioBlob = useRef(null); //blob to store the final audio data
+
   const handleMicClick = () => {
     if (tries < maxTries) {
-      if (isRecording === true ) {
+      if (isRecording === true) {
         setIsRecording(!isRecording);
         setHasRecorded(true);
         setTries(tries + 1);
+        mediaRecorder.current.stop(); //stop recording and trigger the dataavailable event
       }
       if (isRecording === false) {
         setIsRecording(!isRecording);
+        startRecording(); //start recording and create a new MediaRecorder object
       }
     }
     if (tries === maxTries) {
@@ -27,7 +33,37 @@ export default function Mic() {
     }
   };
 
-  console.log("tries: ", tries, "isRecording: ", isRecording);
+  const startRecording = () => {
+    navigator.mediaDevices
+      .getUserMedia({ audio: true }) //request permission to access the microphone
+      .then((stream) => {
+        mediaRecorder.current = new MediaRecorder(stream); //create a new MediaRecorder object with the stream
+        mediaRecorder.current.start(); //start recording
+        mediaRecorder.current.ondataavailable = (e) => {
+          //when data is available, push it to the audioChunks array
+          audioChunks.current.push(e.data);
+          if (mediaRecorder.current.state === "inactive") {
+            //when recording is stopped, create a blob from the audioChunks array
+            audioBlob.current = new Blob(audioChunks.current, {
+              type: "audio/mpeg-3",
+            });
+            audioChunks.current = []; //reset the audioChunks array
+          }
+        };
+      })
+      .catch((err) => {
+        console.error(err); //handle any errors
+      });
+  };
+
+  const playAudio = () => {
+    if (audioBlob.current) {
+      //if there is an audioBlob available, create a URL from it and play it using an audio element
+      const audioUrl = URL.createObjectURL(audioBlob.current);
+      const audio = new Audio(audioUrl);
+      audio.play();
+    }
+  };
 
   const uiLogic = () => {
     if (tries < maxTries && isRecording === false && hasRecorded === false) {
@@ -56,19 +92,23 @@ export default function Mic() {
       //Show play button and allow recording again
       return (
         <div className="mic-container">
-          <div className="play-container">▶️</div>
+          <div className="play-container" onClick={playAudio}>
+            ▶️
+          </div>
           <button className="mic available" onClick={handleMicClick}>
             <img className="mic-svg" src={MicSvg} alt="mic" />
           </button>
         </div>
-      );
+             );
     }
 
     if (tries === maxTries && isRecording === false) {
       // disable mic but allow play of last recording
       return (
         <div className="mic-container">
-          <div className="play-container">▶️</div>
+          <div className="play-container" onClick={playAudio}>
+            ▶️
+          </div>
           <button className="mic unavailable" onClick={handleMicClick}>
             <img className="mic-svg" src={MicUnavailableSvg} alt="mic" />
           </button>
