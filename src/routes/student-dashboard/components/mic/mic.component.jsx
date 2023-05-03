@@ -78,8 +78,6 @@ export default function Mic() {
     }
   };
 
-  console.log("hasRecorded: ", hasRecorded);
-
   const uiLogic = () => {
     if (tries < maxTries && isRecording === false && hasRecorded === false) {
       //Not recording and hasn't saved, default state

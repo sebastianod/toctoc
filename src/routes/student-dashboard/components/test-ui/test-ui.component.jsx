@@ -22,7 +22,7 @@ export default function TestUi() {
   // Get audio recording from mic component
   // audioBlob is the audio recording obtained in <Mic />
   const { audioBlob, setAudioBlob } = useContext(AudioBlobContext);
-  const { tries, setTries, setHasRecorded } = useContext(TriesContext);
+  const { setTries, setHasRecorded } = useContext(TriesContext);
 
   // fetch Questions set by teacher
   useEffect(() => {
@@ -36,15 +36,19 @@ export default function TestUi() {
 
   // handle next question
   const handleNextButton = () => {
-
-    if (currentQuestion < questions.length - 1) { //if not the last question, allow next
-      if (audioBlob) { // if the question is answered
+    if (currentQuestion < questions.length - 1) {
+      //if not the last question, allow next
+      if (audioBlob) {
+        // if the question is answered
         setCurrentQuestion(currentQuestion + 1);
         setAudioBlob(null); // reset audio blob
         setTries(0); // reset tries
         setHasRecorded(false); // reset hasRecorded
-      } else if (audioBlob === null ) { // if the question is skipped
-        const skip = window.confirm("Are you sure you want to skip this question?");
+      } else if (audioBlob === null) {
+        // if the question is skipped
+        const skip = window.confirm(
+          "Are you sure you want to skip this question?"
+        );
         if (skip) {
           setCurrentQuestion(currentQuestion + 1);
           setAudioBlob(null); // reset audio blob
@@ -52,20 +56,20 @@ export default function TestUi() {
           setHasRecorded(false); // reset hasRecorded
         }
       }
-      
-    }
-    else if (currentQuestion === questions.length - 1) {
+    } else if (currentQuestion === questions.length - 1) {
       // do nothing when last question is reached
     }
-  }
-
-  console.log("tries: ", tries, "audioBlob: ", audioBlob, "hasRecorded: ");
+  };
 
   return (
     <div className="test-ui-container">
       <header className="header">
-        <span>{currentQuestion + 1} of {questions.length}</span>
-        <h3 className="test-title">{capitalizeFirstLetterOfEachWord(name)} Test</h3>
+        <span>
+          {currentQuestion + 1} of {questions.length}
+        </span>
+        <h3 className="test-title">
+          {capitalizeFirstLetterOfEachWord(name)} Test
+        </h3>
         <span>Quit</span>
       </header>
       <div className="question-area">
@@ -75,7 +79,9 @@ export default function TestUi() {
         <Mic />
       </div>
       <div className="footer">
-        <button className="next-skip" onClick={handleNextButton} >Next</button>
+        <button className="next-skip" onClick={handleNextButton}>
+          Next
+        </button>
       </div>
     </div>
   );

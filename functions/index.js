@@ -2,6 +2,8 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 admin.initializeApp();
 
+exports.whisper = require("./whisper"); // group functions related to whisper Api in whisper.js
+
 // get user and add custom claim (teacher)
 // addTeacherRole will be accessible from client. onCall does that.
 // onCall( <callback> ), callback will fire when addTeacherRole is called
@@ -142,7 +144,7 @@ exports.logEnrollment = functions.firestore
       .firestore()
       .collection("enrollments")
       .doc(studentId);
-    
+
     // check if the enrollment document already exists
     const enrollmentsDoc = await enrollmentsRef.get();
     if (enrollmentsDoc.exists) {
@@ -158,13 +160,12 @@ exports.logEnrollment = functions.firestore
 
         const enrollmentData = {
           courseId: courseId,
-          name: courseName
-        }
+          name: courseName,
+        };
 
-        await enrollmentsRef.update(
-          { courses: admin.firestore.FieldValue.arrayUnion(enrollmentData) }
-        );
-
+        await enrollmentsRef.update({
+          courses: admin.firestore.FieldValue.arrayUnion(enrollmentData),
+        });
       } catch (error) {
         console.log("Error updating enrollment document:", error);
       }
@@ -181,20 +182,18 @@ exports.logEnrollment = functions.firestore
 
         const enrollmentData = {
           courseId: courseId,
-          name: courseName
-        }
+          name: courseName,
+        };
 
         await enrollmentsRef.set(
           { courses: [enrollmentData] } // add first course id to courses array
         );
-
       } catch (error) {
         console.log("Error creating enrollment document:", error);
       }
     }
     return null;
   });
-
 
 // trigger function when a student is deleted from a course
 // delete the course id from the courses array in the enrollment document
@@ -216,13 +215,18 @@ exports.logUnenrollment = functions.firestore
       const enrollmentData = (await enrollmentsRef.get()).data();
 
       //find the index of the course with the given courseId
-      const courseIndex = enrollmentData.courses.findIndex(course => course.courseId === courseId);
+      const courseIndex = enrollmentData.courses.findIndex(
+        (course) => course.courseId === courseId
+      );
 
       //remove the course at the specified index
       enrollmentData.courses.splice(courseIndex, 1);
 
       //update the enrollment document with the modified courses array
-      await enrollmentsRef.set({ courses: enrollmentData.courses }, { merge: true });
+      await enrollmentsRef.set(
+        { courses: enrollmentData.courses },
+        { merge: true }
+      );
     } catch (error) {
       console.log("Error deleting enrollment document:", error);
     }
