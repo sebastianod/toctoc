@@ -302,6 +302,8 @@ export const createStudentUnderCourse = async (courseId, studentEmail) => {
 // Get the Functions instance
 export const functions = getFunctions();
 export const addUsersFunction = httpsCallable(functions, "addUsers");
+//Call the whisper api
+export const callWhisper = httpsCallable(functions, "whisper-whisper"); //whisper-whisper is the name of the function in the firebase console
 
 //Test questions
 export const createOrUpdateTestQuestions = async (
