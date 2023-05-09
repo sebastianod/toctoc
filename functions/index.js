@@ -1,9 +1,20 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 admin.initializeApp();
+// for api calls
+const express = require("express");
+const cors = require("cors"); // to allow cross origin requests
 
-exports.whisper = require("./whisper"); // group functions related to whisper Api in whisper.js
+const app = express();
 
+// Automatically allow cross-origin requests
+app.use(cors({ origin: true }));
+
+app.post("/", async (req, res) => {
+  res.send({ message: "Hello from Firebase!" });
+});
+
+exports.whisper = functions.https.onRequest(app);
 // get user and add custom claim (teacher)
 // addTeacherRole will be accessible from client. onCall does that.
 // onCall( <callback> ), callback will fire when addTeacherRole is called

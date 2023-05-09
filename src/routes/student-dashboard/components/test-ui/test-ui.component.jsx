@@ -7,6 +7,7 @@ import { useContext, useEffect, useState } from "react";
 import { capitalizeFirstLetterOfEachWord } from "../../../../utils/utilities";
 import { AudioBlobContext } from "../../../../contexts/audioBlob/audioBlob.context";
 import { TriesContext } from "../../../../contexts/tries/tries.context";
+import { callWhisper } from "../../../../utils/firebase/firebase-utils";
 
 export default function TestUi() {
   //fetch courseId and testId from context
@@ -34,12 +35,31 @@ export default function TestUi() {
     fetchQuestions().catch((err) => console.log(err));
   }, [courseId, testId]);
 
+  // send audio to whisper
+  const sendAudioToWhisper = async () => {
+    const testData = { text: "Hello from React client" };
+    // Since the cloud function is an onRequest function, we can call it with axios or fetch
+    const result = await fetch(
+      "https://us-central1-speech-grading.cloudfunctions.net/whisper",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        // credentials: "include",
+        body: JSON.stringify(testData),
+      });
+    const data = await result.json();
+    console.log(data);
+  };
+
   // handle next question
   const handleNextButton = () => {
     if (currentQuestion < questions.length - 1) {
       //if not the last question, allow next
       if (audioBlob) {
         // if the question is answered
+        sendAudioToWhisper();
         setCurrentQuestion(currentQuestion + 1);
         setAudioBlob(null); // reset audio blob
         setTries(0); // reset tries
@@ -60,6 +80,8 @@ export default function TestUi() {
       // do nothing when last question is reached
     }
   };
+
+  if (audioBlob) console.log(audioBlob.type);
 
   return (
     <div className="test-ui-container">
