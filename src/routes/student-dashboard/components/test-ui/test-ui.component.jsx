@@ -7,7 +7,6 @@ import { useContext, useEffect, useState } from "react";
 import { capitalizeFirstLetterOfEachWord } from "../../../../utils/utilities";
 import { AudioBlobContext } from "../../../../contexts/audioBlob/audioBlob.context";
 import { TriesContext } from "../../../../contexts/tries/tries.context";
-import { callWhisper } from "../../../../utils/firebase/firebase-utils";
 
 export default function TestUi() {
   //fetch courseId and testId from context
