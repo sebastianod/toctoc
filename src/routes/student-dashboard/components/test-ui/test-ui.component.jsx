@@ -20,7 +20,7 @@ export default function TestUi() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
 
   // Get audio recording from mic component
-  // audioBlob is the audio recording obtained in <Mic />
+  // audioBlob is the audio recording obtained in <Mic />. In mpeg format
   const { audioBlob, setAudioBlob } = useContext(AudioBlobContext);
   const { setTries, setHasRecorded } = useContext(TriesContext);
 
@@ -35,19 +35,31 @@ export default function TestUi() {
   }, [courseId, testId]);
 
   // send audio to whisper
-  const sendAudioToWhisper = async () => {
-    const testData = { text: "Hello from React client" };
-    // Since the cloud function is an onRequest function, we can call it with axios or fetch
+  const sendAudioToWhisper = async (audioFile) => {
+    // convert the blob to a file object
+    const audioFileObject = new File([audioFile], "file", {
+      type: "audio/mpeg",
+    });
+    // create a form data object
+    const formData = new FormData();
+    // append the file object as a blob
+    formData.append("file", audioFileObject, "file");
+    // create a headers object
+    const headers = new Headers();
+    // delete or assign the content-type property
+    delete headers["Content-Type"];
+    // or
+    headers["Content-Type"] = "multipart/form-data";
+    // send the request with fetch
     const result = await fetch(
       "https://us-central1-speech-grading.cloudfunctions.net/whisper",
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        // credentials: "include",
-        body: JSON.stringify(testData),
-      });
+        // use the headers object
+        headers: headers,
+        body: formData,
+      }
+    );
     const data = await result.json();
     console.log(data);
   };
@@ -58,7 +70,7 @@ export default function TestUi() {
       //if not the last question, allow next
       if (audioBlob) {
         // if the question is answered
-        sendAudioToWhisper();
+        sendAudioToWhisper(audioBlob);
         setCurrentQuestion(currentQuestion + 1);
         setAudioBlob(null); // reset audio blob
         setTries(0); // reset tries
@@ -80,7 +92,7 @@ export default function TestUi() {
     }
   };
 
-  if (audioBlob) console.log(audioBlob.type);
+  if (audioBlob) console.log(audioBlob);
 
   return (
     <div className="test-ui-container">

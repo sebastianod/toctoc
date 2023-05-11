@@ -1,20 +1,129 @@
+/* eslint-disable no-unused-vars */
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 admin.initializeApp();
+
+//===============Whisper related functions==================//
+// import busboy to handle multipart/form-data
+const Busboy = require("busboy");
+
 // for api calls
 const express = require("express");
 const cors = require("cors"); // to allow cross origin requests
-
 const app = express();
-
 // Automatically allow cross-origin requests
 app.use(cors({ origin: true }));
 
+// import axios to make HTTP requests
+const axios = require("axios");
+
+// import FormData to create multipart/form-data request body
+const FormData = require("form-data");
+
 app.post("/", async (req, res) => {
-  res.send({ message: "Hello from Firebase!" });
+  const busboy = Busboy({ headers: req.headers });
+  let fileData;
+  let fileStatus;
+  let fileInfo;
+
+  busboy.on("file", (fieldname, file, info) => {
+    const { filename: fileName, encoding, mimeType } = info;
+    console.log("fieldname", fieldname);
+    console.log("file", file);
+    console.log("fileName", fileName);
+    console.log("encoding", encoding);
+    console.log("mimetype", mimeType);
+
+    // get the file data as a buffer
+    file.on("data", (data) => {
+      fileData = data;
+    });
+
+    // check the file upload status
+    file.on("end", () => {
+      if (fileData) {
+        fileStatus = "success";
+      } else {
+        fileStatus = "failure";
+      }
+      fileInfo = { fileName, encoding, mimeType };
+    });
+  });
+
+  // import axios-retry to add retry functionality to axios
+  const axiosRetry = require("axios-retry");
+
+  // create an axios instance with retry options
+  const axiosInstance = axios.create();
+  axiosRetry(axiosInstance, {
+    // number of retries
+    retries: 3,
+    // retry condition based on error code
+    retryCondition: (error) => {
+      // check if the error is retryable
+      if (axiosRetry.isNetworkOrIdempotentRequestError(error)) {
+        // get the status code from the error config
+        const { status } = error.config;
+        // retry only if the status code is 429
+        return status === 429;
+      }
+      // otherwise, do not retry
+      return false;
+    },
+    // retry delay based on retry count
+    retryDelay: (retryCount) => {
+      return retryCount * 1000; // wait for 1s, 2s, 3s before retries
+    },
+  });
+
+  busboy.on("finish", async () => {
+    // send the file to the openai API
+    try {
+      // create a FormData object with the file data and the model name
+      const formData = new FormData();
+      formData.append("file", fileData, fileInfo.fileName);
+      formData.append("model", "whisper-1");
+      const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+
+      // get the API URL and options
+      const apiURL = "https://api.openai.com/v1/audio/transcriptions";
+
+      // send the POST request with axios instance
+      const apiResponse = await axiosInstance.post(apiURL, formData, {
+        headers: {
+          authorization: `Bearer ${OPENAI_API_KEY}`,
+          "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
+        },
+      });
+      // handle the API response
+      console.log(apiResponse.data);
+      // send a JSON response to the client with the transcription result
+      res.json(apiResponse.data);
+    } catch (error) {
+      // handle the API error
+      console.error(error);
+      // check if there is a response object in the error
+      if (error.response) {
+        // get the status code and data from the error response
+        const { status, data } = error.response;
+        // send a JSON response with the status code and data
+        res.status(status).json(data);
+      } else {
+        // send a JSON response with a generic error message
+        res.status(500).json({ error: "Something went wrong" });
+      }
+    }
+
+    // send a JSON response to the client with the status and the file information
+    res.json({ status: fileStatus, file: fileInfo });
+  });
+
+  busboy.end(req.rawBody);
 });
 
 exports.whisper = functions.https.onRequest(app);
+//=================================================//
+
 // get user and add custom claim (teacher)
 // addTeacherRole will be accessible from client. onCall does that.
 // onCall( <callback> ), callback will fire when addTeacherRole is called
