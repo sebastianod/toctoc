@@ -81,7 +81,7 @@ app.post("/", async (req, res) => {
     try {
       // create a FormData object with the file data and the model name
       const formData = new FormData();
-      formData.append("file", fileData, fileInfo.fileName);
+      formData.append("file", fileData, "file.mpeg");
       formData.append("model", "whisper-1");
       const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
