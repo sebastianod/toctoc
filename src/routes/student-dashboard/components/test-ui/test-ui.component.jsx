@@ -7,6 +7,7 @@ import { useContext, useEffect, useState } from "react";
 import { capitalizeFirstLetterOfEachWord } from "../../../../utils/utilities";
 import { AudioBlobContext } from "../../../../contexts/audioBlob/audioBlob.context";
 import { TriesContext } from "../../../../contexts/tries/tries.context";
+import sendAudioToWhisper from "../../../../api/client-utilities";
 
 export default function TestUi() {
   //fetch courseId and testId from context
@@ -33,36 +34,6 @@ export default function TestUi() {
     };
     fetchQuestions().catch((err) => console.log(err));
   }, [courseId, testId]);
-
-  // send audio to whisper
-  const sendAudioToWhisper = async (audioFile) => {
-    // convert the blob to a file object
-    const audioFileObject = new File([audioFile], "file", {
-      type: "audio/mpeg",
-    });
-    // create a form data object
-    const formData = new FormData();
-    // append the file object as a blob
-    formData.append("file", audioFileObject, "file");
-    // create a headers object
-    const headers = new Headers();
-    // delete or assign the content-type property
-    delete headers["Content-Type"];
-    // or
-    headers["Content-Type"] = "multipart/form-data";
-    // send the request with fetch
-    const result = await fetch(
-      "https://us-central1-speech-grading.cloudfunctions.net/whisper",
-      {
-        method: "POST",
-        // use the headers object
-        headers: headers,
-        body: formData,
-      }
-    );
-    const data = await result.json();
-    console.log(data);
-  };
 
   // handle next question
   const handleNextButton = () => {
