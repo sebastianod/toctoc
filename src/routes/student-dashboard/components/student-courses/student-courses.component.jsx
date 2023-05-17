@@ -8,9 +8,10 @@ import { Outlet } from "react-router-dom";
 export default function StudentCourses() {
   const { currentUser } = useContext(UserContext);
   const [courses, setCourses] = useState([]);
-  const studentId = currentUser.uid;
+  const studentId = currentUser ? currentUser.uid : "";
 
   useEffect(() => {
+    if (!studentId) return;
     const unsubscribe = subscribeStudentToEnrollments(studentId, setCourses);
     return () => unsubscribe();
   }, [studentId]);

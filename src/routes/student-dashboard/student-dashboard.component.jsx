@@ -5,7 +5,7 @@ import "./student-dashboard.styles.scss";
 
 const StudentDashboard = () => {
   const { currentUser } = useContext(UserContext);
-  const studentName = currentUser.displayName;
+  const studentName = currentUser ? currentUser.displayName : "";
 
   return (
     <div className="student-dashboard-container">

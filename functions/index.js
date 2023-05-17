@@ -21,26 +21,21 @@ const axios = require("axios");
 const FormData = require("form-data");
 
 app.post("/", async (req, res) => {
-  const busboy = Busboy({ headers: req.headers });
-  let fileData;
-  let fileStatus;
-  let fileInfo;
+  const busboy = Busboy({ headers: req.headers }); // create a new busboy instance with the request headers
+  let fileData; // to store the file data
+  let fileStatus; // to store the file upload status
+  let fileInfo; // to store the file information
 
-  busboy.on("file", (fieldname, file, info) => {
+  busboy.on("file", (fieldname, file, info) => { // listen for the file event, that is triggered when a file is uploaded
     const { filename: fileName, encoding, mimeType } = info;
-    console.log("fieldname", fieldname);
-    console.log("file", file);
-    console.log("fileName", fileName);
-    console.log("encoding", encoding);
-    console.log("mimetype", mimeType);
 
     // get the file data as a buffer
-    file.on("data", (data) => {
+    file.on("data", (data) => { // read a file, multiple files can be read
       fileData = data;
     });
 
     // check the file upload status
-    file.on("end", () => {
+    file.on("end", () => { // finished reading a file
       if (fileData) {
         fileStatus = "success";
       } else {
@@ -76,7 +71,7 @@ app.post("/", async (req, res) => {
     },
   });
 
-  busboy.on("finish", async () => {
+  busboy.on("finish", async () => { //  finished parsing the entire request, not just one file
     // send the file to the openai API
     try {
       // create a FormData object with the file data and the model name

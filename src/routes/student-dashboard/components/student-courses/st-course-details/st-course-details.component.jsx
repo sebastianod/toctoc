@@ -7,9 +7,10 @@ import TestName from "./test-name/test-name.component";
 export default function StudentCourseDetails() {
   const [tests, setTests] = useState([]);
   const { currentCourse } = useContext(CourseContext); //to get the current courseId, for the path to the tests to this course
-  const courseId = currentCourse.courseId;
+  const courseId = currentCourse && currentCourse.courseId; //wait for currentCourse to be set before getting courseId
 
   useEffect(() => {
+    if (!courseId) return; // wait for courseId to be set before subscribing to tests
     const unsubscribe = subscribeToTests(courseId, setTests); //whenever a document is added, removed, or changed, this will be called
     return () => unsubscribe(); //cleans up after the component is unmounted
   }, [courseId]); //useEffect re-runs upon courseId changing

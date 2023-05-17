@@ -12,9 +12,9 @@ import sendAudioToWhisper from "../../../../api/client-utilities";
 export default function TestUi() {
   //fetch courseId and testId from context
   const { currentCourse } = useContext(CourseContext);
-  const courseId = currentCourse.courseId;
+  const courseId = currentCourse ? currentCourse.courseId : "";
   const { currentTest } = useContext(TestContext);
-  const { testId, name } = currentTest;
+  const { testId, name } = currentTest || {}; // wait for currentTest to be set before getting testId and name
 
   // Question list and state for cycling through questions
   const [questions, setQuestions] = useState([]);
@@ -28,12 +28,17 @@ export default function TestUi() {
   // fetch Questions set by teacher
   useEffect(() => {
     const fetchQuestions = async () => {
-      const questions = await getQuestions(courseId, testId);
-      const questionsList = questions[0].questionsList;
-      setQuestions(questionsList);
+    const questions = await getQuestions(courseId, testId);
+    const questionsList = questions[0].questionsList;
+    setQuestions(questionsList);
     };
+    console.log("before if statement", courseId, testId); //log the values before the if statement
+    if (courseId && testId) { //only call fetchQuestions if both courseId and testId are truthy
     fetchQuestions().catch((err) => console.log(err));
-  }, [courseId, testId]);
+    console.log("after if statement", courseId, testId); //log the values after the if statement
+    console.log('fetchQuestions called');
+    }
+    }, [courseId, testId]);
 
   // handle next question
   const handleNextButton = () => {
@@ -72,12 +77,12 @@ export default function TestUi() {
           {currentQuestion + 1} of {questions.length}
         </span>
         <h3 className="test-title">
-          {capitalizeFirstLetterOfEachWord(name)} Test
+          {name ? capitalizeFirstLetterOfEachWord(name) : ""} Test
         </h3>
         <span>Quit</span>
       </header>
       <div className="question-area">
-        <strong>{questions[currentQuestion]}</strong>
+        <strong>{questions ? questions[currentQuestion] : ""}</strong>
       </div>
       <div className="response-area">
         <Mic />
