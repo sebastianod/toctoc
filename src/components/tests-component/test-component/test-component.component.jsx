@@ -2,7 +2,7 @@ import { Fragment, useContext, useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { CourseContext } from "../../../contexts/course/course.context";
 import { TestContext } from "../../../contexts/test-context/test.context";
-import { deleteTest } from "../../../utils/firebase/firebase-utils";
+import { deleteTest, updateTestAvailability } from "../../../utils/firebase/firebase-utils";
 import Availability from "../../availability-toggle/availability.component";
 import Delete from "../../delete-button/delete-button.component";
 import EditArea from "../../edit-area/edit-area.component";
@@ -32,8 +32,12 @@ const Test = ({ testName, testId }) => {
     }
   };
 
-  const handleAvailabilityClick = () => {
-    console.log("Availability button clicked");
+  const handleAvailabilityClick = (e) => {
+    const availability = e.target.checked;
+    const response = updateTestAvailability(courseId, testId, availability);
+    if (!response) { 
+      alert("Something went wrong. Please try again."); //if the update fails, alert the user
+    }
   }
 
   function uiLogic() {

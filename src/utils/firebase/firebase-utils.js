@@ -368,6 +368,15 @@ export const updateTest = async (courseId, testId, testName) => {
   }
 };
 
+export const updateTestAvailability = async (courseId, testId, isAvailable) => {
+  const testRef = doc(db, `courses/${courseId}/tests`, testId);
+
+  try {
+    await updateDoc(testRef, { isAvailable: isAvailable }); // if the field isAvailable doesn't exist, it will be created
+  } catch (error) {
+    console.log("Error updating test availability", error.message);
+  }
+}
 //=================Deleting data=================//
 
 export const deleteCourse = async (courseId) => {
