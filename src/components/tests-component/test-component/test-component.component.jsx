@@ -3,6 +3,7 @@ import { NavLink, Outlet } from "react-router-dom";
 import { CourseContext } from "../../../contexts/course/course.context";
 import { TestContext } from "../../../contexts/test-context/test.context";
 import { deleteTest } from "../../../utils/firebase/firebase-utils";
+import Availability from "../../availability-toggle/availability.component";
 import Delete from "../../delete-button/delete-button.component";
 import EditArea from "../../edit-area/edit-area.component";
 import Edit from "../../edit-button/edit-button.component";
@@ -31,6 +32,10 @@ const Test = ({ testName, testId }) => {
     }
   };
 
+  const handleAvailabilityClick = () => {
+    console.log("Availability button clicked");
+  }
+
   function uiLogic() {
     if (editClick === true) {
       return (
@@ -52,6 +57,7 @@ const Test = ({ testName, testId }) => {
             </NavLink>
             <Edit className="edit-container" onClick={handleEditClick} />
             <Delete className="delete-container" onClick={handleDeleteClick} />
+            <Availability className="availability-container" onClick={handleAvailabilityClick}/>
           </div>
           <Outlet />
         </Fragment>
