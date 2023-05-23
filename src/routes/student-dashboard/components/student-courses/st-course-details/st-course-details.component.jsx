@@ -16,9 +16,11 @@ export default function StudentCourseDetails() {
   }, [courseId]); //useEffect re-runs upon courseId changing
 
   const showTests = tests.map((test, index) => {
-    const { name, testId } = test;
-    return <TestName name={name} testId={testId} key={index} />;
+    const { name, testId, isAvailable } = test;
+    return <TestName name={name} testId={testId} isAvailable={isAvailable} key={index} />;
   });
+
+  console.log(tests);
 
   return (
     <div className="student-tests-container">

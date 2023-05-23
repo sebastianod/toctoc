@@ -8,6 +8,18 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    flex-direction: row;
+
+    .test-name {
+      display: flex;
+      width: 350px;
+    }
+
+    .test-availability {
+      display: flex;
+      margin-left: 10px;
+      font-size: 20px;
+    }
   }
 }
 
@@ -18,7 +30,7 @@
     text-decoration: none;
     transition: background-color 0.3s ease-in-out;
     border-radius: 5px;
-    width: 230px;
+    width: 250px;
     height: 60px;
     justify-content: center;
     align-items: center;
