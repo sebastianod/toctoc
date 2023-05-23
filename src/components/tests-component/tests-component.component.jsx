@@ -17,14 +17,21 @@ const Tests = () => {
   }, [courseId]); //useEffect re-runs upon courseId changing
 
   const showTests = tests.map((test, index) => {
-    const { name, testId } = test;
+    const { name, testId, isAvailable } = test;
     const processedName = processListOfSentences(name).toString();
-    return <Test key={index} testName={processedName} testId={testId} />;
+    return (
+      <Test
+        key={index}
+        testName={processedName}
+        testId={testId}
+        onLoadAvailability={isAvailable}
+      />
+    );
   });
 
   return (
     <div className="tests-container">
-        <CreateArea type="Test" courseId={courseId} />
+      <CreateArea type="Test" courseId={courseId} />
       {showTests}
     </div>
   );

@@ -2,21 +2,24 @@ import { Fragment, useContext, useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { CourseContext } from "../../../contexts/course/course.context";
 import { TestContext } from "../../../contexts/test-context/test.context";
-import { deleteTest, updateTestAvailability } from "../../../utils/firebase/firebase-utils";
+import {
+  deleteTest,
+  updateTestAvailability,
+} from "../../../utils/firebase/firebase-utils";
 import Availability from "../../availability-toggle/availability.component";
 import Delete from "../../delete-button/delete-button.component";
 import EditArea from "../../edit-area/edit-area.component";
 import Edit from "../../edit-button/edit-button.component";
 import "./test-component.styles.scss";
 
-const Test = ({ testName, testId }) => {
+const Test = ({ testName, testId, onLoadAvailability }) => {
   const { setCurrentTest } = useContext(TestContext);
   const [editClick, setEditClick] = useState(false); //is the edit button clicked? Based on this, we rende <EditArea /> or the basic <Course /> component
   const { currentCourse } = useContext(CourseContext); //we need the current course's Id in order to get the path to update or delete the test
   const { courseId } = currentCourse; //needed for the test's path
 
   const handleTestClick = () => {
-    setCurrentTest({ name: testName, testId: testId });
+    setCurrentTest({ name: testName, testId: testId, isAvailable: onLoadAvailability });
   };
 
   const handleEditClick = () => {
@@ -35,10 +38,10 @@ const Test = ({ testName, testId }) => {
   const handleAvailabilityClick = (e) => {
     const availability = e.target.checked;
     const response = updateTestAvailability(courseId, testId, availability);
-    if (!response) { 
+    if (!response) {
       alert("Something went wrong. Please try again."); //if the update fails, alert the user
     }
-  }
+  };
 
   function uiLogic() {
     if (editClick === true) {
@@ -61,7 +64,11 @@ const Test = ({ testName, testId }) => {
             </NavLink>
             <Edit className="edit-container" onClick={handleEditClick} />
             <Delete className="delete-container" onClick={handleDeleteClick} />
-            <Availability className="availability-container" onClick={handleAvailabilityClick}/>
+            <Availability
+              className="availability-container"
+              onLoadAvailability={onLoadAvailability}
+              onClick={handleAvailabilityClick}
+            />
           </div>
           <Outlet />
         </Fragment>

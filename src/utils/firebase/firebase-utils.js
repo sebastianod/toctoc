@@ -254,7 +254,10 @@ export const createTest = async (courseId, testName) => {
   const testsRef = collection(db, `courses/${courseId}/tests`);
 
   try {
-    await addDoc(testsRef, { name: testName.toLowerCase() });
+    await addDoc(testsRef, {
+      name: testName.toLowerCase(),
+      isAvailable: false,
+    }); //default availability is none
   } catch (error) {
     console.log("Error creating test", error.message);
   }
@@ -376,7 +379,7 @@ export const updateTestAvailability = async (courseId, testId, isAvailable) => {
   } catch (error) {
     console.log("Error updating test availability", error.message);
   }
-}
+};
 //=================Deleting data=================//
 
 export const deleteCourse = async (courseId) => {
