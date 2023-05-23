@@ -18,10 +18,10 @@ export default function TestName(props) {
   // isAvailable is a boolean, true or false, students need a readable status for their tests.
   const readableAvailability = () => {
     if (isAvailable === true) {
-      return "👍";
+      return "🟢";
     }
     if (isAvailable === false) {
-      return "⛔";
+      return "🔴";
     } else {
       return "Unknown";
     }
