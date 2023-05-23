@@ -9,8 +9,10 @@ export default function TestName(props) {
   const { setCurrentTest } = useContext(TestContext);
   const processedName = processListOfSentences(name).toString() || "";
 
-  const handleTestClick = () => {
-    setCurrentTest({ name: name, testId: testId, isAvailable: isAvailable });
+  const handleTestClick = (e) => { // Can take test only if available. This is only a frontend check.
+    isAvailable
+      ? setCurrentTest({ name: name, testId: testId, isAvailable: isAvailable })
+      : e.preventDefault();
   };
 
   // isAvailable is a boolean, true or false, students need a readable status for their tests.
