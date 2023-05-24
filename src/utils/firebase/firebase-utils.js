@@ -354,6 +354,7 @@ export const createOrUpdateTestQuestions = async (
 //We need to know what course, which student and which test: courseId, studentId, testId
 //We duplicate testId for easier grading later
 //path: courses/courseId/students/studentId/tests/testId/answers/answersId
+// to be called by begin/continue test button in <TestUi/>
 
 export const createStudentAnswersDoc = async (courseId, studentId, testId) => {
   const answersCollectionRef = collection(
@@ -371,7 +372,11 @@ export const createStudentAnswersDoc = async (courseId, studentId, testId) => {
   } else {
     // if there's no answers doc already, create it
     try {
-      await addDoc(answersCollectionRef, { answersList: [] });
+      await addDoc(answersCollectionRef, { //default states
+        answersList: [],// contains transcriptions of each answer
+        isBegun: false, //False upon doc creation. True after clicking "Begin"
+        currentQuestion: 0, //holds index in answersList of currentQuestion
+      });
     } catch (error) {
       console.log("Error creating student answers doc: ", error.message);
     }
