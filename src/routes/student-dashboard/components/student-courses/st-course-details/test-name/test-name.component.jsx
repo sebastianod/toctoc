@@ -9,7 +9,7 @@ export default function TestName(props) {
   const { setCurrentTest } = useContext(TestContext);
   const processedName = processListOfSentences(name).toString() || "";
 
-  const handleTestClick = (e) => { // Can take test only if available. This is only a frontend check.
+  const handleTestClick = (e) => { // Can take test only if available. Only a frontend check.
     isAvailable
       ? setCurrentTest({ name: name, testId: testId, isAvailable: isAvailable })
       : e.preventDefault();

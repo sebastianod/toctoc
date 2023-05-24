@@ -349,6 +349,35 @@ export const createOrUpdateTestQuestions = async (
     }
   }
 };
+
+//----creating a student's answers to a test. (Under a course)----//
+//We need to know what course, which student and which test: courseId, studentId, testId
+//We duplicate testId for easier grading later
+//path: courses/courseId/students/studentId/tests/testId/answers/answersId
+
+export const createStudentAnswersDoc = async (courseId, studentId, testId) => {
+  const answersCollectionRef = collection(
+    db,
+    `courses/${courseId}/students/${studentId}/tests/${testId}/answers`
+  );
+
+  // check if the student had already started the test (created answers doc)
+  const q = query(answersCollectionRef);
+  const answersDocSnapshot = await getDocs(q);
+
+  if (!answersDocSnapshot.empty) {
+    //if there's an answers doc already, do nothing, do not create doc
+    return "Answers doc has already been created.";
+  } else {
+    // if there's no answers doc already, create it
+    try {
+      await addDoc(answersCollectionRef, { answersList: [] });
+    } catch (error) {
+      console.log("Error creating student answers doc: ", error.message);
+    }
+  }
+};
+
 //=================Updating data=================//
 
 export const updateCourse = async (courseId, courseName) => {
