@@ -7,6 +7,7 @@ import { useContext, useEffect, useState } from "react";
 import { capitalizeFirstLetterOfEachWord } from "../../../../utils/utilities";
 import { AudioBlobContext } from "../../../../contexts/audioBlob/audioBlob.context";
 import { TriesContext } from "../../../../contexts/tries/tries.context";
+import Button from "../../../../components/button/button.component";
 import sendAudioToWhisper from "../../../../api/client-utilities";
 
 export default function TestUi() {
@@ -16,9 +17,12 @@ export default function TestUi() {
   const { currentTest } = useContext(TestContext);
   const { testId, name } = currentTest || {}; // wait for currentTest to be set before getting testId and name
 
+  // Begin/Continue test button
+  const [isBegun, setIsBegun] = useState(false); //False DB value. DB is true; answers doc would have been created.
+
   // Question list and state for cycling through questions
   const [questions, setQuestions] = useState([]);
-  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [currentQuestion, setCurrentQuestion] = useState(0); //default comes from DB
 
   // Get audio recording from mic component
   // audioBlob is the audio recording obtained in <Mic />. In mpeg format
@@ -28,17 +32,18 @@ export default function TestUi() {
   // fetch Questions set by teacher
   useEffect(() => {
     const fetchQuestions = async () => {
-    const questions = await getQuestions(courseId, testId);
-    const questionsList = questions[0].questionsList;
-    setQuestions(questionsList);
+      const questions = await getQuestions(courseId, testId);
+      const questionsList = questions[0].questionsList;
+      setQuestions(questionsList);
     };
     console.log("before if statement", courseId, testId); //log the values before the if statement
-    if (courseId && testId) { //only call fetchQuestions if both courseId and testId are truthy
-    fetchQuestions().catch((err) => console.log(err));
-    console.log("after if statement", courseId, testId); //log the values after the if statement
-    console.log('fetchQuestions called');
+    if (courseId && testId) {
+      //only call fetchQuestions if both courseId and testId are truthy
+      fetchQuestions().catch((err) => console.log(err));
+      console.log("after if statement", courseId, testId); //log the values after the if statement
+      console.log("fetchQuestions called");
     }
-    }, [courseId, testId]);
+  }, [courseId, testId]);
 
   // handle next question
   const handleNextButton = () => {
@@ -68,30 +73,45 @@ export default function TestUi() {
     }
   };
 
+  const handleBeginClick = () => {
+    setIsBegun(true);
+  }
+
   if (audioBlob) console.log(audioBlob);
 
-  return (
-    <div className="test-ui-container">
-      <header className="header">
-        <span>
-          {currentQuestion + 1} of {questions.length}
-        </span>
+  const uiLogic = () => {
+    return isBegun ? (
+      <div className="test-ui-container">
+        <header className="header">
+          <span>
+            {currentQuestion + 1} of {questions.length}
+          </span>
+          <h3 className="test-title">
+            {name ? capitalizeFirstLetterOfEachWord(name) : ""} Test
+          </h3>
+          <span>Quit</span>
+        </header>
+        <div className="question-area">
+          <strong>{questions ? questions[currentQuestion] : ""}</strong>
+        </div>
+        <div className="response-area">
+          <Mic />
+        </div>
+        <div className="footer">
+          <button className="next-skip" onClick={handleNextButton}>
+            Next
+          </button>
+        </div>
+      </div>
+    ) : (
+      <div className="welcome-test">
         <h3 className="test-title">
           {name ? capitalizeFirstLetterOfEachWord(name) : ""} Test
         </h3>
-        <span>Quit</span>
-      </header>
-      <div className="question-area">
-        <strong>{questions ? questions[currentQuestion] : ""}</strong>
+        <Button onClick={handleBeginClick}>Begin Test</Button>
       </div>
-      <div className="response-area">
-        <Mic />
-      </div>
-      <div className="footer">
-        <button className="next-skip" onClick={handleNextButton}>
-          Next
-        </button>
-      </div>
-    </div>
-  );
+    );
+  };
+
+  return <>{uiLogic()}</>;
 }

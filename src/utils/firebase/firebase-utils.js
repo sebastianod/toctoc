@@ -374,7 +374,7 @@ export const createStudentAnswersDoc = async (courseId, studentId, testId) => {
     try {
       await addDoc(answersCollectionRef, { //default states
         answersList: [],// contains transcriptions of each answer
-        isBegun: false, //False upon doc creation. True after clicking "Begin"
+        isBegun: true, // upon doc creation. True after clicking "Begin", which also creates the doc.
         currentQuestion: 0, //holds index in answersList of currentQuestion
       });
     } catch (error) {
