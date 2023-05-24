@@ -368,7 +368,7 @@ export const createStudentAnswersDoc = async (courseId, studentId, testId) => {
 
   if (!answersDocSnapshot.empty) {
     //if there's an answers doc already, do nothing, do not create doc
-    return "Answers doc has already been created.";
+    return "exists";
   } else {
     // if there's no answers doc already, create it
     try {

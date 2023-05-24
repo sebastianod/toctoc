@@ -1,6 +1,6 @@
 import "./test-ui.styles.scss";
 import Mic from "../mic/mic.component";
-import { getQuestions } from "../../../../utils/firebase/firebase-utils";
+import { createStudentAnswersDoc, getQuestions } from "../../../../utils/firebase/firebase-utils";
 import { CourseContext } from "../../../../contexts/course/course.context";
 import { TestContext } from "../../../../contexts/test-context/test.context";
 import { useContext, useEffect, useState } from "react";
@@ -9,13 +9,15 @@ import { AudioBlobContext } from "../../../../contexts/audioBlob/audioBlob.conte
 import { TriesContext } from "../../../../contexts/tries/tries.context";
 import Button from "../../../../components/button/button.component";
 import sendAudioToWhisper from "../../../../api/client-utilities";
+import { UserContext } from "../../../../contexts/user/user.context";
 
 export default function TestUi() {
-  //fetch courseId and testId from context
+  //fetch courseId, testId and userId from context
   const { currentCourse } = useContext(CourseContext);
   const courseId = currentCourse ? currentCourse.courseId : "";
   const { currentTest } = useContext(TestContext);
   const { testId, name } = currentTest || {}; // wait for currentTest to be set before getting testId and name
+  const { currentUser } = useContext(UserContext);
 
   // Begin/Continue test button
   const [isBegun, setIsBegun] = useState(false); //False DB value. DB is true; answers doc would have been created.
@@ -73,8 +75,9 @@ export default function TestUi() {
     }
   };
 
-  const handleBeginClick = () => {
+  const handleBeginClick = async () => {
     setIsBegun(true);
+    await createStudentAnswersDoc(courseId, currentUser.uid, testId); //creates the answer doc if it doesn't exist already.
   }
 
   if (audioBlob) console.log(audioBlob);
