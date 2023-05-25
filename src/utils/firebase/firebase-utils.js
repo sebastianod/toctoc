@@ -198,8 +198,25 @@ export const answersDocExists = async (courseId, studentId, testId) => {
   } catch (error) {
     console.log("Error checking if student had begun test: ", error.message);
   }
-  
 }
+
+export const getAnswersDoc = async (courseId, studentId, testId) => {
+  const answersCollectionRef = collection(
+    db,
+    `courses/${courseId}/students/${studentId}/tests/${testId}/answers`
+  );
+
+  // check if the student had already started the test (created answers doc)
+  const q = query(answersCollectionRef);
+  const answersDocSnapshot = await getDocs(q);
+
+  if (!answersDocSnapshot.empty) {
+    const answersDoc = answersDocSnapshot.docs.map((doc)=>({
+      id: doc.id,
+      ...doc.data(),
+    }))
+  }
+};
 
 //-------Data listeners (realtime updates)-------//
 
