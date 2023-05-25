@@ -20,8 +20,6 @@ export default function StudentCourseDetails() {
     return <TestName name={name} testId={testId} isAvailable={isAvailable} key={index} />;
   });
 
-  console.log(tests);
-
   return (
     <div className="student-tests-container">
       <h4 className="Tests-header">Tests</h4>

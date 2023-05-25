@@ -84,6 +84,7 @@ export default function TestUi() {
   };
 
   if (audioBlob) console.log(audioBlob);
+  console.log(currentTest);
 
   const uiLogic = () => {
     return isBegun ? (

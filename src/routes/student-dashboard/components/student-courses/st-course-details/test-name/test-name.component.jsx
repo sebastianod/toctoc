@@ -1,7 +1,7 @@
 import "./test-name.styles.scss";
 import { processListOfSentences } from "../../../../../../utils/utilities";
 import { NavLink } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { TestContext } from "../../../../../../contexts/test-context/test.context";
 import { UserContext } from "../../../../../../contexts/user/user.context";
 import { CourseContext } from "../../../../../../contexts/course/course.context";
@@ -14,19 +14,24 @@ export default function TestName(props) {
   const { currentCourse } = useContext(CourseContext);
   const processedName = processListOfSentences(name).toString() || "";
 
-  const { beginOrContinue, setBeginOrContinue } = useState("Begin"); //Show "begin" or "continue" test
+  const handleTestClick = (e) => {
+    // check function: test has been started by student?
+    const checkAnswersDocExists = async () => {
+      const testBeginStatus = await answersDocExists( //returns true or false if doc exists
+        currentCourse.courseId,
+        currentUser.uid,
+        testId
+      );
+      testBeginStatus // If testBeginStatus true -> Test is begun
+      ? setCurrentTest({ name: name, testId: testId, isAvailable: isAvailable, isBegun:true })
+      : setCurrentTest({ name: name, testId: testId, isAvailable: isAvailable, isBegun:false });
+      console.log("Checked if answers doc exists.");
+    };
 
-
-  const handleTestClick = async (e) => { // Can take test only if available. Only a frontend check.
+    // Can take test only if available. Only a frontend check.
     isAvailable
-      ? setCurrentTest({ name: name, testId: testId, isAvailable: isAvailable })
-      : e.preventDefault();
-
-    // check if test has been started by student: 
-   const testBeginStatus = await answersDocExists(currentCourse.courseId, currentUser.uid, testId);
-   if (testBeginStatus === true) {
-    //
-   }
+      ? checkAnswersDocExists() //check only if the test is available
+      : e.preventDefault(); // if test is unavailable do nothing
   };
 
   // isAvailable is a boolean, true or false, students need a readable status for their tests.
