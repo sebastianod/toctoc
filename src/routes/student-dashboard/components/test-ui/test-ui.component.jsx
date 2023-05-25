@@ -19,11 +19,11 @@ export default function TestUi() {
   const { currentCourse } = useContext(CourseContext);
   const courseId = currentCourse ? currentCourse.courseId : "";
   const { currentTest } = useContext(TestContext);
-  const { testId, name } = currentTest || {}; // wait for currentTest to be set before getting testId and name
+  const { testId, name, isBegun } = currentTest || {}; // wait for currentTest to be set before getting testId and name
   const { currentUser } = useContext(UserContext);
 
-  // Begin/Continue test button
-  const [isBegun, setIsBegun] = useState(false); //False DB value. DB is true; answers doc would have been created.
+  // Begin or Continue test button
+  const [testBegun, setTestBegun] = useState(isBegun); //isBegun is gotten upon clicking <TestName/>
 
   // Question list and state for cycling through questions
   const [questions, setQuestions] = useState([]);
@@ -79,7 +79,7 @@ export default function TestUi() {
   };
 
   const handleBeginClick = async () => {
-    setIsBegun(true);
+    setTestBegun(true);
     await createStudentAnswersDoc(courseId, currentUser.uid, testId); //creates the answer doc if it doesn't exist already.
   };
 
@@ -87,7 +87,7 @@ export default function TestUi() {
   console.log(currentTest);
 
   const uiLogic = () => {
-    return isBegun ? (
+    return testBegun ? (
       <div className="test-ui-container">
         <header className="header">
           <span>
