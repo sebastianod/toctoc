@@ -189,11 +189,16 @@ export const answersDocExists = async (courseId, studentId, testId) => {
   const q = query(answersCollectionRef);
   const answersDocSnapshot = await getDocs(q);
 
-  if (answersDocSnapshot.empty) {
-    return false; // answersDocExists?: false
-  } if (!answersDocSnapshot.empty) {
-    return true; // answersDocExists?: true
+  try {
+    if (answersDocSnapshot.empty) {
+      return false; // answersDocExists?: false
+    } if (!answersDocSnapshot.empty) {
+      return true; // answersDocExists?: true
+    }
+  } catch (error) {
+    console.log("Error checking if student had begun test: ", error.message);
   }
+  
 }
 
 //-------Data listeners (realtime updates)-------//
