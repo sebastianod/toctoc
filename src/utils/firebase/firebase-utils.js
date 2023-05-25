@@ -175,6 +175,27 @@ export const getQuestions = async (courseId, testId) => {
   });
 };
 
+// check if a student has already started a test by checking if an answers doc exists.
+// to be done upon clicking an available test.
+// goal: to show "Begin test" or "Continue test" upon clicking a test
+
+export const answersDocExists = async (courseId, studentId, testId) => {
+  const answersCollectionRef = collection(
+    db,
+    `courses/${courseId}/students/${studentId}/tests/${testId}/answers`
+  );
+
+  // check if the student had already started the test (created answers doc)
+  const q = query(answersCollectionRef);
+  const answersDocSnapshot = await getDocs(q);
+
+  if (answersDocSnapshot.empty) {
+    return false; // answersDocExists?: false
+  } if (!answersDocSnapshot.empty) {
+    return true; // answersDocExists?: true
+  }
+}
+
 //-------Data listeners (realtime updates)-------//
 
 export const subscribeToCourses = (setterFunction) => {
@@ -374,7 +395,6 @@ export const createStudentAnswersDoc = async (courseId, studentId, testId) => {
     try {
       await addDoc(answersCollectionRef, { //default states
         answersList: [],// contains transcriptions of each answer
-        isBegun: true, // upon doc creation. True after clicking "Begin", which also creates the doc.
         currentQuestion: 0, //holds index in answersList of currentQuestion
       });
     } catch (error) {

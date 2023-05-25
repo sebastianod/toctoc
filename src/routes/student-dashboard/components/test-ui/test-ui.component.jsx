@@ -1,6 +1,9 @@
 import "./test-ui.styles.scss";
 import Mic from "../mic/mic.component";
-import { createStudentAnswersDoc, getQuestions } from "../../../../utils/firebase/firebase-utils";
+import {
+  createStudentAnswersDoc,
+  getQuestions,
+} from "../../../../utils/firebase/firebase-utils";
 import { CourseContext } from "../../../../contexts/course/course.context";
 import { TestContext } from "../../../../contexts/test-context/test.context";
 import { useContext, useEffect, useState } from "react";
@@ -78,7 +81,7 @@ export default function TestUi() {
   const handleBeginClick = async () => {
     setIsBegun(true);
     await createStudentAnswersDoc(courseId, currentUser.uid, testId); //creates the answer doc if it doesn't exist already.
-  }
+  };
 
   if (audioBlob) console.log(audioBlob);
 
