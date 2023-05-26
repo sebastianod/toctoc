@@ -66,7 +66,8 @@ export default function TestUi() {
       //if not the last question, allow next
       if (audioBlob) {
         // if the question is answered
-        sendAudioToWhisper(audioBlob);
+        sendAudioToWhisper(audioBlob); // whisper endpoint
+        // endpoint for updating current question
         setCurrentQuestion(currentQuestion + 1);
         setAudioBlob(null); // reset audio blob
         setTries(0); // reset tries

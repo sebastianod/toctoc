@@ -347,9 +347,10 @@ export const createStudentUnderCourse = async (courseId, studentEmail) => {
   }
 };
 
-// calling a cloud function that creates many users at once
+
 // Get the Functions instance
 export const functions = getFunctions();
+// calling a cloud function that creates many users at once
 export const addUsersFunction = httpsCallable(functions, "addUsers");
 
 //Test questions

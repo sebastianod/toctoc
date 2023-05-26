@@ -240,6 +240,16 @@ exports.addUsers = functions.https.onCall(async (data, context) => {
   }
 });
 
+exports.increaseCurrentQuestion = functions.https.onCall(async (data, context) => {
+  //Check user's authentication
+  if (!context.auth) {
+    return "Error: You must be authenticated.";
+  }
+  //User is authenticated
+  const { courseId, studentId, testId } = data; //path to answersDoc
+  return {dbCourseId: courseId, dbStudentId: studentId, dbTestId: testId}
+});
+
 //===============Trigger functions==================//
 
 // trigger function when a student is created under a course
