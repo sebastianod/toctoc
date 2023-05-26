@@ -2,6 +2,7 @@ import "./test-ui.styles.scss";
 import Mic from "../mic/mic.component";
 import {
   createStudentAnswersDoc,
+  getAnswersDocCurrentQuestion,
   getQuestions,
 } from "../../../../utils/firebase/firebase-utils";
 import { CourseContext } from "../../../../contexts/course/course.context";
@@ -36,19 +37,28 @@ export default function TestUi() {
 
   // fetch Questions set by teacher
   useEffect(() => {
+    //Function to fetch the test's questions
     const fetchQuestions = async () => {
       const questions = await getQuestions(courseId, testId);
       const questionsList = questions[0].questionsList;
       setQuestions(questionsList);
     };
-    console.log("before if statement", courseId, testId); //log the values before the if statement
+    //Function to fetch the currentQuestion from DB
+    const fetchCurrentQuestion = async () => {
+      const currentQuestionDB = await getAnswersDocCurrentQuestion(courseId, currentUser.uid, testId);
+      setCurrentQuestion(currentQuestionDB);
+      console.log("fetched currentQuestion index from DB: ", currentQuestionDB);
+    }
+
     if (courseId && testId) {
       //only call fetchQuestions if both courseId and testId are truthy
       fetchQuestions().catch((err) => console.log(err));
-      console.log("after if statement", courseId, testId); //log the values after the if statement
-      console.log("fetchQuestions called");
     }
-  }, [courseId, testId]);
+
+    if (courseId && testId && currentUser) {
+      fetchCurrentQuestion().catch((err)=> console.log(err));
+    }
+  }, [courseId, testId, currentUser]);
 
   // handle next question
   const handleNextButton = () => {
@@ -84,14 +94,13 @@ export default function TestUi() {
   };
 
   if (audioBlob) console.log(audioBlob);
-  console.log(currentTest);
 
   const uiLogic = () => {
     return testBegun ? (
       <div className="test-ui-container">
         <header className="header">
           <span>
-            {currentQuestion + 1} of {questions.length}
+            {currentQuestion? currentQuestion + 1 : ""} of {questions.length}
           </span>
           <h3 className="test-title">
             {name ? capitalizeFirstLetterOfEachWord(name) : ""} Test

@@ -201,7 +201,7 @@ export const answersDocExists = async (courseId, studentId, testId) => {
   }
 };
 
-export const getAnswersDoc = async (courseId, studentId, testId) => {
+export const getAnswersDocCurrentQuestion = async (courseId, studentId, testId) => {
   const answersCollectionRef = collection(
     db,
     `courses/${courseId}/students/${studentId}/tests/${testId}/answers`
@@ -217,7 +217,7 @@ export const getAnswersDoc = async (courseId, studentId, testId) => {
       ...doc.data(),
     }));
 
-    return answersDoc;
+    return answersDoc[0].currentQuestion; //there's just one doc
   }
 };
 
