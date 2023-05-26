@@ -192,13 +192,14 @@ export const answersDocExists = async (courseId, studentId, testId) => {
   try {
     if (answersDocSnapshot.empty) {
       return false; // answersDocExists?: false
-    } if (!answersDocSnapshot.empty) {
+    }
+    if (!answersDocSnapshot.empty) {
       return true; // answersDocExists?: true
     }
   } catch (error) {
     console.log("Error checking if student had begun test: ", error.message);
   }
-}
+};
 
 export const getAnswersDoc = async (courseId, studentId, testId) => {
   const answersCollectionRef = collection(
@@ -211,10 +212,12 @@ export const getAnswersDoc = async (courseId, studentId, testId) => {
   const answersDocSnapshot = await getDocs(q);
 
   if (!answersDocSnapshot.empty) {
-    const answersDoc = answersDocSnapshot.docs.map((doc)=>({
+    const answersDoc = answersDocSnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
-    }))
+    }));
+
+    return answersDoc;
   }
 };
 
@@ -415,8 +418,9 @@ export const createStudentAnswersDoc = async (courseId, studentId, testId) => {
   } else {
     // if there's no answers doc already, create it
     try {
-      await addDoc(answersCollectionRef, { //default states
-        answersList: [],// contains transcriptions of each answer
+      await addDoc(answersCollectionRef, {
+        //default states
+        answersList: [], // contains transcriptions of each answer
         currentQuestion: 0, //holds index in answersList of currentQuestion
       });
     } catch (error) {

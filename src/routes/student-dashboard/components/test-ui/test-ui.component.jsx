@@ -115,7 +115,7 @@ export default function TestUi() {
         <h3 className="test-title">
           {name ? capitalizeFirstLetterOfEachWord(name) : ""} Test
         </h3>
-        <Button onClick={handleBeginClick}>Begin Test</Button>
+        <Button onClick={handleBeginClick}>{isBegun ? "Continue Test": "Begin Test"}</Button>
       </div>
     );
   };
