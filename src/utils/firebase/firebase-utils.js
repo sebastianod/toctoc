@@ -352,6 +352,8 @@ export const createStudentUnderCourse = async (courseId, studentEmail) => {
 export const functions = getFunctions();
 // calling a cloud function that creates many users at once
 export const addUsersFunction = httpsCallable(functions, "addUsers");
+// calling firebase function that increases currentQuestion in answersDoc
+export const icreaseCurrentQuestionFunction = httpsCallable(functions, "increaseCurrentQuestion");
 
 //Test questions
 export const createOrUpdateTestQuestions = async (
