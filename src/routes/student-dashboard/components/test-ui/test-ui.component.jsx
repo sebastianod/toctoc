@@ -4,6 +4,7 @@ import {
   createStudentAnswersDoc,
   getAnswersDocCurrentQuestion,
   getQuestions,
+  increaseCurrentQuestionFunction,
 } from "../../../../utils/firebase/firebase-utils";
 import { CourseContext } from "../../../../contexts/course/course.context";
 import { TestContext } from "../../../../contexts/test-context/test.context";
@@ -67,7 +68,7 @@ export default function TestUi() {
       if (audioBlob) {
         // if the question is answered
         sendAudioToWhisper(audioBlob); // whisper endpoint
-        // endpoint for updating current question
+        increaseCurrentQuestionFunction({courseId: courseId, studentId: currentUser.uid, testId: testId});
         setCurrentQuestion(currentQuestion + 1);
         setAudioBlob(null); // reset audio blob
         setTries(0); // reset tries
@@ -79,6 +80,7 @@ export default function TestUi() {
         );
         if (skip) {
           setCurrentQuestion(currentQuestion + 1);
+          increaseCurrentQuestionFunction({courseId: courseId, studentId: currentUser.uid, testId: testId});
           setAudioBlob(null); // reset audio blob
           setTries(0); // reset tries
           setHasRecorded(false); // reset hasRecorded
