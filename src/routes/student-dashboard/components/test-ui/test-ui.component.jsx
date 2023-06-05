@@ -80,7 +80,11 @@ export default function TestUi() {
         );
         if (skip) {
           setCurrentQuestion(currentQuestion + 1);
-          increaseCurrentQuestionFunction({courseId: courseId, studentId: currentUser.uid, testId: testId});
+          const checkServer = async () => {
+            const response = await increaseCurrentQuestionFunction({courseId: courseId, studentId: currentUser.uid, testId: testId});
+            console.log(response, response.data.dbCourseId); // response is= {data : {dbCourseId: 'B297IUjDwd27lEtcK88G', dbStudentId: '5IQlfADlkaczXHh944ofhqlzvW02', dbTestId: 'EddvBc295w3eKoa51xt} }
+          }
+          checkServer();
           setAudioBlob(null); // reset audio blob
           setTries(0); // reset tries
           setHasRecorded(false); // reset hasRecorded
