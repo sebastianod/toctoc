@@ -26,7 +26,6 @@ export default async function sendAudioToWhisper(audioFile) {
     // try catch block. Send audio and receive transcript
     try {
       const data = await result.json();
-      console.log(data);
       return data; // return the transcript.
     } catch (error) {
         console.log(error);

@@ -4,7 +4,7 @@ import {
   createStudentAnswersDoc,
   getAnswersDocCurrentQuestion,
   getQuestions,
-  increaseCurrentQuestionFunction,
+  updateCurrentQuestionFunction,
 } from "../../../../utils/firebase/firebase-utils";
 import { CourseContext } from "../../../../contexts/course/course.context";
 import { TestContext } from "../../../../contexts/test-context/test.context";
@@ -66,16 +66,18 @@ export default function TestUi() {
   }, [courseId, testId, currentUser]);
 
   const nextbuttonLogic = async () => {
-    if (currentQuestion < questions.length - 1) {
+    if (currentQuestion < questions.length ) {
         //if not the last question, allow next
         if (audioBlob) {
           // if the question is answered
-          sendAudioToWhisper(audioBlob); // whisper endpoint
-          await increaseCurrentQuestionFunction({
+          const transcript = await sendAudioToWhisper(audioBlob);
+          const updateValues = await updateCurrentQuestionFunction({
             courseId: courseId,
             studentId: currentUser.uid,
             testId: testId,
+            transcript: transcript.text,
           });
+          console.log(updateValues);
           setCurrentQuestion(currentQuestion + 1);
           setAudioBlob(null); // reset audio blob
           setTries(0); // reset tries
@@ -87,17 +89,19 @@ export default function TestUi() {
           );
           if (skip) {
             setCurrentQuestion(currentQuestion + 1); //local +1
-            await increaseCurrentQuestionFunction({ //server +1
+            const updateValues = await updateCurrentQuestionFunction({
               courseId: courseId,
               studentId: currentUser.uid,
               testId: testId,
+              transcript: "", //sends an empty string if skipped
             });
+            console.log(updateValues);
             setAudioBlob(null); // reset audio blob
             setTries(0); // reset tries
             setHasRecorded(false); // reset hasRecorded
           }
         }
-      } else if (currentQuestion === questions.length - 1) {
+      } else if (currentQuestion === questions.length ) {
         // do nothing when last question is reached
       }
 }
@@ -114,12 +118,20 @@ export default function TestUi() {
 
   if (audioBlob) console.log(audioBlob);
 
+  const showCount = () => {
+    if (currentQuestion < questions.length) {
+      <span> {currentQuestion + 1} of {questions.length} </span>
+    } if (currentQuestion === questions.length) {
+      <span> {currentQuestion} of {questions.length} </span>
+    }
+  }
+
   const uiLogic = () => {
     return testBegun ? (
       <div className="test-ui-container">
         <header className="header">
           <span>
-            {currentQuestion ? currentQuestion + 1 : "1"} of {questions.length}
+            {(currentQuestion < questions.length) ? `${currentQuestion + 1} of ${questions.length}` : "Finished"}
           </span>
           <h3 className="test-title">
             {name ? capitalizeFirstLetterOfEachWord(name) : ""} Test

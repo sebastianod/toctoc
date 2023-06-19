@@ -353,7 +353,7 @@ export const functions = getFunctions();
 // calling a cloud function that creates many users at once
 export const addUsersFunction = httpsCallable(functions, "addUsers");
 // calling firebase function that increases currentQuestion in answersDoc
-export const increaseCurrentQuestionFunction = httpsCallable(functions, "increaseCurrentQuestion");
+export const updateCurrentQuestionFunction = httpsCallable(functions, "updateCurrentQuestion");
 
 //Test questions
 export const createOrUpdateTestQuestions = async (

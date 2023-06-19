@@ -245,14 +245,14 @@ exports.addUsers = functions.https.onCall(async (data, context) => {
   }
 });
 
-exports.increaseCurrentQuestion = functions.https.onCall(
+exports.updateCurrentQuestion = functions.https.onCall(
   async (data, context) => {
     //Check user's authentication
     if (!context.auth) {
       return "Error: You must be authenticated.";
     }
     //User is authenticated
-    const { courseId, studentId, testId } = data; //path to answersDoc
+    const { courseId, studentId, testId, transcript } = data; //path to answersDoc
 
     // with the path data above update currentQuestion field from the answers doc
     // path to answers collection:
@@ -272,6 +272,9 @@ exports.increaseCurrentQuestion = functions.https.onCall(
         await answersRef
           .doc(answersDocId)
           .update({ currentQuestion: FieldValue.increment(1) });
+        await answersRef
+          .doc(answersDocId)
+          .update({ answersList: admin.firestore.FieldValue.arrayUnion(transcript) });
         return { successMessage: "Success updating currentQuestion!" };
       } catch (error) {
         return { message: "Error updating currentQuestion: ", error };
