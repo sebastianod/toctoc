@@ -46,10 +46,14 @@ export default function TestUi() {
     };
     //Function to fetch the currentQuestion from DB
     const fetchCurrentQuestion = async () => {
-      const currentQuestionDB = await getAnswersDocCurrentQuestion(courseId, currentUser.uid, testId);
+      const currentQuestionDB = await getAnswersDocCurrentQuestion(
+        courseId,
+        currentUser.uid,
+        testId
+      );
       setCurrentQuestion(currentQuestionDB);
-      console.log("fetched currentQuestion index from DB: ", currentQuestionDB);
-    }
+      //console.log("fetched currentQuestion index from DB: ", currentQuestionDB);
+    };
 
     if (courseId && testId) {
       //only call fetchQuestions if both courseId and testId are truthy
@@ -57,42 +61,50 @@ export default function TestUi() {
     }
 
     if (courseId && testId && currentUser) {
-      fetchCurrentQuestion().catch((err)=> console.log(err));
+      fetchCurrentQuestion().catch((err) => console.log(err));
     }
   }, [courseId, testId, currentUser]);
 
-  // handle next question
-  const handleNextButton = () => {
+  const nextbuttonLogic = async () => {
     if (currentQuestion < questions.length - 1) {
-      //if not the last question, allow next
-      if (audioBlob) {
-        // if the question is answered
-        sendAudioToWhisper(audioBlob); // whisper endpoint
-        increaseCurrentQuestionFunction({courseId: courseId, studentId: currentUser.uid, testId: testId});
-        setCurrentQuestion(currentQuestion + 1);
-        setAudioBlob(null); // reset audio blob
-        setTries(0); // reset tries
-        setHasRecorded(false); // reset hasRecorded
-      } else if (audioBlob === null) {
-        // if the question is skipped
-        const skip = window.confirm(
-          "Are you sure you want to skip this question?"
-        );
-        if (skip) {
+        //if not the last question, allow next
+        if (audioBlob) {
+          // if the question is answered
+          sendAudioToWhisper(audioBlob); // whisper endpoint
+          await increaseCurrentQuestionFunction({
+            courseId: courseId,
+            studentId: currentUser.uid,
+            testId: testId,
+          });
           setCurrentQuestion(currentQuestion + 1);
-          const checkServer = async () => {
-            const response = await increaseCurrentQuestionFunction({courseId: courseId, studentId: currentUser.uid, testId: testId});
-            console.log(response, response.data.dbCourseId); // response is= {data : {dbCourseId: 'B297IUjDwd27lEtcK88G', dbStudentId: '5IQlfADlkaczXHh944ofhqlzvW02', dbTestId: 'EddvBc295w3eKoa51xt} }
-          }
-          checkServer();
           setAudioBlob(null); // reset audio blob
           setTries(0); // reset tries
           setHasRecorded(false); // reset hasRecorded
+        } else if (audioBlob === null) {
+          // if the question is skipped
+          const skip = window.confirm(
+            "Are you sure you want to skip this question?"
+          );
+          if (skip) {
+            setCurrentQuestion(currentQuestion + 1); //local +1
+            await increaseCurrentQuestionFunction({ //server +1
+              courseId: courseId,
+              studentId: currentUser.uid,
+              testId: testId,
+            });
+            setAudioBlob(null); // reset audio blob
+            setTries(0); // reset tries
+            setHasRecorded(false); // reset hasRecorded
+          }
         }
+      } else if (currentQuestion === questions.length - 1) {
+        // do nothing when last question is reached
       }
-    } else if (currentQuestion === questions.length - 1) {
-      // do nothing when last question is reached
-    }
+}
+
+  // handle next question
+  const handleNextButton = () => {
+    nextbuttonLogic();
   };
 
   const handleBeginClick = async () => {
@@ -107,7 +119,7 @@ export default function TestUi() {
       <div className="test-ui-container">
         <header className="header">
           <span>
-            {currentQuestion? currentQuestion + 1 : ""} of {questions.length}
+            {currentQuestion ? currentQuestion + 1 : "1"} of {questions.length}
           </span>
           <h3 className="test-title">
             {name ? capitalizeFirstLetterOfEachWord(name) : ""} Test
@@ -131,7 +143,9 @@ export default function TestUi() {
         <h3 className="test-title">
           {name ? capitalizeFirstLetterOfEachWord(name) : ""} Test
         </h3>
-        <Button onClick={handleBeginClick}>{isBegun ? "Continue Test": "Begin Test"}</Button>
+        <Button onClick={handleBeginClick}>
+          {isBegun ? "Continue Test" : "Begin Test"}
+        </Button>
       </div>
     );
   };

@@ -19,6 +19,7 @@ const axios = require("axios");
 
 // import FormData to create multipart/form-data request body
 const FormData = require("form-data");
+const { FieldValue } = require("firebase-admin/firestore");
 
 app.post("/", async (req, res) => {
   const busboy = Busboy({ headers: req.headers }); // create a new busboy instance with the request headers
@@ -26,16 +27,19 @@ app.post("/", async (req, res) => {
   let fileStatus; // to store the file upload status
   let fileInfo; // to store the file information
 
-  busboy.on("file", (fieldname, file, info) => { // listen for the file event, that is triggered when a file is uploaded
+  busboy.on("file", (fieldname, file, info) => {
+    // listen for the file event, that is triggered when a file is uploaded
     const { filename: fileName, encoding, mimeType } = info;
 
     // get the file data as a buffer
-    file.on("data", (data) => { // read a file, multiple files can be read
+    file.on("data", (data) => {
+      // read a file, multiple files can be read
       fileData = data;
     });
 
     // check the file upload status
-    file.on("end", () => { // finished reading a file
+    file.on("end", () => {
+      // finished reading a file
       if (fileData) {
         fileStatus = "success";
       } else {
@@ -71,7 +75,8 @@ app.post("/", async (req, res) => {
     },
   });
 
-  busboy.on("finish", async () => { //  finished parsing the entire request, not just one file
+  busboy.on("finish", async () => {
+    //  finished parsing the entire request, not just one file
     // send the file to the openai API
     try {
       // create a FormData object with the file data and the model name
@@ -240,15 +245,43 @@ exports.addUsers = functions.https.onCall(async (data, context) => {
   }
 });
 
-exports.increaseCurrentQuestion = functions.https.onCall(async (data, context) => {
-  //Check user's authentication
-  if (!context.auth) {
-    return "Error: You must be authenticated.";
+exports.increaseCurrentQuestion = functions.https.onCall(
+  async (data, context) => {
+    //Check user's authentication
+    if (!context.auth) {
+      return "Error: You must be authenticated.";
+    }
+    //User is authenticated
+    const { courseId, studentId, testId } = data; //path to answersDoc
+
+    // with the path data above update currentQuestion field from the answers doc
+    // path to answers collection:
+    // courses/${courseId}/students/${studentId}/tests/${testId}/answers
+
+    try {
+      const answersRef = admin //answers collection ref
+        .firestore()
+        .collection(
+          `courses/${courseId}/students/${studentId}/tests/${testId}/answers`
+        );
+      //answers collection only has one document
+      const answersSnapshot = await answersRef.get();
+      const answersDocId = answersSnapshot.docs[0].id;
+      //add 1 to currentQuestion field
+      try {
+        await answersRef
+          .doc(answersDocId)
+          .update({ currentQuestion: FieldValue.increment(1) });
+        return { successMessage: "Success updating currentQuestion!" };
+      } catch (error) {
+        return { message: "Error updating currentQuestion: ", error };
+      }
+    } catch (error) {
+      return error;
+    }
+    //return { dbCourseId: courseId, dbStudentId: studentId, dbTestId: testId };
   }
-  //User is authenticated
-  const { courseId, studentId, testId } = data; //path to answersDoc
-  return {dbCourseId: courseId, dbStudentId: studentId, dbTestId: testId}
-});
+);
 
 //===============Trigger functions==================//
 

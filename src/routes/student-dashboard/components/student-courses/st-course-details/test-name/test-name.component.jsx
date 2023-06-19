@@ -25,7 +25,7 @@ export default function TestName(props) {
       testBeginStatus // If testBeginStatus true -> Test is begun
       ? setCurrentTest({ name: name, testId: testId, isAvailable: isAvailable, isBegun:true })
       : setCurrentTest({ name: name, testId: testId, isAvailable: isAvailable, isBegun:false });
-      console.log("Checked if answers doc exists.");
+      //console.log("Checked if answers doc exists.");
     };
 
     // Can take test only if available. Only a frontend check.
