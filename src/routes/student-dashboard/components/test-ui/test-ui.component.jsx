@@ -119,14 +119,6 @@ export default function TestUi() {
 
   if (audioBlob) console.log(audioBlob);
 
-  const showCount = () => {
-    if (currentQuestion < questions.length) {
-      <span> {currentQuestion + 1} of {questions.length} </span>
-    } if (currentQuestion === questions.length) {
-      <span> {currentQuestion} of {questions.length} </span>
-    }
-  }
-
   const uiLogic = () => {
     return testBegun ? (
       <div className="test-ui-container">
