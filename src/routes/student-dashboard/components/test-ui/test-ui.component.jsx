@@ -26,6 +26,7 @@ export default function TestUi() {
 
   // Begin or Continue test button
   const [testBegun, setTestBegun] = useState(isBegun); //isBegun is gotten upon clicking <TestName/>
+  const [isLoadingAudio, setIsLoadingAudio] = useState(null);
 
   // Question list and state for cycling through questions
   const [questions, setQuestions] = useState([]);
@@ -65,51 +66,70 @@ export default function TestUi() {
     }
   }, [courseId, testId, currentUser]);
 
-  const nextbuttonLogic = async () => {
-    if (currentQuestion < questions.length ) {
-        //if not the last question, allow next
-        if (audioBlob) {
-          // if the question is answered
-          const transcript = await sendAudioToWhisper(audioBlob);
+  const nextbuttonLogic = async (e) => {
+    if (currentQuestion < questions.length) {
+      //if not the last question, allow next
+      setIsLoadingAudio(true);
+      if (audioBlob) {
+        // if the question is answered
+        const transcript = await sendAudioToWhisper(audioBlob);
+        const updateValues = await updateCurrentQuestionFunction({
+          //status 200 or 500
+          courseId: courseId,
+          studentId: currentUser.uid,
+          testId: testId,
+          transcript: transcript.text,
+        });
+        // if updateValues fails, don't move on to the next question
+        if (!updateValues.data.status === 200) {
+          e.preventDefault();
+          setAudioBlob(null); // reset audio blob
+          setTries(0); // reset tries
+          setHasRecorded(false); // reset hasRecorded
+          setIsLoadingAudio(false);
+        }
+
+        console.log(updateValues.data.status);
+        setCurrentQuestion(currentQuestion + 1);
+        setAudioBlob(null); // reset audio blob
+        setTries(0); // reset tries
+        setHasRecorded(false); // reset hasRecorded
+        setIsLoadingAudio(false);
+      } else if (audioBlob === null) {
+        // if the question is skipped
+        const skip = window.confirm(
+          "Are you sure you want to skip this question?"
+        );
+        if (skip) {
           const updateValues = await updateCurrentQuestionFunction({
             courseId: courseId,
             studentId: currentUser.uid,
             testId: testId,
-            transcript: transcript.text,
+            transcript: "", //sends an empty string if skipped
           });
-          console.log(transcript);
-          console.log(updateValues);
-          setCurrentQuestion(currentQuestion + 1);
-          setAudioBlob(null); // reset audio blob
-          setTries(0); // reset tries
-          setHasRecorded(false); // reset hasRecorded
-        } else if (audioBlob === null) {
-          // if the question is skipped
-          const skip = window.confirm(
-            "Are you sure you want to skip this question?"
-          );
-          if (skip) {
-            setCurrentQuestion(currentQuestion + 1); //local +1
-            const updateValues = await updateCurrentQuestionFunction({
-              courseId: courseId,
-              studentId: currentUser.uid,
-              testId: testId,
-              transcript: "", //sends an empty string if skipped
-            });
-            console.log(updateValues);
-            setAudioBlob(null); // reset audio blob
-            setTries(0); // reset tries
-            setHasRecorded(false); // reset hasRecorded
+          if (!updateValues.data.status === 200) {
+            e.preventDefault();
+            setAudioBlob(null);
+            setTries(0);
+            setHasRecorded(false);
+            setIsLoadingAudio(false);
           }
+          console.log(updateValues.data.status);
+          setCurrentQuestion(currentQuestion + 1);
+          setAudioBlob(null);
+          setTries(0);
+          setHasRecorded(false);
+          setIsLoadingAudio(false);
         }
-      } else if (currentQuestion === questions.length ) {
-        // do nothing when last question is reached
       }
-}
+    } else if (currentQuestion === questions.length) {
+      // do nothing when last question is reached
+    }
+  };
 
   // handle next question
-  const handleNextButton = () => {
-    nextbuttonLogic();
+  const handleNextButton = (event) => {
+    nextbuttonLogic(event);
   };
 
   const handleBeginClick = async () => {
@@ -124,7 +144,9 @@ export default function TestUi() {
       <div className="test-ui-container">
         <header className="header">
           <span>
-            {(currentQuestion < questions.length) ? `${currentQuestion + 1} of ${questions.length}` : "Finished"}
+            {currentQuestion < questions.length
+              ? `${currentQuestion + 1} of ${questions.length}`
+              : "Finished"}
           </span>
           <h3 className="test-title">
             {name ? capitalizeFirstLetterOfEachWord(name) : ""} Test
@@ -141,6 +163,7 @@ export default function TestUi() {
           <button className="next-skip" onClick={handleNextButton}>
             Next
           </button>
+          {isLoadingAudio ? "Loading..." : null}
         </div>
       </div>
     ) : (
