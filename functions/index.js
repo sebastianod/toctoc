@@ -277,9 +277,9 @@ exports.updateCurrentQuestion = functions.https.onCall(
         await answersRef
           .doc(answersDocId)
           .set({ answersList: answersArray }, { merge: true });
-        return { successMessage: "Success updating currentQuestion!" };
+        return { status: 200, data: "Success" };
       } catch (error) {
-        return { message: "Error updating currentQuestion: ", error };
+        return { status: 500, data: error };
       }
     } catch (error) {
       return error;
