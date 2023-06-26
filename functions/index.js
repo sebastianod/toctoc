@@ -267,6 +267,8 @@ exports.updateCurrentQuestion = functions.https.onCall(
       //answers collection only has one document
       const answersSnapshot = await answersRef.get();
       const answersDocId = answersSnapshot.docs[0].id;
+      const answersArray = answersSnapshot.docs[0].data().answersList; //array
+      answersArray.push(transcript);
       //add 1 to currentQuestion field
       try {
         await answersRef
@@ -274,7 +276,7 @@ exports.updateCurrentQuestion = functions.https.onCall(
           .update({ currentQuestion: FieldValue.increment(1) });
         await answersRef
           .doc(answersDocId)
-          .update({ answersList: admin.firestore.FieldValue.arrayUnion(transcript) });
+          .set({ answersList: answersArray }, { merge: true });
         return { successMessage: "Success updating currentQuestion!" };
       } catch (error) {
         return { message: "Error updating currentQuestion: ", error };

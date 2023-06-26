@@ -77,6 +77,7 @@ export default function TestUi() {
             testId: testId,
             transcript: transcript.text,
           });
+          console.log(transcript);
           console.log(updateValues);
           setCurrentQuestion(currentQuestion + 1);
           setAudioBlob(null); // reset audio blob
