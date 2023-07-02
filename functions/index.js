@@ -396,3 +396,43 @@ exports.logUnenrollment = functions.firestore
 
     return null;
   });
+
+exports.gradeTest = functions.firestore
+  .document(
+    `courses/{courseId}/students/{studentId}/tests/{testId}/answers/{answersId}`
+  )
+  .onUpdate(async (snapshot, context) => {
+    const courseId = context.params.courseId;
+    const studentId = context.params.studentId;
+    const testId = context.params.testId;
+    const answersId = context.params.answersId;
+
+    // References-----------------------------------------
+
+    // teacher questions collection ref: in order to get the doc
+    const questionsCollectionRef = admin
+      .firestore()
+      .collection(`courses/${courseId}/tests/${testId}/questions`);
+
+    // student answers doc ref
+    const answersDocRef = admin
+      .firestore()
+      .doc(
+        `courses/${courseId}/students/${studentId}/tests/${testId}/answers/${answersId}`
+      );
+
+    try {
+       //list from teacher questions
+    const questionsCollectionSnapshot = await questionsCollectionRef.get();
+    const questionsArray =
+      questionsCollectionSnapshot.docs[0].data().questionsList;
+  
+    //list from student answers
+    const answersSnapshot = await answersDocRef.get();
+    const answersArray = await answersSnapshot.data().answersList;
+      console.log("questionsList:", questionsArray);
+      console.log("answersList:", answersArray);
+    } catch (error) {
+      console.log(error);
+    }
+    });

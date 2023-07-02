@@ -28,6 +28,9 @@ export default function TestUi() {
   const [testBegun, setTestBegun] = useState(isBegun); //isBegun is gotten upon clicking <TestName/>
   const [isLoadingAudio, setIsLoadingAudio] = useState(null);
 
+  //error state
+  const [isError, setIsError] = useState(false);
+
   // Question list and state for cycling through questions
   const [questions, setQuestions] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(0); //default comes from DB
@@ -87,6 +90,7 @@ export default function TestUi() {
           setTries(0); // reset tries
           setHasRecorded(false); // reset hasRecorded
           setIsLoadingAudio(false);
+          setIsError(true);
         }
 
         console.log(updateValues.data.status);
@@ -113,6 +117,7 @@ export default function TestUi() {
             setTries(0);
             setHasRecorded(false);
             setIsLoadingAudio(false);
+            setIsError(true);
           }
           console.log(updateValues.data.status);
           setCurrentQuestion(currentQuestion + 1);
@@ -163,7 +168,8 @@ export default function TestUi() {
           <button className="next-skip" onClick={handleNextButton}>
             Next
           </button>
-          {isLoadingAudio ? "Loading..." : null}
+          <span className="loading-state">{isLoadingAudio ? "Loading..." : null}</span>
+          <strong>{isError? "There was an error, please try again." : null}</strong>
         </div>
       </div>
     ) : (
