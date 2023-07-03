@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 /* eslint-disable no-unused-vars */
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
@@ -397,6 +398,8 @@ exports.logUnenrollment = functions.firestore
     return null;
   });
 
+const dljs = require("damerau-levenshtein-js");
+
 exports.gradeTest = functions.firestore
   .document(
     `courses/{courseId}/students/{studentId}/tests/{testId}/answers/{answersId}`
@@ -422,17 +425,63 @@ exports.gradeTest = functions.firestore
       );
 
     try {
-       //list from teacher questions
-    const questionsCollectionSnapshot = await questionsCollectionRef.get();
-    const questionsArray =
-      questionsCollectionSnapshot.docs[0].data().questionsList;
-  
-    //list from student answers
-    const answersSnapshot = await answersDocRef.get();
-    const answersArray = await answersSnapshot.data().answersList;
-      console.log("questionsList:", questionsArray);
-      console.log("answersList:", answersArray);
+      //list from teacher questions
+      const questionsCollectionSnapshot = await questionsCollectionRef.get();
+      const questionsArray =
+        questionsCollectionSnapshot.docs[0].data().questionsList;
+
+      //list from student answers
+      const answersSnapshot = await answersDocRef.get();
+      const answersArray = await answersSnapshot.data().answersList;
+
+      const currentQuestionInAnswers = await answersSnapshot.data()
+        .currentQuestion;
+      const currentQuestionIndex = currentQuestionInAnswers - 1;
+
+      // grade currentQuestion-------------------------------------------------------
+
+      //sanitization
+      const rawQuestion = questionsArray[currentQuestionIndex];
+      const rawAnswer = answersArray[currentQuestionIndex];
+      const punctuationlessQuestion = rawQuestion.replace(
+        /[.,\/#!?$%\^&\*;:{}=\-_`~()]/g,
+        ""
+      );
+      const punctuationlessAnswer = rawAnswer.replace(
+        /[.,\/#!?$%\^&\*;:{}=\-_`~()]/g,
+        ""
+      );
+
+      const question = punctuationlessQuestion
+        .replace(/\s{2,}/g, " ")
+        .toLowerCase();
+      const answer = punctuationlessAnswer
+        .replace(/\s{2,}/g, " ")
+        .toLowerCase();
+
+      const distance = dljs.distance(question, answer); // damerau-levenshtein distance
+
+      const gradeSentence = () => {
+        if (distance > question.length) {
+          return 0;
+        }
+        if (distance <= question.length) {
+          let errorsToQuestion = question.length - distance;
+          return errorsToQuestion / question.length;
+        }
+      };
+
+      const sentenceGrade = gradeSentence().toFixed(2)*100; // 2 decimals in %
+      const gradesIndex = [];
+      gradesIndex.push(sentenceGrade);
+
+      //try to create gradesIndex field in student's answersDoc
+      try {
+        await answersDocRef.set({ gradesIndex: gradesIndex }, { merge: true });
+      } catch (error) {
+        console.log(error);
+      }
     } catch (error) {
       console.log(error);
     }
-    });
+  });

@@ -425,6 +425,7 @@ export const createStudentAnswersDoc = async (courseId, studentId, testId) => {
         //default states
         answersList: [], // contains transcriptions of each answer
         currentQuestion: 0, //holds index in answersList of currentQuestion
+        gradesIndex: [],
       });
     } catch (error) {
       console.log("Error creating student answers doc: ", error.message);
