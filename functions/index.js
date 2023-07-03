@@ -434,6 +434,7 @@ exports.gradeTest = functions.firestore
       const answersSnapshot = await answersDocRef.get();
       const answersArray = await answersSnapshot.data().answersList;
 
+      //currentQuestion
       const currentQuestionInAnswers = await answersSnapshot.data()
         .currentQuestion;
       const currentQuestionIndex = currentQuestionInAnswers - 1;
@@ -471,13 +472,58 @@ exports.gradeTest = functions.firestore
         }
       };
 
-      const sentenceGrade = gradeSentence().toFixed(2)*100; // 2 decimals in %
-      const gradesIndex = [];
-      gradesIndex.push(sentenceGrade);
+      // Write grades----------------------------------------------------
+      const sentenceGrade = gradeSentence().toFixed(2) * 100; // 2 decimals in %
 
-      //try to create gradesIndex field in student's answersDoc
+      const gradesDocRef = admin
+        .firestore()
+        .doc(`courses/${courseId}/tests/${testId}/grades/${studentId}`);
+
+      const gradesDocSnapshot = await gradesDocRef.get();
+
+      if (!gradesDocSnapshot.exists) {
+        //if gradesDoc doesn't exist, create it gradesIndex array
+        try {
+          await gradesDocRef.set({
+            gradesIndex: [sentenceGrade], //grades sentence by sentence
+            grade: sentenceGrade, //test's overall grade
+            gradesReadable: [{ [rawQuestion]: sentenceGrade }], //readable sentence by sentence
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      // If it does exist, just update the fields:
+
+      //Retrieve gradesIndex array from DB
+      const gradesIndexFromDatabase = await gradesDocSnapshot.data()
+        .gradesIndex;
+      //pushing grades to array
+      gradesIndexFromDatabase[currentQuestionIndex] = sentenceGrade;
+
+      //grading overall score
+      const averageGrade =
+        gradesIndexFromDatabase.reduce((acc, currentVal) => {
+          return acc + currentVal;
+        }) / questionsArray.length;
+
+      //adding object to readable grades
+      const gradesReadableFromDatabase = await gradesDocSnapshot.data()
+        .gradesReadable;
+      gradesReadableFromDatabase[currentQuestionIndex] = {
+        [rawQuestion]: sentenceGrade,
+      };
+
+      //try to update the fields in gradesDoc
       try {
-        await answersDocRef.set({ gradesIndex: gradesIndex }, { merge: true });
+        await gradesDocRef.set(
+          {
+            gradesIndex: gradesIndexFromDatabase,
+            grade: averageGrade,
+            gradesReadable: gradesReadableFromDatabase,
+          },
+          { merge: true }
+        );
       } catch (error) {
         console.log(error);
       }
