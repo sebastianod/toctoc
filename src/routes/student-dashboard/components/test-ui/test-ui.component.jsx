@@ -20,12 +20,11 @@ export default function TestUi() {
   //fetch courseId, testId and userId from context
   const { currentCourse } = useContext(CourseContext);
   const courseId = currentCourse ? currentCourse.courseId : "";
-  const { currentTest } = useContext(TestContext);
+  const { currentTest, setCurrentTest } = useContext(TestContext);
   const { testId, name, isBegun } = currentTest || {}; // wait for currentTest to be set before getting testId and name
   const { currentUser } = useContext(UserContext);
 
   // Begin or Continue test button
-  const [testBegun, setTestBegun] = useState(isBegun); //isBegun is gotten upon clicking <TestName/>
   const [isLoadingAudio, setIsLoadingAudio] = useState(null);
 
   //error state
@@ -56,7 +55,8 @@ export default function TestUi() {
         testId
       );
       setCurrentQuestion(currentQuestionDB);
-      //console.log("fetched currentQuestion index from DB: ", currentQuestionDB);
+
+      console.log("fetched currentQuestion index from DB: ", currentQuestionDB);
     };
 
     if (courseId && testId) {
@@ -67,7 +67,7 @@ export default function TestUi() {
     if (courseId && testId && currentUser) {
       fetchCurrentQuestion().catch((err) => console.log(err));
     }
-  }, [courseId, testId, currentUser]);
+  }, [courseId, testId, currentUser, setCurrentQuestion]);
 
   const nextbuttonLogic = async (e) => {
     if (currentQuestion < questions.length) {
@@ -138,14 +138,24 @@ export default function TestUi() {
   };
 
   const handleBeginClick = async () => {
-    setTestBegun(true);
-    await createStudentAnswersDoc(courseId, currentUser.uid, testId); //creates the answer doc if it doesn't exist already.
+    try {
+      await createStudentAnswersDoc(courseId, currentUser.uid, testId); //creates the answer doc if it doesn't exist already.
+      setCurrentTest((prevTest) => ({
+        ...prevTest, // spread the previous state to keep the other properties
+        isBegun: true,
+      }));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  if (audioBlob) console.log(audioBlob);
+  const nameExists = name?.length > 0;
+
+  console.log("currentQ: ", currentQuestion);
+  console.log("Current test: ", currentTest);
 
   const uiLogic = () => {
-    return testBegun ? (
+    return isBegun ? (
       <div className="test-ui-container">
         <header className="header">
           <span>
@@ -168,8 +178,12 @@ export default function TestUi() {
           <button className="next-skip" onClick={handleNextButton}>
             Next
           </button>
-          <span className="loading-state">{isLoadingAudio ? "Loading..." : null}</span>
-          <strong>{isError? "There was an error, please try again." : null}</strong>
+          <span className="loading-state">
+            {isLoadingAudio ? "Loading..." : null}
+          </span>
+          <strong>
+            {isError ? "There was an error, please try again." : null}
+          </strong>
         </div>
       </div>
     ) : (
@@ -177,12 +191,10 @@ export default function TestUi() {
         <h3 className="test-title">
           {name ? capitalizeFirstLetterOfEachWord(name) : ""} Test
         </h3>
-        <Button onClick={handleBeginClick}>
-          {isBegun ? "Continue Test" : "Begin Test"}
-        </Button>
+        <Button onClick={handleBeginClick}>Begin Test</Button>
       </div>
     );
   };
 
-  return <>{uiLogic()}</>;
+  return <>{nameExists ? uiLogic() : <span>Loading...</span>}</>;
 }

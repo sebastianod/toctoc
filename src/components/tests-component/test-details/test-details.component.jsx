@@ -18,7 +18,7 @@ export default function TestDetails() {
   const { name, testId } = currentTest;
   const [answersList, setAnswersList] = useState(
     //setting the answers text area
-    "Write* answers* here* separated* by* a* star*"
+    "Write* questions* here* separated* by* a* star"
   );
   const [submittedAnswers, setSubmittedAnswers] = useState([]); //submmitting answers
   const [ currentAnswers, setCurrentAnswers ] = useState([]); //current answers in the db
@@ -75,7 +75,7 @@ export default function TestDetails() {
         onSubmit={handleSubmit}
       />
       <div className="current-answers-area">
-        <h4>Current answers: </h4>
+        <h4>Current Questions: </h4>
         {showCurrentAnswers(currentAnswers)}
       </div>
     </div>

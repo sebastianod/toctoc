@@ -1,7 +1,7 @@
 import "./test-name.styles.scss";
 import { processListOfSentences } from "../../../../../../utils/utilities";
 import { NavLink } from "react-router-dom";
-import { useContext } from "react";
+import { useContext } from "react"; // import useEffect hook
 import { TestContext } from "../../../../../../contexts/test-context/test.context";
 import { UserContext } from "../../../../../../contexts/user/user.context";
 import { CourseContext } from "../../../../../../contexts/course/course.context";
@@ -9,7 +9,7 @@ import { answersDocExists } from "../../../../../../utils/firebase/firebase-util
 
 export default function TestName(props) {
   const { name, testId, isAvailable } = props;
-  const { setCurrentTest } = useContext(TestContext);
+  const { setCurrentTest } = useContext(TestContext); // get currentTest from context
   const { currentUser } = useContext(UserContext); //needed to check if student has begun the test
   const { currentCourse } = useContext(CourseContext);
   const processedName = processListOfSentences(name).toString() || "";
@@ -17,14 +17,31 @@ export default function TestName(props) {
   const handleTestClick = (e) => {
     // check function: test has been started by student?
     const checkAnswersDocExists = async () => {
-      const testBeginStatus = await answersDocExists( //returns true or false if doc exists
-        currentCourse.courseId,
-        currentUser.uid,
-        testId
-      );
-      testBeginStatus // If testBeginStatus true -> Test is begun
-      ? setCurrentTest({ name: name, testId: testId, isAvailable: isAvailable, isBegun:true })
-      : setCurrentTest({ name: name, testId: testId, isAvailable: isAvailable, isBegun:false });
+      setCurrentTest((prevTest) => ({
+        ...prevTest, // spread the previous state to keep the other properties
+        name: "",
+        testId: "",
+        isAvailable: "",
+        isBegun: false,
+      }));
+      try {
+        const testBeginStatus = await answersDocExists(
+          //returns true or false if doc exists
+          currentCourse.courseId,
+          currentUser.uid,
+          testId
+        );
+        setCurrentTest((prevTest) => ({
+          ...prevTest, // spread the previous state to keep the other properties
+          name: name,
+          testId: testId,
+          isAvailable: isAvailable,
+          isBegun: testBeginStatus,
+        }));
+        //window.location.href = testId;
+      } catch (error) {
+        console.log(error);
+      }
       //console.log("Checked if answers doc exists.");
     };
 
