@@ -67,7 +67,7 @@ export default function TestUi() {
     if (courseId && testId && currentUser) {
       fetchCurrentQuestion().catch((err) => console.log(err));
     }
-  }, [courseId, testId, currentUser, setCurrentQuestion]);
+  }, [courseId, testId, currentUser, setCurrentQuestion, currentQuestion]);
 
   const nextbuttonLogic = async (e) => {
     if (currentQuestion < questions.length) {
@@ -138,12 +138,24 @@ export default function TestUi() {
   };
 
   const handleBeginClick = async () => {
+    setCurrentQuestion(undefined);
     try {
       await createStudentAnswersDoc(courseId, currentUser.uid, testId); //creates the answer doc if it doesn't exist already.
       setCurrentTest((prevTest) => ({
         ...prevTest, // spread the previous state to keep the other properties
         isBegun: true,
       }));
+      if (currentQuestion === undefined) {
+        const fetchCurrentQuestion = async () => {
+          const currentQuestionDB = await getAnswersDocCurrentQuestion(
+            courseId,
+            currentUser.uid,
+            testId
+          );
+          setCurrentQuestion(currentQuestionDB);
+        };
+        fetchCurrentQuestion();
+      }
     } catch (error) {
       console.log(error);
     }
@@ -152,7 +164,7 @@ export default function TestUi() {
   const nameExists = name?.length > 0;
 
   console.log("currentQ: ", currentQuestion);
-  console.log("Current test: ", currentTest);
+  // console.log("Current test: ", currentTest);
 
   const uiLogic = () => {
     return isBegun ? (

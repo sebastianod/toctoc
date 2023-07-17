@@ -8,17 +8,18 @@ import { CourseContext } from "../../../../../../contexts/course/course.context"
 import { answersDocExists } from "../../../../../../utils/firebase/firebase-utils";
 
 export default function TestName(props) {
-  const { name, testId, isAvailable } = props;
+  const { name, testId, isAvailable, grade } = props;
   const { setCurrentTest } = useContext(TestContext); // get currentTest from context
   const { currentUser } = useContext(UserContext); //needed to check if student has begun the test
   const { currentCourse } = useContext(CourseContext);
   const processedName = processListOfSentences(name).toString() || "";
-
+  
   const handleTestClick = (e) => {
     // check function: test has been started by student?
     const checkAnswersDocExists = async () => {
+      //set empty state before loading the current state
       setCurrentTest((prevTest) => ({
-        ...prevTest, // spread the previous state to keep the other properties
+        ...prevTest,
         name: "",
         testId: "",
         isAvailable: "",
@@ -62,7 +63,7 @@ export default function TestName(props) {
       return "Unknown";
     }
   };
-  //Availability: <strong>{readableAvailability()}</strong>
+
   return (
     <div className="test-name-container">
       <NavLink
@@ -71,6 +72,7 @@ export default function TestName(props) {
         onClick={handleTestClick}
       >
         <span className="test-name">{processedName}</span>
+        <strong>{grade}%</strong>
         <strong className="test-availability">{readableAvailability()}</strong>
       </NavLink>
     </div>

@@ -175,6 +175,31 @@ export const getQuestions = async (courseId, testId) => {
   });
 };
 
+export const getMainGradeForSingleStudent = async (
+  courseId,
+  testId,
+  studentId
+) => {
+  //get reference to the student's answers
+  const gradesDocRef = doc(
+    db,
+    `courses/${courseId}/tests/${testId}/grades/${studentId}`
+  );
+  const gradesDocSnapshot = await getDoc(gradesDocRef);
+  //console.log("gradesDoc exists?: ", gradesDocSnapshot.exists());
+  if (gradesDocSnapshot.exists()) {
+    try {
+      const grade =  gradesDocSnapshot.data().grade.toFixed(1);
+      //console.log("student's grade utils: ", grade);
+      return grade;
+    } catch (error) {
+      //console.log("grade exists but there's an error retrieving it: ", error);
+    }
+  } else {
+    return "No grade";
+  }
+};
+
 // check if a student has already started a test by checking if an answers doc exists.
 // to be done upon clicking an available test.
 // goal: to show "Begin test" or "Continue test" upon clicking a test
@@ -201,7 +226,11 @@ export const answersDocExists = async (courseId, studentId, testId) => {
   }
 };
 
-export const getAnswersDocCurrentQuestion = async (courseId, studentId, testId) => {
+export const getAnswersDocCurrentQuestion = async (
+  courseId,
+  studentId,
+  testId
+) => {
   const answersCollectionRef = collection(
     db,
     `courses/${courseId}/students/${studentId}/tests/${testId}/answers`
@@ -347,13 +376,15 @@ export const createStudentUnderCourse = async (courseId, studentEmail) => {
   }
 };
 
-
 // Get the Functions instance
 export const functions = getFunctions();
 // calling a cloud function that creates many users at once
 export const addUsersFunction = httpsCallable(functions, "addUsers");
 // calling firebase function that increases currentQuestion in answersDoc
-export const updateCurrentQuestionFunction = httpsCallable(functions, "updateCurrentQuestion");
+export const updateCurrentQuestionFunction = httpsCallable(
+  functions,
+  "updateCurrentQuestion"
+);
 
 //Test questions
 export const createOrUpdateTestQuestions = async (
