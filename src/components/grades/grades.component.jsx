@@ -1,13 +1,31 @@
+import { useContext, useEffect, useState } from "react";
 import styles from "./grades.module.scss";
+import { CourseContext } from "../../contexts/course/course.context";
+import { subscribeToTests } from "../../utils/firebase/firebase-utils";
+import { processListOfSentences } from "../../utils/utilities";
 
 const Grades = () => {
-  return (
-    <div className={styles.mainContainer}>
-      <span>Test 1's grades</span>
-      <span>Test 2's grades</span>
-      <span>Test 3's grades</span>
-    </div>
-  );
+  const [tests, setTests] = useState([]);
+  const { currentCourse } = useContext(CourseContext);
+  const courseId = currentCourse.courseId;
+
+  useEffect(() => {
+    const unsubscribe = subscribeToTests(courseId, setTests);
+    return () => unsubscribe();
+  }, [courseId]);
+
+  const showTests = tests.map((test, index) => {
+    const { name, testId, isAvailable } = test;
+    const processedName = processListOfSentences(name).toString();
+    //Placeholder for new <TestGrades/> component.
+    return (
+      <span key={index}>
+        {processedName}, {testId}, Available: {isAvailable.toString()}
+      </span>
+    );
+  });
+
+  return <div className={styles.mainContainer}>{showTests}</div>;
 };
 
 export default Grades;
