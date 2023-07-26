@@ -24,6 +24,11 @@ const CourseDetails = () => {
             <h3>Students</h3>
           </NavLink>
         </div>
+        <div className="course-details-link">
+          <NavLink to={`grades`}>
+            <h3>Grades</h3>
+          </NavLink>
+        </div>
       </div>
       <div className="course-details-outlet-container">
         <Outlet />
