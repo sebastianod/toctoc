@@ -10,9 +10,12 @@ const GradeDetails = (props) => {
         <h3 className={styles.testName}>{name}</h3>
       </div>
       <div className={styles.availabilityIcon}>{isAvailable ? "🟢" : "🔴"}</div>
-      <div className={styles.iconContainer}>
-        <img className={styles.excelIcon} alt="download excel file" src={ExcelIcon} />
-      </div>
+      <input
+        type="image"
+        alt="download grades"
+        className={styles.excelIcon}
+        src={ExcelIcon}
+      />
     </div>
   );
 };
