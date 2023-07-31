@@ -3,6 +3,7 @@ import styles from "./grades.module.scss";
 import { CourseContext } from "../../contexts/course/course.context";
 import { subscribeToTests } from "../../utils/firebase/firebase-utils";
 import { processListOfSentences } from "../../utils/utilities";
+import GradeDetails from "./grade-details/grade-details.component";
 
 const Grades = () => {
   const [tests, setTests] = useState([]);
@@ -19,9 +20,12 @@ const Grades = () => {
     const processedName = processListOfSentences(name).toString();
     //Placeholder for new <TestGrades/> component.
     return (
-      <span key={index}>
-        {processedName}, {testId}, Available: {isAvailable.toString()}
-      </span>
+      <GradeDetails
+        key={index}
+        name={processedName}
+        testId={testId}
+        isAvailable={isAvailable}
+      />
     );
   });
 
