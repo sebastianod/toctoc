@@ -424,6 +424,9 @@ exports.gradeTest = functions.firestore
         `courses/${courseId}/students/${studentId}/tests/${testId}/answers/${answersId}`
       );
 
+    // user ref to get student name = 'displayName'
+    const userDocRef = admin.firestore().doc(`users/${studentId}`);
+
     try {
       //list from teacher questions
       const questionsCollectionSnapshot = await questionsCollectionRef.get();
@@ -438,6 +441,10 @@ exports.gradeTest = functions.firestore
       const currentQuestionInAnswers = await answersSnapshot.data()
         .currentQuestion;
       const currentQuestionIndex = currentQuestionInAnswers - 1;
+
+      //student's name
+      const userDocSnapshot = await userDocRef.get();
+      const studentName = await userDocSnapshot.data().displayName;
 
       // grade currentQuestion-------------------------------------------------------
 
@@ -482,12 +489,13 @@ exports.gradeTest = functions.firestore
       const gradesDocSnapshot = await gradesDocRef.get();
 
       if (!gradesDocSnapshot.exists) {
-        //if gradesDoc doesn't exist, create it gradesIndex array
+        //if gradesDoc doesn't exist, create it
         try {
           await gradesDocRef.set({
             gradesIndex: [sentenceGrade], //grades sentence by sentence
             grade: sentenceGrade, //test's overall grade
             gradesReadable: [{ [rawQuestion]: sentenceGrade }], //readable sentence by sentence
+            student: studentName,
           });
         } catch (error) {
           console.log(error);
