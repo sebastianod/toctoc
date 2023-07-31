@@ -3,5 +3,17 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    margin-bottom: 10px;
+
+    .testNameContainer {
+        width: 200px;
+        margin-right: 20px;
+    }
+
+    .availabilityIcon {
+        margin-right: 20px;
+    }
+
+    .excelIcon{
+        width: 30px;
+    }
 }
