@@ -189,7 +189,7 @@ export const getMainGradeForSingleStudent = async (
   //console.log("gradesDoc exists?: ", gradesDocSnapshot.exists());
   if (gradesDocSnapshot.exists()) {
     try {
-      const grade =  gradesDocSnapshot.data().grade.toFixed(1);
+      const grade = gradesDocSnapshot.data().grade.toFixed(1);
       //console.log("student's grade utils: ", grade);
       return grade;
     } catch (error) {
@@ -197,6 +197,30 @@ export const getMainGradeForSingleStudent = async (
     }
   } else {
     return "No grade";
+  }
+};
+
+export const getAllGradesFromTest = async (courseId, testId) => {
+  //reference to the test's grades collection
+  const gradesRef = collection(
+    db,
+    `courses/${courseId}/tests/${testId}/grades`
+  );
+  const gradesSnapshot = await getDocs(gradesRef);
+
+  try {
+    return gradesSnapshot.docs.map((gradesDoc) => {
+      const student = gradesDoc.data().student; //.data() is needed b4 accessing fields
+      const grade = gradesDoc.data().grade;
+      return {
+        gradesDocId: gradesDoc.id,
+        student: student,
+        grade: grade,
+      };
+    });
+  } catch (error) {
+    const message = { code: 500, error: error };
+    return message;
   }
 };
 
