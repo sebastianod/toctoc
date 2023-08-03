@@ -5,7 +5,7 @@ import "./teacher-dashboard.styles.scss";
 
 const TeacherDashboard = () => {
   const { currentUser } = useContext(UserContext);
-  const displayName = currentUser.displayName;
+  const displayName = currentUser?.displayName;
 
   return (
     <Fragment>

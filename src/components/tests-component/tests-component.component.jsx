@@ -9,7 +9,7 @@ import "./tests-component.styles.scss";
 const Tests = () => {
   const [tests, setTests] = useState([]);
   const { currentCourse } = useContext(CourseContext); //to get the current courseId, for the path to the tests to this course
-  const courseId = currentCourse.courseId;
+  const courseId = currentCourse && currentCourse.courseId;
 
   useEffect(() => {
     const unsubscribe = subscribeToTests(courseId, setTests); //whenever a document is added, removed, or changed, this will be called

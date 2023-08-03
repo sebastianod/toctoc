@@ -13,9 +13,12 @@ export default function TestDetails() {
   const { currentTest } = useContext(TestContext); //getting the current test
   const { currentCourse } = useContext(CourseContext); //getting the current course
 
-  const courseId = currentCourse.courseId; //needed to create the test questions, to give the db path
+  const courseId = currentCourse && currentCourse.courseId; //needed to create the test questions, to give the db path
 
-  const { name, testId } = currentTest;
+  //const { name, testId } = currentTest;
+  const name = currentTest && currentTest.name;
+  const testId = currentTest && currentTest.testId;
+
   const [answersList, setAnswersList] = useState(
     //setting the answers text area
     "Write* questions* here* separated* by* a* star"
