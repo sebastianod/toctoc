@@ -1,13 +1,23 @@
-import { Fragment, useContext } from "react"; //for user context
+import { Fragment, useContext, useEffect } from "react"; //for user context
 import { Outlet, NavLink, Link } from "react-router-dom"; //routing
 import { UserContext } from "../../contexts/user/user.context";
-import { signOutUser } from "../../utils/firebase/firebase-utils";
+import { onAuthStateChangedListener, signOutUser } from "../../utils/firebase/firebase-utils";
 import AudioWavesLogo from "../../assets/audio-waves.png";
 
 import "./navigation.styles.scss";
 
 const Navigation = () => {
   const { currentUser } = useContext(UserContext); //to sign in or out
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChangedListener((user)=>{
+      if (!user && window.location.pathname !== '/') {
+        window.location.replace('/');
+      }
+    })
+    // Clean up the listener on component unmount
+    return () => unsubscribe();
+  }, [currentUser]);
 
   function uiLogic() {
     if (currentUser) { // if user is signed in
