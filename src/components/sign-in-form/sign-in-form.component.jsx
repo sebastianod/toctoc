@@ -1,9 +1,15 @@
 import "./sign-in-form.styles.scss";
 import TextInput from "../text-input/text-input.component";
 import Button from "../button/button.component";
-import { useState } from "react";
-import { signInWithGooglePopup, signInAuthEmailPassword, checkUserExists } from "../../utils/firebase/firebase-utils";
-
+import { useEffect, useState } from "react";
+import {
+  signInWithGooglePopup,
+  signInAuthEmailPassword,
+  checkUserExists,
+  onAuthStateChangedListener,
+} from "../../utils/firebase/firebase-utils";
+import { UserContext } from "../../contexts/user/user.context";
+import { useContext } from "react";
 
 const SignInForm = () => {
   const defaultForm = {
@@ -40,9 +46,26 @@ const SignInForm = () => {
     //Check if the user exists in the database
     const exists = await checkUserExists(user);
     if (!exists) {
-      alert("You have not signed up yet, sign up!")
-    } return;
-  }
+      alert("You have not signed up yet, sign up!");
+    }
+    return;
+  };
+
+  //handle redirecting to dashs or dasht depending on user type
+  const { currentUser } = useContext(UserContext);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChangedListener((user) => {
+      if (user && window.location.pathname !== ("/dashs" || "/dasht")) {
+        user.teacher
+          ? window.location.replace("/dasht")
+          : window.location.replace("/dashs");
+      }
+    });
+
+    // Clean up the listener on component unmount
+    return () => unsubscribe();
+  }, [currentUser]);
 
   return (
     <div className="sign-in-container">
