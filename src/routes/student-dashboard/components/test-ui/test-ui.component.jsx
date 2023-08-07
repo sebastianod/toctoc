@@ -30,6 +30,9 @@ export default function TestUi() {
   //error state
   const [isError, setIsError] = useState(false);
 
+  //hide mic and next button when finished
+  const [isHidden, setIsHidden] = useState(false); //false by default
+
   // Question list and state for cycling through questions
   const [questions, setQuestions] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(0); //default comes from DB
@@ -163,8 +166,14 @@ export default function TestUi() {
 
   const nameExists = name?.length > 0;
 
-  console.log("currentQ: ", currentQuestion);
-  // console.log("Current test: ", currentTest);
+//hide the mic and next buttons when the test is finished
+  if (currentQuestion) {
+    if ((currentQuestion === questions.length) && (isHidden === false))  {
+      setIsHidden(true);
+      console.log("currentQ is = to questions.length");
+    }
+  }
+
 
   const uiLogic = () => {
     return isBegun ? (
@@ -178,15 +187,14 @@ export default function TestUi() {
           <h3 className="test-title">
             {name ? capitalizeFirstLetterOfEachWord(name) : ""} Test
           </h3>
-          <span>Quit</span>
         </header>
         <div className="question-area">
           <strong>{questions ? questions[currentQuestion] : ""}</strong>
         </div>
-        <div className="response-area">
+        <div className={isHidden ? "response-area hidden" : "response-area"}>
           <Mic />
         </div>
-        <div className="footer">
+        <div className={isHidden ? "footer hidden" : "footer"}>
           <button className="next-skip" onClick={handleNextButton}>
             Next
           </button>

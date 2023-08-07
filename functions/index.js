@@ -156,7 +156,7 @@ exports.addTeacherRole = functions.https.onCall((data, context) => {
 });
 
 // give custom claim of teacher to sebastianochoad@gmail.com
-const userEmail = "sebastianochoad@gmail.com";
+const userEmail = "kdelgadog76@gmail.com";
 admin
   .auth()
   .getUserByEmail(userEmail)

@@ -10,6 +10,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        flex-direction: column;
         margin-bottom: 2.5rem;
         width: 100%;
     }
@@ -44,6 +45,10 @@
             font-size:14px;
             margin-left: 5px;
         }
+    }
+
+    .hidden {
+        display: none;
     }
 }
 
