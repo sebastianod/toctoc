@@ -59,7 +59,7 @@ export default function TestUi() {
       );
       setCurrentQuestion(currentQuestionDB);
 
-      console.log("fetched currentQuestion index from DB: ", currentQuestionDB);
+      //console.log("fetched currentQuestion index from DB: ", currentQuestionDB);
     };
 
     if (courseId && testId) {
@@ -170,7 +170,7 @@ export default function TestUi() {
   if (currentQuestion) {
     if ((currentQuestion === questions.length) && (isHidden === false))  {
       setIsHidden(true);
-      console.log("currentQ is = to questions.length");
+      //console.log("currentQ is = to questions.length");
     }
   }
 

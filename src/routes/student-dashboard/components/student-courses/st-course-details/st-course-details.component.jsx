@@ -23,7 +23,7 @@ export default function StudentCourseDetails() {
       studentId
     );
     setGrades((prevGrades) => ({ ...prevGrades, [testId]: studentGrade })); // update the grades object with the new grade for the test
-    console.log("student's grade: ", studentGrade);
+    //console.log("student's grade: ", studentGrade);
   };
 
   useEffect(() => {
