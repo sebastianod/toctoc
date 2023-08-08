@@ -8,6 +8,7 @@ import { createStudentUnderCourse } from "../../utils/firebase/firebase-utils";
 
 export default function ExcelInput(props) {
   const [jsonForm, setJsonForm] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const { type, courseId } = props;
 
   const handleFileUpload = (e) => {
@@ -29,28 +30,34 @@ export default function ExcelInput(props) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
+    setIsLoading(true);
     if (type === "enrollment") {
       //enroll students under the course with courseId
       jsonForm.forEach(async (student) => {
         try {
           const email = student.email;
           createStudentUnderCourse(courseId, email);
+          alert("Success creating users.");
+          setIsLoading(false);
         } catch (error) {
+          setIsLoading(false);
           console.log(error.message);
+          setIsLoading(false);
+          alert("Error creating users.");
         }
       });
-
     } else if (type === undefined) {
       //create student user accounts
       addUsersFunction(jsonForm)
         .then((result) => {
           console.log("Server Message: ", result);
           alert("Success creating users.");
+          setIsLoading(true);
         })
         .catch((error) => {
           console.error(error);
           alert("Error creating users.");
+          setIsLoading(false);
         });
     }
   };
@@ -78,6 +85,7 @@ export default function ExcelInput(props) {
         <Button className="submit-button" buttonType="submit" type="submit">
           Submit
         </Button>
+        {isLoading ? <span className="loading">...Loading</span> : ""}
       </form>
     </div>
   );
