@@ -85,8 +85,8 @@ export default function ExcelInput(props) {
         <Button className="submit-button" buttonType="submit" type="submit">
           Submit
         </Button>
-        {isLoading ? <span className="loading">...Loading</span> : ""}
       </form>
+      {isLoading ? <span className="loading">...Loading</span> : ""}
     </div>
   );
 }

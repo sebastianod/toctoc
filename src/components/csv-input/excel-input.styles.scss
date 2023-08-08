@@ -9,15 +9,15 @@
     margin-bottom: 0;
   }
 
+  .loading {
+    margin-top: 15px;
+  }
+
   .excel-form-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
-    // .loading {
-    //   margin-top: 15px;
-    // }
 
     .submit-button {
       background-color: #3d0000;
@@ -61,15 +61,15 @@
     width: 200px;
   }
 
+  .loading {
+    margin-left: 15px;
+  }
+
   .excel-form-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-
-    // .loading {
-    //   margin-top: 15px;
-    // }
 
     .submit-button {
       background-color: #3d0000;
