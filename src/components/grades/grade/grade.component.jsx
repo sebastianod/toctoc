@@ -5,10 +5,12 @@ import { useContext } from "react";
 import { CourseContext } from "../../../contexts/course/course.context";
 import { utils, write } from "xlsx";
 import { NavLink } from "react-router-dom";
+import { TestContext } from "../../../contexts/test-context/test.context";
 
 const Grade = (props) => {
   const { testId, name, isAvailable } = props;
   const { currentCourse } = useContext(CourseContext);
+  const { setCurrentTest } = useContext(TestContext);
   const { courseId } = currentCourse;
 
   const handleExcelClick = async () => {
@@ -65,10 +67,14 @@ const Grade = (props) => {
     URL.revokeObjectURL(url);
   };
 
+  const handleTestClick = () => {
+    setCurrentTest({ name: name, testId: testId, isAvailable: isAvailable });
+  }
+
   return (
     <div className={styles.gradeContainer}>
       <div className={styles.testNameContainer}>
-        <NavLink to={`grade-details`}>
+        <NavLink to={`grade-details`} onClick={handleTestClick}>
           <h3 className={styles.testName}>{name}</h3>
         </NavLink>
       </div>
