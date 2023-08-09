@@ -11,9 +11,6 @@ const GradeDetails = () => {
   const { currentTest } = useContext(TestContext);
   const testId = currentTest?.testId;
 
-  console.log("course and test ids: ", courseId, " ", testId);
-  console.log(students);
-
   useEffect(() => {
     const getStudents = async () => {
       const gradesArray = await getAllGradesFromTest(courseId, testId);

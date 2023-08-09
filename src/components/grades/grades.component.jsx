@@ -8,7 +8,7 @@ import Grade from "./grade/grade.component";
 const Grades = () => {
   const [tests, setTests] = useState([]);
   const { currentCourse } = useContext(CourseContext);
-  const courseId = currentCourse.courseId;
+  const courseId = currentCourse && currentCourse.courseId;
 
   useEffect(() => {
     const unsubscribe = subscribeToTests(courseId, setTests);
