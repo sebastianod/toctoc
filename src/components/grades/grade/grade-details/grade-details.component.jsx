@@ -5,7 +5,7 @@ import { TestContext } from "../../../../contexts/test-context/test.context";
 import { getAllGradesFromTest } from "../../../../utils/firebase/firebase-utils";
 
 const GradeDetails = () => {
-  const [students, setStudents] = useState(null);
+  const [students, setStudents] = useState([]);
   const { currentCourse } = useContext(CourseContext);
   const courseId = currentCourse?.courseId;
   const { currentTest } = useContext(TestContext);
@@ -27,15 +27,15 @@ const GradeDetails = () => {
     const grade = student.grade;
     return (
       <div className={styles.studentContainer} key={index}>
-        <span className={styles.studentName}> {name} </span>
-        <span className={styles.grade}> {grade} %</span>
+        <span className={styles.studentName}>{name}</span>
+        <span className={styles.grade}>{grade}%</span>
       </div>
     );
   });
 
   return (
     <div className={styles.mainContainer}>
-      <h3 className={styles.testName}>Test Name</h3>
+      <h3 className={styles.testName}>{currentTest ? `${currentTest.name} Test` : "Test name"}</h3>
       <br />
       <div className={styles.studentsContainer}>{showStudents}</div>
     </div>

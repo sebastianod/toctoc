@@ -8,7 +8,14 @@
         flex-direction: column;
 
         .studentContainer {
+            display: flex;
+            flex-direction: row;
             margin-bottom: 15px;
+
+            .studentName {
+                margin-right: 10px;
+                width: 120px;
+            }
         }
     }
 }
