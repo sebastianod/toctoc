@@ -69,7 +69,6 @@ const GradeDetails = (props) => {
       <div className={styles.testNameContainer}>
         <h3 className={styles.testName}>{name}</h3>
       </div>
-      <div className={styles.availabilityIcon}>{isAvailable ? "🟢" : "🔴"}</div>
       <input
         type="image"
         alt="download grades"
@@ -77,6 +76,7 @@ const GradeDetails = (props) => {
         src={ExcelIcon}
         onClick={handleExcelClick}
       />
+      <div className={styles.availabilityIcon}>{isAvailable ? "🟢" : "🔴"}</div>
     </div>
   );
 };
