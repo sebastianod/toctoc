@@ -15,8 +15,6 @@ const Grades = () => {
     return () => unsubscribe();
   }, [courseId]);
 
-  //
-
   const showTests = tests.map((test, index) => {
     const { name, testId, isAvailable } = test;
     const processedName = processListOfSentences(name).toString();
