@@ -6,5 +6,9 @@
     .studentsContainer{
         display: flex;
         flex-direction: column;
+
+        .studentContainer {
+            margin-bottom: 15px;
+        }
     }
 }
