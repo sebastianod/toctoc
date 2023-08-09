@@ -14,6 +14,7 @@ import ExcelInput from "./components/csv-input/excel-input.component";
 import StudentCourseDetails from "./routes/student-dashboard/components/student-courses/st-course-details/st-course-details.component";
 import TestUi from "./routes/student-dashboard/components/test-ui/test-ui.component";
 import Grades from "./components/grades/grades.component";
+import GradeDetails from "./components/grades/grade/grade-details/grade-details.component";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
             <Route path="tests/:testId" element={<TestDetails />} />
             <Route path="students" element={<Students />} />
             <Route path="grades" element={<Grades />} />
+            <Route path="grades/grade-details" element={<GradeDetails/>}/>
           </Route>
         </Route>
         <Route path="dashs" element={<StudentDashboard />}>

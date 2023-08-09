@@ -4,6 +4,7 @@ import { getAllGradesFromTest } from "../../../utils/firebase/firebase-utils";
 import { useContext } from "react";
 import { CourseContext } from "../../../contexts/course/course.context";
 import { utils, write } from "xlsx";
+import { NavLink } from "react-router-dom";
 
 const Grade = (props) => {
   const { testId, name, isAvailable } = props;
@@ -67,7 +68,9 @@ const Grade = (props) => {
   return (
     <div className={styles.gradeContainer}>
       <div className={styles.testNameContainer}>
-        <h3 className={styles.testName}>{name}</h3>
+        <NavLink to={`grade-details`}>
+          <h3 className={styles.testName}>{name}</h3>
+        </NavLink>
       </div>
       <input
         type="image"
