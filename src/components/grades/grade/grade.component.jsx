@@ -1,11 +1,11 @@
-import styles from "./grade-details.module.scss";
+import styles from "./grade.module.scss";
 import ExcelIcon from "../../../assets/excel.svg";
 import { getAllGradesFromTest } from "../../../utils/firebase/firebase-utils";
 import { useContext } from "react";
 import { CourseContext } from "../../../contexts/course/course.context";
 import { utils, write } from "xlsx";
 
-const GradeDetails = (props) => {
+const Grade = (props) => {
   const { testId, name, isAvailable } = props;
   const { currentCourse } = useContext(CourseContext);
   const { courseId } = currentCourse;
@@ -81,4 +81,4 @@ const GradeDetails = (props) => {
   );
 };
 
-export default GradeDetails;
+export default Grade;
