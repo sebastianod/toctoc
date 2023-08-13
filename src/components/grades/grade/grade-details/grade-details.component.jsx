@@ -20,6 +20,7 @@ const GradeDetails = () => {
   }, [courseId, testId]);
 
   const showStudents = students.map((student, index) => {
+    const studentId = student.gradesDocId;
     const name = student.student;
     const grade = student.grade;
     return (
