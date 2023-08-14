@@ -224,6 +224,21 @@ export const getAllGradesFromTest = async (courseId, testId) => {
   }
 };
 
+export const getStudentTestGrades = async (courseId, testId, studentId) => {
+  const gradesDocRef = doc(
+    db,
+    `courses/${courseId}/tests/${testId}/grades/${studentId}`
+  );
+  const gradesDocSnapshot = await getDoc(gradesDocRef);
+
+    try {
+      const gradedScoresArray = gradesDocSnapshot.data().gradesReadable;
+      return gradedScoresArray;  
+    } catch (error) {
+      console.log("Error fetching student's test grades: ",error);
+    }
+};
+
 // check if a student has already started a test by checking if an answers doc exists.
 // to be done upon clicking an available test.
 // goal: to show "Begin test" or "Continue test" upon clicking a test
