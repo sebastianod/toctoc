@@ -15,14 +15,14 @@ const StudentGrades = () => {
   return (
     <div className={styles.mainContainer}>
       <div className={styles.testNameContainer}>
-        <h3 className={styles.testName}>{testName}</h3>
+        <h3 className={styles.testName}>{testName} Test</h3>
         <span className={styles.availabilityIcon}>
           {isAvailable ? "🟢" : "🔴"}
         </span>
       </div>
       <div className={styles.studentNameContainer}>
         <h3 className={styles.studentName}>{studentName}</h3>
-        <span className={styles.studentGrade}>{grade}</span>
+        <span className={styles.studentGrade}>{grade}%</span>
       </div>
       <div className={styles.testGrades}>Test's grades go here</div>
     </div>

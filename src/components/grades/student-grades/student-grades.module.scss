@@ -1,0 +1,25 @@
+.mainContainer{
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+
+    .testNameContainer{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        .availabilityIcon{
+            margin-left: 15px;
+        }
+    }
+
+    .studentNameContainer {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        .studentGrade{
+            margin-left: 15px;
+        }
+    }
+}
