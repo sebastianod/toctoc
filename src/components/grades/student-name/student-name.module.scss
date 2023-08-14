@@ -1,4 +1,8 @@
-.studentName {
-  margin-right: 10px;
-  width: 100px;
+.navLink {
+  display: flex;
+  margin-right: 15px;
+  width: 200px;
+  .studentName {
+    font-weight: 700;
+  }
 }

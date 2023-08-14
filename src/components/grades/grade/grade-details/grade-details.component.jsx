@@ -11,6 +11,7 @@ const GradeDetails = () => {
   const courseId = currentCourse?.courseId;
   const { currentTest } = useContext(TestContext);
   const testId = currentTest?.testId;
+  const isAvailable = currentTest?.isAvailable;
 
   useEffect(() => {
     const getStudents = async () => {
@@ -26,14 +27,20 @@ const GradeDetails = () => {
     const grade = student.grade;
     return (
       <div className={styles.studentContainer} key={index}>
-        <StudentName name={name} grade={grade} studentId={studentId}/>
+        <StudentName name={name} grade={grade} studentId={studentId} />
       </div>
     );
   });
 
   return (
     <div className={styles.mainContainer}>
-      <h3 className={styles.testName}>{currentTest ? `${currentTest.name} Test` : "Test name"}</h3>
+      <div className={styles.testNameContainer}>
+        <h3 className={styles.testName}>
+          {currentTest ? `${currentTest.name} Test` : "Test name"}
+        </h3>
+        <div className={styles.isAvailableIcon}>{isAvailable ? "🟢" : "🔴"}</div>
+      </div>
+
       <br />
       <div className={styles.studentsContainer}>{showStudents}</div>
     </div>

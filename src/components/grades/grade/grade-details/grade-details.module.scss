@@ -3,6 +3,17 @@
     flex-direction: column;
     padding: 20px;
 
+    .testNameContainer{
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+
+        .isAvailableIcon{
+            margin-left: 15px;
+        }
+    }
+
     .studentsContainer{
         display: flex;
         flex-direction: column;
