@@ -4,6 +4,14 @@ import { CourseContext } from "../../../contexts/course/course.context";
 import { TestContext } from "../../../contexts/test-context/test.context";
 
 const StudentGrades = () => {
+
+    const {currentTest} = useContext(TestContext);
+    const testName = currentTest?.name;
+    const isAvailable = currentTest?.isAvailable;
+    const studentName = currentTest?.studentName;
+    const grade = currentTest?.studentGrade;
+
+
   return (
     <div className={styles.mainContainer}>
       <div className={styles.testNameContainer}>

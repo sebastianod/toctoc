@@ -15,6 +15,7 @@ import StudentCourseDetails from "./routes/student-dashboard/components/student-
 import TestUi from "./routes/student-dashboard/components/test-ui/test-ui.component";
 import Grades from "./components/grades/grades.component";
 import GradeDetails from "./components/grades/grade/grade-details/grade-details.component";
+import StudentGrades from "./components/grades/student-grades/student-grades.component";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
             <Route path="students" element={<Students />} />
             <Route path="grades" element={<Grades />} />
             <Route path="grades/grade-details" element={<GradeDetails/>}/>
+            <Route path="grades/grade-details/:studentId" element={<StudentGrades/>} />
           </Route>
         </Route>
         <Route path="dashs" element={<StudentDashboard />}>

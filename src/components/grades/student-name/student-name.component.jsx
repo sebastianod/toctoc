@@ -18,7 +18,7 @@ const StudentName = ({ name, grade, studentId }) => {
 console.log(currentTest);
   return (
     <Fragment>
-      <NavLink onClick={handleOnClick} className={styles.navLink}>
+      <NavLink to={`${studentId}`} onClick={handleOnClick} className={styles.navLink}>
         <span className={styles.studentName}>{name}</span>
       </NavLink>
       <span className={styles.grade}>{grade}%</span>
