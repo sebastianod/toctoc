@@ -1,7 +1,6 @@
 import { Fragment, useContext } from "react";
 import styles from "./student-name.module.scss";
 import { TestContext } from "../../../contexts/test-context/test.context";
-import { CourseContext } from "../../../contexts/course/course.context";
 import { NavLink } from "react-router-dom";
 
 const StudentName = ({ name, grade, studentId }) => {
@@ -11,7 +10,7 @@ const StudentName = ({ name, grade, studentId }) => {
 
   const handleOnClick = () => {
     setCurrentTest(prevTest => {
-        return { ...prevTest, studentId: studentId };
+        return { ...prevTest, studentId: studentId, studentName: name, studentGrade:grade };
       });
   }
 //the NavLink goes to the StudentGrades component
