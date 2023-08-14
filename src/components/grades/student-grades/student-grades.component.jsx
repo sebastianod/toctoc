@@ -64,10 +64,9 @@ const StudentGrades = () => {
           <strong className={styles.questionsHeaders}>Questions</strong>
           <strong className={styles.gradesHeaders}>Grades</strong>
         </div>
-        {showGrades}
+        {grades.length > 0 ? showGrades : <div>Loading...</div>}
       </div>
     </div>
   );
 };
-
 export default StudentGrades;
