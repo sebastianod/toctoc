@@ -32,14 +32,14 @@ const StudentGrades = () => {
 
   const showGrades = grades.map((grade, index) => {
     const gradeEntries = Object.entries(grade); // Convert the object to an array of [key, value] pairs
-  
+
     const gradeElements = gradeEntries.map(([key, value]) => (
       <div className={styles.singleGradeContainer} key={key}>
-        <span className={styles.question}>{`${key}:`}</span>
+        <span className={styles.question}>{`${key}`}</span>
         <span className={styles.grade}>{`${value}%`}</span>
       </div>
     ));
-  
+
     return (
       <div className={styles.gradeContainer} key={index}>
         {gradeElements}
@@ -59,7 +59,13 @@ const StudentGrades = () => {
         <h3 className={styles.studentName}>{studentName}</h3>
         <span className={styles.studentGrade}>{grade}%</span>
       </div>
-      <div className={styles.testGrades}>{showGrades}</div>
+      <div className={styles.testGradesContainer}>
+        <div className={styles.gradesHeader}>
+          <strong className={styles.questionsHeaders}>Questions</strong>
+          <strong className={styles.gradesHeaders}>Grades</strong>
+        </div>
+        {showGrades}
+      </div>
     </div>
   );
 };

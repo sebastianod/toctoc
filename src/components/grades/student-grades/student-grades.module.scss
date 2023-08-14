@@ -22,4 +22,34 @@
             margin-left: 15px;
         }
     }
+
+    .testGradesContainer{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        .singleGradeContainer{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+            margin-bottom: 15px;
+
+            .question{
+                width: 250px;
+            }
+        }
+
+        .gradesHeader{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+            margin-bottom: 20px;
+
+            .questionsHeaders{
+                width: 250px;
+            }
+        }
+    }
 }
