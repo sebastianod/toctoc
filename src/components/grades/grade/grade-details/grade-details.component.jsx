@@ -3,6 +3,7 @@ import styles from "./grade-details.module.scss";
 import { CourseContext } from "../../../../contexts/course/course.context";
 import { TestContext } from "../../../../contexts/test-context/test.context";
 import { getAllGradesFromTest } from "../../../../utils/firebase/firebase-utils";
+import StudentName from "../../student-name/student-name.component";
 
 const GradeDetails = () => {
   const [students, setStudents] = useState([]);
@@ -25,8 +26,7 @@ const GradeDetails = () => {
     const grade = student.grade;
     return (
       <div className={styles.studentContainer} key={index}>
-        <span className={styles.studentName}>{name}</span>
-        <span className={styles.grade}>{grade}%</span>
+        <StudentName name={name} grade={grade} studentId={studentId}/>
       </div>
     );
   });
