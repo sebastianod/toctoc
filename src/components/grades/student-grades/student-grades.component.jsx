@@ -6,12 +6,14 @@ import { getStudentTestGrades } from "../../../utils/firebase/firebase-utils";
 
 const StudentGrades = () => {
   const { currentTest } = useContext(TestContext);
-  const testName = currentTest?.name;
-  const isAvailable = currentTest?.isAvailable;
-  const studentName = currentTest?.studentName;
-  const grade = currentTest?.studentGrade;
-  const testId = currentTest?.testId;
-  const studentId = currentTest?.studentId;
+  const {
+    name: testName,
+    isAvailable,
+    studentName,
+    studentGrade: grade,
+    testId,
+    studentId,
+  } = currentTest || {};
 
   const { currentCourse } = useContext(CourseContext);
   const courseId = currentCourse?.courseId;
