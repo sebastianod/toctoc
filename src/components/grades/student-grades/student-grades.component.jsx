@@ -30,7 +30,7 @@ const StudentGrades = () => {
     getGrades(courseId, testId, studentId);
   }, [courseId, testId, studentId]);
 
-  const showGrades = grades.map((grade, index) => {
+  const showGrades = grades?.map((grade, index) => {
     const gradeEntries = Object.entries(grade); // Convert the object to an array of [key, value] pairs
 
     const gradeElements = gradeEntries.map(([key, value]) => (
@@ -64,7 +64,7 @@ const StudentGrades = () => {
           <strong className={styles.questionsHeaders}>Questions</strong>
           <strong className={styles.gradesHeaders}>Grades</strong>
         </div>
-        {grades.length > 0 ? showGrades : <div>Loading...</div>}
+        {grades?.length > 0 ? showGrades : <div>Loading...</div>}
       </div>
     </div>
   );
