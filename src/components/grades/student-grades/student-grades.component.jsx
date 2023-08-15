@@ -32,11 +32,24 @@ const StudentGrades = () => {
     getGrades(courseId, testId, studentId);
   }, [courseId, testId, studentId]);
 
+  // const handleColor = (value) => {
+  //   if (value >= 90) {
+  //     return { color: 'blue' };
+  //   } else if (value >= 75) {
+  //     return { color: 'orange' }; 
+  //   } else if (value <= 60) {
+  //     return { color: 'red' }; 
+  //   } else {
+  //     return {};
+  //   }
+  // };
+
   const showGrades = grades?.map((grade, index) => {
     const gradeEntries = Object.entries(grade); // Convert the object to an array of [key, value] pairs
 
     const gradeElements = gradeEntries.map(([key, value]) => (
       <div className={styles.singleGradeContainer} key={key}>
+        <strong className={styles.questionIndex}>{index+1}.</strong>
         <span className={styles.question}>{`${key}`}</span>
         <span className={styles.grade}>{`${value}%`}</span>
       </div>
